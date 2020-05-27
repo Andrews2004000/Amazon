@@ -11,7 +11,7 @@
                <span class="fa fa-shopping-cart mode-1" v-if="homePage"></span>
 
                <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
-               <div class="ball">
+               <div class="ball orange">
   <span class="number dark">1</span>
                </div>
              

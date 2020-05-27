@@ -11,7 +11,7 @@
             <v-btn class="success btn">Buy</v-btn>
         </v-col>
         <v-col>
-            <v-btn class="warning btn-2">Remove</v-btn>
+            <v-btn class="red btn-2">Remove</v-btn>
             <v-row>
                 
                 <div class="diva">

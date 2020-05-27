@@ -28,7 +28,9 @@ const ProductSchema = new mongoose.Schema({
         required:true
     },
     category:{
-     type:String,
+        type: String,
+        enum: ['Tecno', 'House', 'Book'],
+       
 
     },
     scadenza:{

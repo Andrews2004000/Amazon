@@ -14,8 +14,8 @@
        </v-app-bar>
        <v-navigation-drawer v-model="drawer" app class="success">
            
-                   <v-btn class="ma-2" color="darken-2" dark>
-          <v-icon dark left @click="GoAway">mdi-arrow-left</v-icon>Back To HomePage
+                   <v-btn class="ma-2" color="darken-2" dark v-if="homePage">
+          <v-icon dark left  v-if="homePage">mdi-arrow-left</v-icon>Back To HomePage
         </v-btn>
          
            <div class="conta">

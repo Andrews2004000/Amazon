@@ -148,8 +148,8 @@ export default {
         ],
         MaxQuantity: v=>{
          if (!v.trim()) return true;
-      if (!isNaN(parseFloat(v)) && v >= 0 && v <= 10) return true;
-      return 'Number has to be between 0 and 10';
+      if (!isNaN(parseFloat(v)) && v >= 1 && v <= 10) return true;
+      return 'Number has to be between 1 and 10';
         }
       
 

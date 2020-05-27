@@ -12,7 +12,7 @@ const CLIENT_URL = 'http://localhost:8080';
 app.use(BodyParser.json());
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 app.use('/user', AuthRoutes);
-app.use('/products', ProductsRoutes);
+app.use(ProductsRoutes);
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).json({ message: 'Route Not Foundsss' });
 });

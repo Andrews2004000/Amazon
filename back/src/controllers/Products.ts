@@ -4,34 +4,15 @@ import { RequestHandler } from 'express';
 
 export const getProducts: RequestHandler = async (req, res, next) => {
     // Create the database query
-    const productDatabaseQuery = Products.find();
+  const product = await Products.find()
+  if(!product){
+      const err:any = new Error('No Products')
+      err.statusCode = 422;
+      throw err;
+  }
 
-    const urlSearchQuery = req.query.search as string | undefined;
-    const categoryFilter = req.query.category as string | undefined;
-
-    if (categoryFilter) {
-        productDatabaseQuery.where('category').equals(categoryFilter)
-    }
-
-    if (urlSearchQuery) {
-        // Get the search keyword from the url search query
-        const searchKeyword = urlSearchQuery.split('+').join(' '); //"new+mac" -> "new mac"
-
-        // Edit productDatabaseQuery
-        productDatabaseQuery.where('title').regex(new RegExp(searchKeyword, 'i'));
-    }
-
-    // Call query on the database
-    const products = await productDatabaseQuery;
-
-
-
-    if (!products) {
-        const err: any = new Error('No Products');
-        err.statusCode = 422;
-        throw err;
-    }
-    res.status(200).json({ message: 'You Are Getting A Product', products: products });
+  
+    res.status(200).json({ message: 'You Are Getting A Product', products: product });
 };
 
 export const getProduct: RequestHandler = async (req, res, next) => {

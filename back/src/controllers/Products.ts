@@ -120,31 +120,7 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
     const results = await product.save();
     res.status(200).json({ message: 'You have Update Your Products', product: results });
 };
-export const SearchProducts:RequestHandler = async (req,res,next)=>{
 
-const ProductsFromDatabase = Products.find()
-
-const urlSearchQuery = req.query.search as string | undefined;
-
-if(urlSearchQuery){
-
-    const searchKeyword = urlSearchQuery.split('+').join(' ')
-
-    ProductsFromDatabase.where('title').regex(new RegExp(searchKeyword,'i'))
-
-}
-const Allproducts = await ProductsFromDatabase
-
-if(!Allproducts){
-    const err:any = new Error('No Product')
-    err.statusCode = 422;
-    throw err;
-
-}
-res.status(200).json({message:'You are getting Well',products:Allproducts})
-
-
-}
 export const Search:RequestHandler = async (req,res,next)=>{
 const ProductsFromDatabase = Products.find()
 const urlSearchQuery = req.query.search as string | undefined;

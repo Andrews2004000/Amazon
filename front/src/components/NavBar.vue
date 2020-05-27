@@ -11,7 +11,7 @@
                <span class="fa fa-shopping-cart mode-1" v-if="homePage"></span>
 
                <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
-               <div class="ball orange">
+               <div class="ball orange" v-if="homePage">
   <span class="number dark">1</span>
                </div>
              
@@ -48,7 +48,7 @@
                 <v-dialog v-model="dialog" max-width="500px" v-if="Exist">
                     <v-card>
                         <v-card-title>
-                            <span>Login Into The Site</span>
+                            <span>SignUp Into The Site</span>
                         </v-card-title>
                         <v-card-text>
                             <v-container>

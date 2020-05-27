@@ -107,9 +107,7 @@ const ProductsFromDatabase = Products.find()
 const urlSearchQuery = req.query.search as string | undefined;
 const categoryFiletr = req.query.category as string | undefined;
 if(categoryFiletr){
-    ProductsFromDatabase.where('category').equals(categoryFiletr)
-
-   
+    ProductsFromDatabase.where('category').equals(categoryFiletr)   
 }
 if(urlSearchQuery){
     const searchKeyword = urlSearchQuery.split('+').join(' ')

@@ -3,7 +3,29 @@ import User from '../models/Authentication';
 import { RequestHandler } from 'express';
 
 export const getProducts: RequestHandler = async (req, res, next) => {
-    const products = await Products.find();
+    // Create the database query
+    const productDatabaseQuery = Products.find();
+
+    const urlSearchQuery = req.query.search as string | undefined;
+    const categoryFilter = req.query.category as string | undefined;
+
+    if (categoryFilter) {
+        productDatabaseQuery.where('category').equals(categoryFilter)
+    }
+
+    if (urlSearchQuery) {
+        // Get the search keyword from the url search query
+        const searchKeyword = urlSearchQuery.split('+').join(' '); //"new+mac" -> "new mac"
+
+        // Edit productDatabaseQuery
+        productDatabaseQuery.where('title').regex(new RegExp(searchKeyword, 'i'));
+    }
+
+    // Call query on the database
+    const products = await productDatabaseQuery;
+
+
+
     if (!products) {
         const err: any = new Error('No Products');
         err.statusCode = 422;
@@ -11,6 +33,7 @@ export const getProducts: RequestHandler = async (req, res, next) => {
     }
     res.status(200).json({ message: 'You Are Getting A Product', products: products });
 };
+
 export const getProduct: RequestHandler = async (req, res, next) => {
     const product = await Products.findById(req.user?._id);
     if (!product) {

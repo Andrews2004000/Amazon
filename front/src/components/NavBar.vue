@@ -9,8 +9,12 @@
                </v-toolbar-title>
                <v-spacer></v-spacer>
                <span class="fa fa-shopping-cart mode-1" v-if="homePage"></span>
-               <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
 
+               <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
+               <div class="ball">
+  <span class="number dark">1</span>
+               </div>
+             
        </v-app-bar>
        <v-navigation-drawer v-model="drawer" app class="success">
            
@@ -194,6 +198,23 @@ export default {
 .listona{
     margin-top:120px;
    
+}
+.number{
+    transform:translateX(-8px)translateY(-6px);
+    font-weight:700;
+    font-size:19px;
+    margin-left:9px;
+    margin-top:5px;
+    
+
+
+}
+.ball{
+    border-radius:20px;
+    height:30px;
+    width:30px;
+    background-color:green;
+     transform:translateX(-10px)translateY(-12px);
 }
 .listina{
     margin-top:15px;

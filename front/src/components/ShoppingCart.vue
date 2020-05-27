@@ -20,7 +20,19 @@
                 </div>
                 
                 <v-rating class="ratings" v-model="rating"></v-rating>
-                 
+               
+
+                <div class="like">
+
+              
+                 <v-btn class="ma-2" text icon color="blue lighten-2">
+          <v-icon>mdi-thumb-up</v-icon>
+        </v-btn>
+  
+        <v-btn class="ma-2" text icon color="red lighten-2">
+          <v-icon>mdi-thumb-down</v-icon>
+        </v-btn>
+                 </div>
         
          
             
@@ -97,6 +109,9 @@ export default {
 .btn-2{
     margin-right:-290px;
     margin-top:-10px;
+}
+.like{
+    margin-left:50px;
 }
 .ex{
     width:1000px;

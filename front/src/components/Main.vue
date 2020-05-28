@@ -42,7 +42,7 @@
  <div>
      <v-container class="pinoto">
             <v-row >
-                <v-col  v-for="product in products" :key="product.id" :cols="product.flex">
+                <v-col  v-for="product in products" :key="product.id" :cols="product.flex" :products="products">
                     <v-card class="pa-5 mx-auto" max-width="400" tile>
                         <div class="padre">
                             <v-row>
@@ -51,9 +51,12 @@
                                     <v-card-subtitle >{{ product.title }}</v-card-subtitle>
                                 </v-card-text>
 
-                                <v-img :src="product.image"  class="pongo align-end" height="190px" max-width="230px"></v-img>
+                                <v-img :src="product.imageUrl"  class="pongo align-end" height="190px" max-width="230px"></v-img>
                                   <span class="pu">ONLY</span>
+                                  <span>{{product.description}}</span>
                                     <span class="sna">{{ product.price }}$</span>
+                                    <span>{{product.ratings}}</span>
+                                    <span>{{product.MaxQuantity}}</span>
 
                                 <v-card-actions>
                                     <v-btn class="success putin" router-view to="/ShoppingCart">Add To Cart</v-btn>
@@ -133,7 +136,7 @@ export default {
                 {src:'https://leganerd.com/wp-content/uploads/2018/10/d39w7f4ix9f5s9.cloudfront-999x485.png',title:'Alexa Products'},
                 {src:'https://www.lifestyleblog.it/wp-content/uploads/2020/01/xbox-series-x-.jpg',title:'Xbox Series X'}
             ],
-            products: [
+            pro: [
                 {
                     title: 'IPHONE SE',
                     price: 499.9,
@@ -186,8 +189,14 @@ export default {
     components:{
             NavBar
     },
+    computed:{
+        products(){
+           return this.$store.state.prods
+        }
+
+    },
     mounted(){
-        this.$store.dispatch('getProducts')
+        this.$store.dispatch('setProducts')
     }
 }
 </script>

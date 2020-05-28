@@ -1,7 +1,7 @@
 
 
 export class Api {
-    static baseUrl = 'http://locahost:5000/'
+    static baseUrl = 'http://localhost:5000/'
 
     static async fetchData(path:string,method:'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',body?:object){
         try{

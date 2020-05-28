@@ -18,8 +18,8 @@ export default new Vuex.Store({
   },
   actions: {
     async setProducts({commit}){
-    const products =  await Api.fetchData('/products')
-      commit('GET_PRODUCTS',products)
+    const products =  await Api.fetchData('products')
+      commit('SET_PRODUCTS',products)
 
     }
     

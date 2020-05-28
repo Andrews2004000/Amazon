@@ -185,6 +185,9 @@ export default {
     },
     components:{
             NavBar
+    },
+    mounted(){
+        this.$store.dispatch('getProducts')
     }
 }
 </script>

@@ -1,7 +1,7 @@
 
 
 export class Api {
-    static baseUrl = 'http://locahost:8080/'
+    static baseUrl = 'http://locahost:5000/'
 
     static async fetchData(path:string,method:'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET',body?:object){
         try{
@@ -9,7 +9,7 @@ export class Api {
                 method,
                 credentials:'include',
                 headers:{
-                    'Content-Type':'aplication/josn'
+                    'Content-Type':'application/json'
                 },
                 body:JSON.stringify(body)
             })

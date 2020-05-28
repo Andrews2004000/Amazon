@@ -10,9 +10,18 @@ export default new Vuex.Store({
     prods:[]
   },
   mutations: {
+    SET_PRODUCTS(state,products){
+      state.prods = products
+      
+    }
   
   },
   actions: {
+    async setProducts({commit}){
+    const products =  await Api.fetchData('/products')
+      commit('GET_PRODUCTS',products)
+
+    }
     
 },
   getters:{

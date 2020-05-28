@@ -27,6 +27,7 @@ export const getProduct: RequestHandler = async (req, res, next) => {
 export const createProduct: RequestHandler = async (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
+    const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const category = req.body.category;
     const scadenza = req.body.scadenza;
@@ -35,6 +36,7 @@ export const createProduct: RequestHandler = async (req, res, next) => {
     const products = new Products({
         title: title,
         description: description,
+        imageUrl: imageUrl,
         price: price,
         category: category,
         scadenza: scadenza,
@@ -75,6 +77,7 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
     const prodId = req.params.prodId;
     const title = req.body.title;
     const description = req.body.description;
+    const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const category = req.body.category;
     const scadenza = req.body.scadenza;
@@ -93,6 +96,7 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
     }
     product.title = title;
     product.description = description;
+    product.imageUrl = imageUrl;
     product.price = price;
     product.category = category;
     product.scadenza = scadenza;

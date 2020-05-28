@@ -5,6 +5,7 @@ export interface IUProducts extends mongoose.Document {
     title:string;
     description:string;
     price: string;
+    imageUrl:string;
     category?:string;
     scadenza:string;
     ratings?:string;
@@ -21,6 +22,11 @@ const ProductSchema = new mongoose.Schema({
     description:{
         type:String,
         required:true
+    },
+    imageUrl:{
+        type:String,
+        required:true
+
     },
  
     price:{

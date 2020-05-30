@@ -22,7 +22,7 @@ export const isAuth = async (req: Request, res: Response, next: NextFunction) =>
         error.statusCode = 401;
         throw error;
     }
-    const user = await User.findById(decodedToken.userId);
+    const user = await User.findById(decodedToken.user);
     if (!user) {
         throw new Error('Cannt find User');
     }

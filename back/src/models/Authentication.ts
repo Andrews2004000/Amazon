@@ -39,12 +39,7 @@ const UserSchema = new mongoose.Schema({
         enum: ['client', 'vendor', 'admin'],
         default: 'client',
     },
-    product: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Products'
-        }
-      ],
+   
 
     status:{
         type:String,

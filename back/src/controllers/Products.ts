@@ -33,6 +33,7 @@ export const createProduct: RequestHandler = async (req, res, next) => {
     const scadenza = req.body.scadenza;
     const ratings = req.body.ratings;
     const MaxQuantity = req.body.MaxQuantity;
+    const creator = req.user?._id
     const products = new Products({
         title: title,
         description: description,
@@ -42,9 +43,13 @@ export const createProduct: RequestHandler = async (req, res, next) => {
         scadenza: scadenza,
         ratings: ratings,
         MaxQuantity: MaxQuantity,
+        creator:creator
     });
     await products.save();
     const user: any = await User.findById(req.user?._id);
+  
+
+    
     user.product.push(products);
     res.status(200).json({
         message: 'Post Created',

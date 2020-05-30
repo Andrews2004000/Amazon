@@ -58,6 +58,7 @@
                                     <span class="sna">{{ product.price }}$</span>
                                     <span>{{product.ratings}}</span>
                                     <span>{{product.MaxQuantity}}</span>
+                                    <span>{{product.scadenza}}</span>
 
                                 <v-card-actions>
                                     <v-btn class="success putin" router-view to="/ShoppingCart">Add To Cart</v-btn>

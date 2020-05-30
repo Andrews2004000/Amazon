@@ -16,7 +16,7 @@
                 
                 <div class="diva">
 <v-card-title>Mac 2020</v-card-title>
-                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione cumque animi ipsa vitae, ad consectetur reprehenderit accusamus quis quidem? Voluptate impedit quisquam dicta accusamus tempore illum neque rem nesciunt error.</span>
+                <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est illo porro mollitia id odit nostrum molestiae libero tenetur recusandae nesciunt veniam cumque vero cupiditate debitis incidunt repudiandae accusamus, minus blanditiis.</span>
                 </div>
                 
                 <v-rating class="ratings" v-model="rating"></v-rating>
@@ -86,6 +86,7 @@ export default {
     components:{
         NavBar
     },
+    
     data(){
         return{
             rating:4,

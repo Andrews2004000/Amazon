@@ -32,6 +32,11 @@ export default new Vuex.Store({
     async Register({commit},userCredentials){
       const User = await Api.fetchData('user/signup',userCredentials)
 
+    },
+    async CreteProducts({commit},Product){
+      const {products} = await Api.fetchData('products')
+      commit('CREATE_PRODUCTS',products)
+
     }
 
     

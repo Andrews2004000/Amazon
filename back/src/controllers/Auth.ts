@@ -2,7 +2,20 @@ import User from '../models/Authentication';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { RequestHandler, Request, Response, NextFunction } from 'express';
-
+function sendJwtOnCookie(res: Response, token?: string) {
+    if (token) {
+        res.cookie('access_token', token, {
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+            // secure: true
+        });
+    } else {
+        res.cookie('access_token', {
+            httpOnly: true,
+            expires: Date.now(),
+        });
+    }
+}
 export const login: RequestHandler = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -29,6 +42,8 @@ export const login: RequestHandler = async (req, res, next) => {
         'myownsecretword',
         { expiresIn: '1h' }
     );
+
+sendJwtOnCookie(res,token)
     res.status(200).json({ token: token, user: loadedUser._id.toString() });
 };
 
@@ -45,6 +60,9 @@ export const signUp: RequestHandler = async (req, res, next) => {
         password: hashedPassword,
     });
     const result = await user.save();
+   
+
+sendJwtOnCookie(res)
     res.status(201).json({ message: 'User Create', user: result._id });
 };
 

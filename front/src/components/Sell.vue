@@ -154,7 +154,22 @@ export default {
       
 
     }
-  }
+  
+  },
+    methods:{
+      CreateProduct(){
+        this.$store.dispatch('CreteProducts',{
+          title:this.title,
+          description:this.description,
+          imageUrl:this.imageUrl,
+          price:this.price,
+          category:this.category,
+          MaxQuantity:this.maxQuantity
+
+        })
+
+      }
+    }
     
 }
 </script>

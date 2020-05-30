@@ -20,14 +20,20 @@ export default new Vuex.Store({
   },
   actions: {
     async setProducts({commit}){
-    const products =  await Api.fetchData('products')
+    const {products} = await Api.fetchData('products')
       commit('SET_PRODUCTS',products)
 
     },
     async Login({commit},userCredentilas){
       const User = await Api.fetchData('user/login',userCredentilas)
    
+    },
+    async Register({commit},userCredentials){
+      const User = await Api.fetchData('user/signup',userCredentials)
+
     }
+
+    
    
     
 },

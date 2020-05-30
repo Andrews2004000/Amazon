@@ -42,13 +42,14 @@
  <div>
      <v-container class="pinoto">
             <v-row >
-                <v-col  v-for="product in products" :key="product.id" :cols="product.flex" :products="products">
+                <v-col  v-for="product in products" :key="product.id"  :products="products">
                     <v-card class="pa-5 mx-auto" max-width="400" tile>
                         <div class="padre">
                             <v-row>
                                 <v-card-text class="beta">
                                     <v-card-title class="titolo">Product Of The Mounth</v-card-title>
                                     <v-card-subtitle >{{ product.title }}</v-card-subtitle>
+                                    <span>{{product.description}}</span>
                                 </v-card-text>
 
                                 <v-img :src="product.imageUrl"  class="pongo align-end" height="190px" max-width="230px"></v-img>
@@ -191,7 +192,9 @@ export default {
     },
     computed:{
         products(){
-           return this.$store.state.prods
+         const products =  this.$store.state.prods
+          console.log(products)
+          return products
         }
 
     },

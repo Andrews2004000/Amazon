@@ -166,6 +166,14 @@ export default {
                 password:this.password
 
             })
+        },
+        Register(){
+            this.$store.dispatch('Register',{
+                username:this.username,
+                email:this.email,
+                password:this.password,
+                
+            })
         }
 
     },

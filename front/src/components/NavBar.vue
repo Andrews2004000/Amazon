@@ -110,7 +110,7 @@
                                 <v-subheader class="indigo--text sub" @click="Exist = !Exist">Not registered yet?Sign up now</v-subheader>
                                 <div class="bottoni">
   <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" text >Save</v-btn>
+            <v-btn color="blue darken-1" text @click="Login">Save</v-btn>
                             
                                 </div>
                                
@@ -159,6 +159,13 @@ export default {
         },
         GoAway(){
             this.$route.push('/')
+        },
+        Login(){
+            this.$store.dispatch('Login',{
+                email:this.email,
+                password:this.password
+
+            })
         }
 
     },

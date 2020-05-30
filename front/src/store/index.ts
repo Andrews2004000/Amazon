@@ -14,6 +14,7 @@ export default new Vuex.Store({
       state.prods = products
       
     },
+
    
   
   },
@@ -23,6 +24,10 @@ export default new Vuex.Store({
       commit('SET_PRODUCTS',products)
 
     },
+    async Login({commit},userCredentilas){
+      const User = await Api.fetchData('user/login',userCredentilas)
+   
+    }
    
     
 },

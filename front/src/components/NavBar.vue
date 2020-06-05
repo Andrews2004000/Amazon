@@ -8,7 +8,7 @@
                <span class="store orange--text">Store</span>
                </v-toolbar-title>
                <v-spacer></v-spacer>
-               <span class="fa fa-shopping-cart mode-1" v-if="homePage"></span>
+               <span class="fa fa-shopping-cart mode-1" v-if="isLoggedIn"></span>
 
                <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
                <div class="ball orange" v-if="homePage">
@@ -16,16 +16,29 @@
                </div>
              
        </v-app-bar>
-       <v-navigation-drawer v-model="drawer" app class="success">
+      
+
+       <v-navigation-drawer v-model="drawer" app dark class="secondary">
+           <span class="fa fa-cog" v-if="userData.role === 'admin' || userData.role === 'vendor'"></span>
+
            
                    <v-btn class="ma-2" color="darken-2" dark v-if="homePage">
           <v-icon dark left  v-if="homePage">mdi-arrow-left</v-icon>Back To HomePage
         </v-btn>
          
            <div class="conta">
-  <span class="fa fa-user mode"></span>
+             
   
-           <v-btn class="user" router-view to="/Account">Account</v-btn>
+ 
+           <span class="fa fa-user mode"></span>
+           <v-btn class="user orange" router-view to="/Account"  v-if="isLoggedIn">Account </v-btn>
+  
+           <v-btn class="btn-5 orange" v-if="!isLoggedIn"><span class="LoginDetail" >Login</span></v-btn>
+
+
+ 
+
+           <span>{{userData.username}}</span>
            </div>
            
           
@@ -40,102 +53,146 @@
            <v-spacer>
 
            </v-spacer>
-           <v-btn class="btn">LOGOUT</v-btn>
+           <v-btn class="btn success" @click="LogoutHanlder" v-if="isLoggedIn">LOGOUT</v-btn>
 
        </v-navigation-drawer>
-       <div>
-           <v-row>
-                <v-dialog v-model="dialog" max-width="500px" v-if="Exist">
+      
+       
+      
+           
+
+
+
+
+                <v-dialog v-model="dialog" max-width="500px" >
+
+
+
                     <v-card>
-                        <v-card-title>
-                            <span>SignUp Into The Site</span>
-                        </v-card-title>
-                        <v-card-text>
+                      
+                       
+                                    <v-form v-if="!isAlreadyRegistered" ref="SignUpform" v-model="isSignUpDataValid">
+                                        <v-card-title>
+                                           <span class="headline">SignUp</span>
+                                        </v-card-title>
+                                         <v-card-text>
                             <v-container>
                                 <v-row>
-                                    <v-form ref="form">
                                     <v-col cols="12" class="coli">
-                                        <v-text-field label="Username" v-model="username" :rules="inputUser"></v-text-field>
+                                        <v-text-field label="Username" v-model="userData.username" :rules="rules.fullName" required></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
-                                        <v-text-field label="Email" v-model="email" :rules="EmailUser"></v-text-field>
+                                        <v-text-field label="Email" v-model="userData.email" :rules="rules.emailRules" required></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-text-field
                                             label="Password"
                                             type="password"
-                                            v-model="password"
-                                            :rules="inputPassword"
+                                            required
+                                            v-model="userData.password"
+                                            :rules="rules.passwordRules"
                                         ></v-text-field>
                                     </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field
+                                            label="Password"
+                                            type="password"
+                                            required
+                                            v-model="userData.passwordConfirmation"
+                                            :rules="rules.passwordConfirmation"
+                                        ></v-text-field>
+                                    </v-col>
+                                    </v-row>
+                                    </v-container>
 
-                                   </v-form>
-                                </v-row>
-                                 <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" text @click="SignUp">Save</v-btn>
-                                     <v-subheader class="indigo--text sub" @click="Exist = !Exist">Already registered? Log in now</v-subheader>
-                            </v-container>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-            </v-row>
-             <v-row>
-                <v-dialog v-model="dialog" router-link to="/Cart" max-width="500px" else>
-                    <v-card>
-                        <v-card-title>
-                            <span>Access</span>
-                        </v-card-title>
-                        <v-card-text>
+                                    <small>
+                        <a @click="isAlreadyRegistered = true">Already registered,sign in</a>
+                    </small>
+                    </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+
+                               
+  <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+            <v-btn color="blue darken-1" text @click="SignUpHandler">Save</v-btn>
+                            </v-card-actions>
+                               
+                                  
+                           
+                               </v-form>
+                                    <v-form v-else ref="Loginform" :lazy-validation="lazy" v-model="isLoginDataValid">
+                                        <v-card-title>
+                                            <span class="headline">Log Into The WebSite</span>
+                                        </v-card-title>
+                           <v-card-text>
                             <v-container>
                                 <v-row>
-                                    <v-form ref="firm" :lazy-validation="lazy" v-model="valid">
-
                                    
                                     <v-col cols="12" class="coli">
-                                        <v-text-field label="Email" v-model="email" :rules="EmailUser"></v-text-field>
+                                        <v-text-field label="Email" v-model="userData.email" :rules="rules.emailRules" required></v-text-field>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-text-field
+                                        required
                                             label="Password"
                                             type="password"
-                                            v-model="password"
-                                            :rules="inputPassword"
+                                            v-model="userData.password"
+                                            :rules="rules.passwordRules"
                                         ></v-text-field>
                                     </v-col>
-                                     </v-form>
+                                   
 
                                     
                                 </v-row>
+                                </v-container>
                                
-                                <v-subheader class="indigo--text sub" @click="Exist = !Exist">Not registered yet?Sign up now</v-subheader>
-                                <div class="bottoni">
+                               <small>
+                        <a @click="isAlreadyRegistered = false">Not ?</a>
+                    </small>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                       
+                       
+
+                       
+  <div class="bottoni">
   <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" text @click="Login">Save</v-btn>
+            <v-btn color="blue darken-1" @click="LoginHandler" text >Save</v-btn>
                             
                                 </div>
-                               
-                            </v-container>
-                        </v-card-text>
+                    </v-card-actions>
+                              
+                            
+                        
+                    </v-form>
                     </v-card>
-                </v-dialog>
-            </v-row>
+                    </v-dialog>
+           
+          
+           
 
-       </div>
-
+       
+</div>
   
-   </div>
+  
 </template>
 <script>
+import {mapActions,mapState} from 'vuex';
+import authInput from '../mixins/authInput';
 export default {
+    mixins:[authInput],
     data(){
         return{
             drawer:false,
             dialog:false,
             valid:false,
-            Exist:false,
-        username: '',
-            email: '',
-            password: '',
+            
+            isAlreadyRegistered:true,
+            isLoginDataValid:true,
+            isSignUpDataValid:true,
+            userData:{},
+       
             lazy:false,
               inputUser:[
             v => v.length >= 5 || 'Minimun Length is 5 Characthers'
@@ -154,28 +211,41 @@ export default {
         }
     },
     methods:{
-        Toogle(){
-             this.Exist = !this.Exist
+      ...mapActions(['Signup','Login','Logout']),
+      async SignUpHandler(){
+          if(this.isSignUpDataValid){
+              await this.Signup(this.userData)
+              this.dialog = false;
+          }
+      },
+       async LoginHandler() {
+            if (this.isLoginDataValid) {
+                await this.Login(this.userData);
+
+                this.dialog = false;
+            }
         },
+        async LogoutHanlder() {
+            await this.Logout()
+
+        },
+      
         GoAway(){
             this.$route.push('/')
         },
-        Login(){
-            this.$store.dispatch('Login',{
-                email:this.email,
-                password:this.password
+       
+       
 
-            })
-        },
-        Register(){
-            this.$store.dispatch('Register',{
-                username:this.username,
-                email:this.email,
-                password:this.password,
-                
-            })
+    },
+      watch: {
+        isAlreadyRegistered() {
+            if (this.$refs.signupForm) {
+                this.$refs.signupForm.resetValidation();
+            }
+            if (this.$refs.loginForm) {
+                this.$refs.loginForm.resetValidation();
+            }
         }
-
     },
     computed: {
       homePage() {
@@ -184,12 +254,17 @@ export default {
         } else {
           return false
         }
-      }
-    }
+      },
+      ...mapState(["isLoggedIn"])
+     
+     
+    },
+  
     
 }
 </script>
 <style scoped>
+
 .barra{
     color:white;
     font-size:20px;
@@ -199,6 +274,11 @@ export default {
     margin-left:5px;
     text-transform:uppercase;
     font-weight:700;
+}
+.btn-5{
+    width:60%;
+    margin-left:50px;
+    margin-top:30px;
 }
 .rapha{
     
@@ -224,6 +304,11 @@ export default {
 
 
 }
+.LoginDetail{
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size:17px;
+}
 .ball{
     border-radius:20px;
     height:30px;
@@ -234,6 +319,13 @@ export default {
 .listina{
     margin-top:15px;
   
+}
+.initila{
+    margin-left:55px;
+    text-transform:uppercase;
+    font-weight:700;
+    font-size:20px;
+    transform:translateY(-60px)
 }
 .content{
 font-weight:700;

@@ -29,7 +29,9 @@
         <v-text-field
         outlined
               label="search"
+              v-model="searchField"
               prepend-inner-icon="fa fa-search"
+              v-debounce:300ms="searchHanlder"
             ></v-text-field>
             </v-col>
              </v-row>
@@ -39,7 +41,8 @@
 
            
 
-            <v-chip
+       <!---     <v-chip
+           
         class="ma-2 cip"
         color="indigo"
         outlined
@@ -62,22 +65,130 @@
       >
         <v-icon class="fa fa-mobile" left></v-icon>
        Phones
-      </v-chip>
+      </v-chip>-->
+       <v-chip-group
+            mandatory
+            active-class="primary white--text"
+            class="d-flex mb-5"
+            multiple
+            @change="changeHandler"
+            :value="valueIndexes"
+        >
+            <v-chip v-for="tag in tags" :key="tag">
+                {{ tag }}
+            </v-chip>
+        </v-chip-group>
        </div>
            
    </div>
 
- 
+ <div>
+   
+     <v-container class="pinoto">
+            <v-row >
+                <v-col  v-for="product in products" :key="product.id"  :products="products">
+                    <v-card class="pa-5 mx-auto" max-width="400" tile>
+                        <div class="padre">
+                            <v-row>
+                                <v-card-text class="beta">
+                                    <v-card-title class="titolo">Product Of The Mounth</v-card-title>
+                                    <v-card-subtitle >{{ product.title }}</v-card-subtitle>
+                                    <span>{{product.description}}</span>
+                                </v-card-text>
+
+                                <v-img :src="product.imageUrl"  class="pongo align-end" height="190px" max-width="230px"></v-img>
+                                  <span class="pu">ONLY</span>
+                                  <span>{{product.description}}</span>
+                                    <span class="sna">{{ product.price }}$</span>
+                                    <span>{{product.ratings}}</span>
+                                    <span>{{product.MaxQuantity}}</span>
+                                    <span>{{product.scadenza}}</span>
+
+                                <v-card-actions>
+                                  <v-btn class="success putin" router-view to="/ShoppingCart" v-if="isLoggedIn">Add To Cart</v-btn>
+                                      <v-btn class="success putin" disabled v-if="!isLoggedIn">Add To Cart</v-btn>
+
+
+                                 
+                                   
+                                </v-card-actions>
+                            </v-row>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+
+
+ </div>
    
     </div>
 </template>
 <script>
+import {mapState,mapActions} from 'vuex'
 import NavBar from './NavBar'
 export default {
+    data(){
+        return{
+            searchField:"",
+              selectedTagsIndexes: [],
+        }
+    },
     components:{
         NavBar
-    }
+    },
+    created() {
+        this.$store.dispatch('LoadTecnologyProducts')
+
+    },
+    methods:{
+        ...mapActions(["SearchProducts","LoadTagsTecnologyProducts"]),
+        
+        changeHandler(tagIndexes) {
+            let tags;
+            if (tagIndexes.length) {
+                tags = tagIndexes.sort().map((i) => this.tags[i]);
+            } else {
+                tags = [];
+            }
+            this.$emit('input', tags);
+        },
+        searchHanlder() {
+            console.log("Sto Ceracndo");
+            const searchField = this.searchField;
+            const searchQuery = searchField.split(" ").join("+");
+            console.log(searchQuery);
+            this.SearchProducts({ searchQuery, categoryType: "TecnologyProducts" });
+        },
+          
+       
+
+    },
+    computed:{
+             
+       valueIndexes() {
+            let indexes = [];
+            if (this.value && this.tags) {
+                indexes = this.value.map((tag) => {
+                    return this.tags.indexOf(tag);
+                });
+                indexes = indexes.filter((i) => i !== -1);
+            }
+            return indexes;
+        },
+        
+    
+        products(){
+            return this.$store.state.TecnologyProducts
+        },
+         ...mapState(["isLoggedIn","TecnologyProducts","AllTags"]),
+      
+       }
 }
+    
+    
+    
+
 </script>
 <style scoped>
 .image-container{

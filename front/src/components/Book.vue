@@ -30,6 +30,8 @@
         outlined
               label="search"
               prepend-inner-icon="fa fa-search"
+              v-model="searchField"
+              v-debounce:300ms="searchHanlder"
             ></v-text-field>
             </v-col>
              </v-row>
@@ -66,16 +68,76 @@
        </div>
            
    </div>
+   
+<div>
+     <v-container class="pinoto">
+            <v-row >
+                <v-col  v-for="product in products" :key="product.id"  :products="products">
+                    <v-card class="pa-5 mx-auto" max-width="400" tile>
+                        <div class="padre">
+                            <v-row>
+                                <v-card-text class="beta">
+                                    <v-card-title class="titolo">Product Of The Mounth</v-card-title>
+                                    <v-card-subtitle >{{ product.title }}</v-card-subtitle>
+                                    <span>{{product.description}}</span>
+                                </v-card-text>
 
+                                <v-img :src="product.imageUrl"  class="pongo align-end" height="190px" max-width="230px"></v-img>
+                                  <span class="pu">ONLY</span>
+                                  <span>{{product.description}}</span>
+                                    <span class="sna">{{ product.price }}$</span>
+                                    <span>{{product.ratings}}</span>
+                                    <span>{{product.MaxQuantity}}</span>
+                                    <span>{{product.scadenza}}</span>
+
+                                <v-card-actions>
+                                  <v-btn class="success putin" router-view to="/ShoppingCart" v-if="isLoggedIn">Add To Cart</v-btn>
+                                      <v-btn class="success putin" disabled v-if="!isLoggedIn">Add To Cart</v-btn>
+
+
+                                 
+                                   
+                                </v-card-actions>
+                            </v-row>
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-container>
+
+
+ </div>
  
    
     </div>
 </template>
 <script>
+import {mapState,mapActions} from 'vuex'
 import NavBar from './NavBar'
 export default {
+    data(){
+        return{
+searchField:""
+        }
+    },
     components:{
         NavBar
+    },
+     methods:{
+        ...mapActions(["SearchProducts"]),
+        searchHanlder() {
+            console.log("Sto Ceracndo");
+            const searchField = this.searchField;
+            const searchQuery = searchField.split(" ").join("+");
+            console.log(searchQuery);
+            this.SearchProducts({ searchQuery, categoryType: "HouseProducts" });
+        },
+      
+
+    },
+    computed:{
+         ...mapState(["isLoggedIn"])
+    
     }
 }
 </script>

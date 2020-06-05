@@ -7,6 +7,8 @@ import House from '../components/House.vue'
 import Account from '../components/Account.vue'
 import Sell from '../components/Sell.vue'
 import Upgrade from '../components/Upgrade.vue'
+import VendorPage from '../components/Vendor.vue'
+import EditProduct from '../components/EditProduct.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
 Vue.use(VueRouter)
 
@@ -15,6 +17,16 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Main',
     component: Main
+  },
+  {
+    path: '/EditProduct/:id',
+    name: 'Edit',
+    component: EditProduct
+  },
+  {
+    path: '/VendorPageDetails',
+    name: 'VendorPage',
+    component: VendorPage
   },
   {
     path: '/UpgradedUser',

@@ -8,7 +8,7 @@
               
                </v-toolbar-title>
                <v-spacer></v-spacer>
-             <span class="white--text text">Save</span>
+             <v-btn class="orange text" @click="ChangeAccountDetails" >Save</v-btn>
 
         </v-app-bar>
            <v-expansion-panels class="pannel-body">
@@ -17,17 +17,18 @@
       >
         <v-expansion-panel-header class="account">Accoun Details</v-expansion-panel-header>
         <v-expansion-panel-content>
-           <v-form>
-           <v-container>
+        
+         
                <v-row>
+                   <v-form ref="authForm" v-model="isAuthInputValid">
 
        <v-col cols="12" sm="12">
         <v-text-field
         outlined
               label="UserName"
               placeholder="Username"
-              v-model="username"
-              :rules="inputUser"
+              v-model="authInput.username"
+              :rules="rules.nameRules"
             
             ></v-text-field>
             </v-col>
@@ -36,35 +37,39 @@
         outlined
               label="Email"
               placeholder="Email"
-              v-model="email"
-              :rules="EmailUser"
+              v-model="authInput.email"
+              :rules="rules.emailUser"
             
             ></v-text-field>
             </v-col>
-                   <v-col cols="12" sm="12">
-        <v-text-field
-        outlined
-              label="Password"
-              placeholder="Current Password"
-              v-model="currentPassword"
-              :rules="inputPassword"
-            
-            ></v-text-field>
-            </v-col>
+                  
                    <v-col cols="12" sm="12">
         <v-text-field
         outlined
               label="ChangePassword"
               placeholder="ChangePassword"
-              v-model="changePassword"
-              :rules="inputPassword"
+              v-model="authInput.password"
+              :rules="rules.changePasswordRules"
             
             ></v-text-field>
-            <v-btn class="red seller" router-view to="/UpgradedUser">Wanna Become A Seller </v-btn>
             </v-col>
+                <v-col cols="12" sm="12">
+        <v-text-field
+        outlined
+              label="ChangeUserPhoto"
+              placeholder="ChnageUserPhoto"
+              v-model="authInput.ChangeUserPhoto"
+              :rules="rules.nameRules"
+            
+            ></v-text-field>
+          
+           
+            
+            <v-btn class="red seller" router-view to="/UpgradedUser">Wanna Become A Seller </v-btn>
+           </v-col>
+        </v-form>
              </v-row>
-             </v-container>
-            </v-form>
+       
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -72,7 +77,7 @@
       <v-expansion-panel
      
       >
-        <v-expansion-panel-header class="account">Delete Account</v-expansion-panel-header>
+        <v-expansion-panel-header class="account" >Delete Account</v-expansion-panel-header>
         <v-expansion-panel-content>
         
    
@@ -87,10 +92,14 @@
     </div>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
+import authInput from "../mixins/authInput";
 export default {
+    mixins:[authInput],
     data(){
         return{
-            drawer:false,
+            authInput:{},
+            isAuthInputValid:true,
              inputUser:[
             v => v.length >= 5 || 'Minimun Length is 5 Characthers'
         ],
@@ -101,7 +110,49 @@ export default {
             v => v.length >= 4 || 'Minimun Length is 4 Characthers'
         ],
         }
-    }
+    },
+    methods:{
+             ...mapActions(["changeAccountDetails"]),
+        async ChangeAccountDetails(){
+if(this.isAuthInputValid){
+    console.log('1')
+    const inputData = {...this.authInput};
+    console.log('3')
+    const data = await this.changeAccountDetails(inputData);
+    console.log(data)
+    
+    console.log('4')
+    this.reset();
+}
+        },
+        exit() {
+            if (!confirm("Are you sure to exit without saving?")) {
+                return;
+            }
+          
+            this.reset();
+        },
+        reset() {
+            this.initialize();
+        },
+        initialize() {
+            this.authInput.username = this.userData.username;
+            this.authInput.email = this.userData.email;
+          
+            this.authInput.currentUserPhoto = this.userData.currentUserPhoto;
+            this.authInput.changePassword = "";
+        },
+       
+       
+    },
+    created() {
+        this.initialize();
+    },
+
+    computed:{
+        ...mapState(["userData"])
+   
+}
 }
 </script>
 <style scoped>

@@ -1,24 +1,19 @@
 <template>
     <div>
-        <div>
-
-        
         <v-app-bar app class="indigo nav">
             <span class="fa fa-times cross" router-view to="/"></span>
-         <v-spacer></v-spacer>
+         
            <v-toolbar-title>
-               <span class="rapha orange--text seller">Seller</span>
+               <span class="rapha white--text">Edit Your Product</span>
               
                </v-toolbar-title>
                <v-spacer></v-spacer>
- 
+             <v-btn class="orange text" @click="changeAccounDetails">Save</v-btn>
 
         </v-app-bar>
-        </div>
-        <div>
- <span class="tes">Create Your Products</span>
-        </div>
-        <div>
+      
+
+       <div>
             <v-form>
            <v-container>
                <v-row>
@@ -142,12 +137,14 @@
             </v-form>
             <v-btn class="yellow btn" router-view to="/">Post Your Product</v-btn>
         </div>
-       
     </div>
 </template>
 <script>
 import {mapState} from 'vuex'
 export default {
+
+
+
   data(){
     return{
       inputData:{
@@ -207,6 +204,7 @@ export default {
    
     }
     
+
 }
 </script>
 <style scoped>
@@ -223,7 +221,7 @@ export default {
 
 }
 .text{
-    font-size:20px;
+    font-size:15px;
 }
 .seller{
 text-transform:uppercase;

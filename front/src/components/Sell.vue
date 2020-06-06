@@ -97,6 +97,16 @@
           ></v-select>
            
             </v-col>
+            <v-col cols="12" sm="12">
+         <v-select
+            :items="tags"
+            label="Tags"
+            placeholder="Tags"
+            outlined
+          ></v-select>
+           
+            </v-col>
+
 
             
              <v-col cols="12" sm="12">
@@ -115,12 +125,12 @@
                     <v-menu>
                         <template v-slot:activator="{ on }">
                             <v-text-field
-                                :value="formatedDate"
+                               
                                 v-on="on"
                                 label="Due Date"
                                 prepend-icon="date_range"
                                 readonly
-                                :rules="notEmpty"
+                                :rules="notEmptyRule"
                                 
                                 v-model="data"
                             ></v-text-field>
@@ -134,19 +144,19 @@
                     </v-col>
                       <v-col cols="12" sm="12">
             <span class="ratings"> Add Ratings</span>
-         <v-rating v-model="rating"></v-rating>
+         <v-rating></v-rating>
            
             </v-col>
              </v-row>
              </v-container>
             </v-form>
-            <v-btn class="yellow btn" router-view to="/">Post Your Product</v-btn>
+            <v-btn class="yellow btn" @submit="submit">Post Your Product</v-btn>
         </div>
        
     </div>
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState,mapActions} from 'vuex'
 export default {
   data(){
     return{
@@ -157,7 +167,7 @@ export default {
        notEmptyRule: [v => !!v || "This field is required"],
       e6:[],
       e7:[],
-      ratings:4,
+     
       title:'',
       description:'',
       price:'',
@@ -169,6 +179,7 @@ export default {
 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
 41,42,43,44,45,46,47,48,49,50],
       items:['Tecnology','House','Book'],
+      tags:["videogames","phones","computers","fantasy","action","history","livingroom","garden","bedroom"],
       item:['Red','Blue','Orange','Black','White','Green','Purple','Violet','AzulMarine','pink'],
        inputUser:[
             v => v.length >= 3 || 'Minimun Length is 3 Characthers'
@@ -198,6 +209,13 @@ export default {
   
   },
     methods:{
+      ...mapActions(['CreteNewProducts']),
+      async submit(data){
+        await this.CreteNewProducts(data)
+        this.$router.push('/')
+
+      }
+
      
 
       

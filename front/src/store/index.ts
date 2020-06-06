@@ -166,6 +166,7 @@ HOUSE_PRODUCTS(state,payload){
   //Create Product
     async CreteNewProducts({commit},{userInputsData}){
 const result = await Api.fetchData(`products`,true,'POST',userInputsData)
+console.log(result)
 if(!result.ok){
   return;
 }

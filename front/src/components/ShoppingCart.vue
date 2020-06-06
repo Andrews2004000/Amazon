@@ -24,7 +24,7 @@
         </v-col>
         
          <v-text-field
-            v-model="rows"
+            
             class="mx-4 ex"
             label="Quantity"
             

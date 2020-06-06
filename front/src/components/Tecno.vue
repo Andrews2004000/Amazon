@@ -66,7 +66,7 @@
         <v-icon class="fa fa-mobile" left></v-icon>
        Phones
       </v-chip>-->
-       <v-chip-group
+    <!---   <v-chip-group
             mandatory
             active-class="primary white--text"
             class="d-flex mb-5"
@@ -77,7 +77,7 @@
             <v-chip v-for="tag in tags" :key="tag">
                 {{ tag }}
             </v-chip>
-        </v-chip-group>
+        </v-chip-group> --->
        </div>
            
    </div>

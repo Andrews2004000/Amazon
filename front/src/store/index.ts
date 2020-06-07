@@ -171,6 +171,8 @@ if(!result.ok){
   return;
 }
 const data = result.data;
+console.log(data)
+console.log('3')
 commit('CREATE_NEW_PRODUCTS',data)
 
     },

@@ -28,7 +28,7 @@
         outlined
               label="Title"
               placeholder="Title"
-              v-model="title"
+              v-model="userInputs.title"
               :rules="inputUser"
             
             ></v-text-field>
@@ -37,7 +37,7 @@
         <v-textarea
             outlined
             placeholder="Description"
-            v-model="description"
+            v-model="userInputs.description"
             :rules="inputDescription"
             name="input-7-4"
             label="Description"
@@ -50,7 +50,7 @@
         outlined
               label="ImageUrl"
               placeholder="ImageUrl"
-              v-model="image"
+              v-model="userInputs.image"
               :rules="imageUrl"
             
             ></v-text-field>
@@ -60,14 +60,14 @@
         outlined
               label="Price"
               placeholder="Price"
-            v-model="price"
+            v-model="userInputs.price"
 
             ></v-text-field>
            
             </v-col>
               <v-col cols="6" sm="12">
          <v-select
-            v-model="colorsAvailable"
+            v-model="userInputs.colorsAvailable"
             :items="item"
             label="Colors Available"
             multiple
@@ -81,7 +81,7 @@
          <v-select
             
             :items="size"
-             v-model="size"
+             v-model="userInputs.size"
             label="Size Available"
             multiple
             chips
@@ -95,7 +95,7 @@
          <v-select
             :items="items"
             label="Category"
-             v-model="category"
+             v-model="userInputs.category"
             placeholder="Category"
             outlined
           ></v-select>
@@ -104,7 +104,7 @@
             <v-col cols="12" sm="12">
          <v-select
             :items="tags"
-            v-model="tags"
+            v-model="userInputs.tags"
             label="Tags"
             placeholder="Tags"
             outlined
@@ -119,7 +119,7 @@
         outlined
               label="Max Quantity"
               placeholder="Max Quantity"
-              v-model="maxQuantity"
+              v-model="userInputs.maxQuantity"
               :rules="[MaxQuantity]"
               
             
@@ -137,10 +137,10 @@
                                 readonly
                                 :rules="notEmptyRule"
                                 
-                                v-model="data"
+                                v-model="userInputs.dates"
                             ></v-text-field>
                         </template>
-                        <v-date-picker v-model="dates" range no-title scrollable></v-date-picker>
+                        <v-date-picker  range no-title scrollable></v-date-picker>
                       <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
                             <v-btn text color="primary">OK</v-btn>
@@ -149,7 +149,7 @@
                     </v-col>
                       <v-col cols="12" sm="12">
             <span class="ratings"> Add Ratings</span>
-         <v-rating v-model="ratings"></v-rating>
+         <v-rating v-model="userInputs.ratings"></v-rating>
            
             </v-col>
              </v-row>
@@ -176,25 +176,15 @@ category:'',
 tags:'',
 maxQuantity:'',
 dates:'',
-        ratings:'',
+        ratings:0,
 
 
       },
-      inputData:{
-        dates:[]
-
-      },
+    
        notEmptyRule: [v => !!v || "This field is required"],
-      e6:[],
-      e7:[],
      
-      title:'',
-      description:'',
-      price:'',
-      data:'',
-      category:'',
-      maxQuantity:'',
-      image:'',
+     
+      
       size:[10,11,12,13,14,15,16,17,18,19,20,
 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
 41,42,43,44,45,46,47,48,49,50],
@@ -229,15 +219,11 @@ dates:'',
   
   },
     methods:{
-    //  ...mapActions(['CreteNewProducts']),
-    //  async submit(){
-    //    await this.CreteNewProducts(this.userInputs)
-     //   this.$router.push('/')
-
-     // }
      ...mapActions(['CreteNewProducts']),
 async submit(){
+  console.log('1')
   await this.CreteNewProducts(this.userInputs)
+  console.log('2')
   this.$router.push('/')
 
  

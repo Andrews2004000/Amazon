@@ -6,7 +6,7 @@ const router = ExpressPromiseRouter();
 router.route('/')
 .get(ProductsController.getAllProducts)
 
-.post(protect,ProductsController.createProducts,restrictRole('admin' || 'vendor' || 'client'))
+.post(ProductsController.createProducts)
 
 router.route('/:prodId')
 .patch(protect,ProductsController.editProduct,restrictRole('admin' || 'vendor'))

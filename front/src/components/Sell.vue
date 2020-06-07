@@ -37,11 +37,13 @@
         <v-textarea
             outlined
             placeholder="Description"
+            v-model="description"
             :rules="inputDescription"
             name="input-7-4"
             label="Description"
             
           ></v-textarea>
+          
             </v-col>
                    <v-col cols="12" sm="12">
         <v-text-field
@@ -65,7 +67,7 @@
             </v-col>
               <v-col cols="6" sm="12">
          <v-select
-            v-model="e7"
+            v-model="colorsAvailable"
             :items="item"
             label="Colors Available"
             multiple
@@ -77,8 +79,9 @@
             </v-col>
              <v-col cols="6" sm="12">
          <v-select
-            v-model="e6"
+            
             :items="size"
+             v-model="size"
             label="Size Available"
             multiple
             chips
@@ -92,6 +95,7 @@
          <v-select
             :items="items"
             label="Category"
+             v-model="category"
             placeholder="Category"
             outlined
           ></v-select>
@@ -100,6 +104,7 @@
             <v-col cols="12" sm="12">
          <v-select
             :items="tags"
+            v-model="tags"
             label="Tags"
             placeholder="Tags"
             outlined
@@ -135,16 +140,16 @@
                                 v-model="data"
                             ></v-text-field>
                         </template>
-                        <v-date-picker v-model="inputData.dates" range no-title scrollable></v-date-picker>
+                        <v-date-picker v-model="dates" range no-title scrollable></v-date-picker>
                       <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                            <v-btn text color="primary" @click="$refs.menu.save(inputData.dates)">OK</v-btn>
+                            <v-btn text color="primary">OK</v-btn>
                     </v-menu>
                     
                     </v-col>
                       <v-col cols="12" sm="12">
             <span class="ratings"> Add Ratings</span>
-         <v-rating></v-rating>
+         <v-rating v-model="ratings"></v-rating>
            
             </v-col>
              </v-row>
@@ -160,6 +165,21 @@ import {mapState,mapActions} from 'vuex'
 export default {
   data(){
     return{
+      userInputs:{
+        title:'',
+        description:'',
+        image:'',
+price:'',
+colorsAvailable:'',
+size:'',
+category:'',
+tags:'',
+maxQuantity:'',
+dates:'',
+        ratings:'',
+
+
+      },
       inputData:{
         dates:[]
 
@@ -209,12 +229,20 @@ export default {
   
   },
     methods:{
-      ...mapActions(['CreteNewProducts']),
-      async submit(data){
-        await this.CreteNewProducts(data)
-        this.$router.push('/')
+    //  ...mapActions(['CreteNewProducts']),
+    //  async submit(){
+    //    await this.CreteNewProducts(this.userInputs)
+     //   this.$router.push('/')
 
-      }
+     // }
+     ...mapActions(['CreteNewProducts']),
+async submit(){
+  await this.CreteNewProducts(this.userInputs)
+  this.$router.push('/')
+
+ 
+  
+}
 
      
 

@@ -40,16 +40,19 @@
             <div class="chip">
 
            
-
+<v-chip-group v-model="searchTags">
             <v-chip
         class="ma-2 cip"
         color="indigo"
         outlined
+        value="fantasy"
       >
         <v-icon class="fa fa-magic" left></v-icon>
        Fantasy
       </v-chip>
           <v-chip
+          value="action"
+         
         class="ma-2 cip"
         color="red"
         outlined
@@ -58,6 +61,7 @@
       Action
       </v-chip>
           <v-chip
+          value="history"
         class="ma-2 cip"
         color="success"
         outlined
@@ -65,6 +69,7 @@
         <v-icon class="fa fa-history" left></v-icon>
        History
       </v-chip>
+</v-chip-group>
        </div>
            
    </div>
@@ -72,7 +77,7 @@
 <div>
      <v-container class="pinoto">
             <v-row >
-                <v-col  v-for="product in products" :key="product.id"  :products="products">
+                <v-col  v-for="product in  filteredProducts" :key="product.id"  :products="products">
                     <v-card class="pa-5 mx-auto" max-width="400" tile>
                         <div class="padre">
                             <v-row>
@@ -117,7 +122,8 @@ import NavBar from './NavBar'
 export default {
     data(){
         return{
-searchField:""
+searchField:"",
+searchTags:""
         }
     },
     components:{
@@ -133,6 +139,24 @@ searchField:""
             this.SearchProducts({ searchQuery, categoryType: "HouseProducts" });
         },
       
+
+    },
+    filteredProducts(){
+        const products = this.products;
+        if(!this.searchTags)return products;
+
+        const filteredTags = this.products.filter(product=>{
+            if(product.tags && Array.isArray(product.tags) && product.tags.includes(this.searchTags)){
+                return true;
+            }else{
+                return false;
+            }
+           
+        })
+         if(filteredTags.length === 0){
+                return products
+            }
+            return filteredTags;
 
     },
     computed:{

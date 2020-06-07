@@ -34,7 +34,7 @@ export default new Vuex.Store({
 
   },
   mutations: {
-SETP_RODUCTS_DATA<T>(state:T,payload:{type:string;data:any}){
+SETUP_RODUCTS_DATA<T>(state:T,payload:{type:string;data:any}){
 const type = payload.type;
 const data = payload.data;
 state[type as keyof T] = data;
@@ -185,7 +185,7 @@ commit('CREATE_NEW_PRODUCTS',data)
         return;
       }
       const data = result.data;
-      commit('SETP_RODUCTS_DATA',{data,type:categoryType})
+      commit('SETUP_RODUCTS_DATA',{data,type:categoryType})
 
     },
     async LoadAllProducts({commit}){

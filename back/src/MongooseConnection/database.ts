@@ -11,7 +11,7 @@ import mongoose from 'mongoose'
         });
         console.log('Connected');
     } catch (error) {
-        console.log(error);
+       console.log(error)
     }
 
 }

@@ -40,39 +40,24 @@
             <div class="chip">
 
            
-
-            <v-chip
-        class="ma-2 cip"
-        color="indigo"
-        outlined
-      >
-        <v-icon class="fa fa-home icon" left></v-icon>
-    Living Room
-      </v-chip>
-          <v-chip
-        class="ma-2 cip"
-        color="orange"
-        outlined
-      >
-        <v-icon class="fa fa-tree icon" left></v-icon>
-      Garden
-      </v-chip>
-          <v-chip
-        class="ma-2 cip"
-        color="success"
-        outlined
-      >
-        <v-icon class="fa fa-bed icon" left></v-icon>
-       Bedroom
-
-      </v-chip>
+ <v-chip-group v-model="selectedTag">
+                    <v-chip class="ma-2 cip" color="indigo" outlined value="bedroom">
+                        <v-icon class="fa fa-bed" left></v-icon>bedroom
+                    </v-chip>
+                    <v-chip class="ma-2 cip" color="primary" outlined value="garden">
+                        <v-icon class="fa fa-tree" left></v-icon>Garden
+                    </v-chip>
+                    <v-chip class="ma-2 cip" color="success" outlined value="livingroom">
+                        <v-icon class="fa fa-home" left></v-icon>livingRoom
+                    </v-chip>
+                </v-chip-group>
        </div>
            
    </div>
    <div>
      <v-container class="pinoto">
             <v-row >
-                <v-col  v-for="product in products" :key="product.id"  :products="products">
+                <v-col  v-for="product in filteredProducts" :key="product.id"  :products="products">
                     <v-card class="pa-5 mx-auto" max-width="400" tile>
                         <div class="padre">
                             <v-row>
@@ -118,7 +103,8 @@ import NavBar from './NavBar'
 export default {
     data(){
         return{
-            searchField:""
+            searchField:"",
+            selectedTag:""
         }
 
     },
@@ -141,6 +127,35 @@ export default {
 
     },
     computed:{
+
+                 filteredProducts() {
+            const products = this.products;
+
+            // Se non è selezionato alcun tag, restituisci tutti i prodotti
+            if (!this.selectedTag) return products;
+
+            // Crea un array di prodotti che presentano il tag selezionato e restituiscilo
+            const filteredProducts = products.filter(product => {
+                // Controlla se product tags esiste, se è un array e se include il tag con cui si sta filtrando
+                if (
+                    product.tags &&
+                    Array.isArray(product.tags) &&
+                    product.tags.includes(this.selectedTag)
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+            // Se non ha trovato nulla, restituisci tutti i prodotti
+            if (filteredProducts.length === 0) return products;
+
+            // Altrimenti restituisci quelli filtrati
+            return filteredProducts;
+        },
+
+        
         products(){
             return this.$store.state.HouseProducts
 

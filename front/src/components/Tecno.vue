@@ -127,15 +127,7 @@ export default {
     methods: {
         ...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),
 
-        changeHandler(tagIndexes) {
-            let tags;
-            if (tagIndexes.length) {
-                tags = tagIndexes.sort().map(i => this.tags[i]);
-            } else {
-                tags = [];
-            }
-            this.$emit("input", tags);
-        },
+    
         searchHanlder() {
             console.log("Sto Ceracndo");
             const searchField = this.searchField;

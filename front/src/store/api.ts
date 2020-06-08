@@ -25,10 +25,11 @@ class Api {
           }else{
             body = inputBody ? inputBody :null;
           }
+          console.log(headers)
                
-        
-            
-            console.log(body);
+        console.log(inputBody)
+            console.log("BODY")
+            console.log(body)
             // Fetch Call
             const rawResponse = await fetch(this.url + path, {
                 method: method,

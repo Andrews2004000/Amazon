@@ -10,6 +10,7 @@ import Upgrade from '../components/Upgrade.vue'
 import VendorPage from '../components/Vendor.vue'
 import EditProduct from '../components/EditProduct.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
+import Detail from '../components/Details.vue'
 Vue.use(VueRouter)
 
   const routes = [
@@ -19,7 +20,12 @@ Vue.use(VueRouter)
     component: Main
   },
   {
-    path: '/EditProduct/:id',
+    path: '/Detail',
+    name: 'Detail',
+    component: Detail
+  },
+  {
+    path: '/EditProduct',
     name: 'Edit',
     component: EditProduct
   },

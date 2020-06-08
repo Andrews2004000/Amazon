@@ -12,8 +12,9 @@ router.route('/')
 
 /// Routes For Updatings
 router.route('/userUpdatings')
-.patch(protect,restrictRole('admin' || 'vendor'||'client' ),UserController.upadteUser)
-.post(protect,restrictRole('admin' || 'vendor'|| 'client'),UserController.Logout)
+.get(UserController.getOneUser)
+.patch(UserController.upadteUser)
+.post(UserController.Logout)
 .delete(protect,restrictRole('admin' || 'vendor'|| 'client'),UserController.deletAccount)
 
 export default router;

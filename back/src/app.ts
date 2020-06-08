@@ -10,6 +10,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import * as  db from './MongooseConnection/database'
 import  AppError from './Error/AppError'
 import AuthRoutes from './routes/Auth'
+import OrderRoutes from './routes/order'
 import xss from 'xss-clean'
 
 import ProductsRoutes from './routes/Products';
@@ -47,6 +48,7 @@ app.use(BodyParser.json())
 
 app.use('/api/v1/user',AuthRoutes);
 app.use('/api/v1/products',ProductsRoutes);
+app.use('/api/v1/order',OrderRoutes);
 //Error Handling
 app.use('/api/', (req: Request, res: Response) => {
     res.status(404).json({ message: 'Route Not Found' });

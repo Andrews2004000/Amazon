@@ -42,7 +42,7 @@ export const getProduct:RequestHandler = async (req,res,next)=>{
     })
 }
 export const createProducts:RequestHandler = async (req,res,next)=>{
-   const ProductData = {...req.body};
+   const ProductData = {...req.body.userInputs};
    ProductData.vendor = req.user?._id;
     const newProduct = await Product.create(ProductData)
    

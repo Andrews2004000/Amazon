@@ -3,53 +3,23 @@
 <NavBar/>
 <div class="centro">
 <span class="emp">Your Cart Is Empty</span>
+ 
 <v-card class="pa-5  card" width="1000">
     <v-container>
         <v-row>
-        <v-col>
-            <v-img src="https://www.01net.it/wp-content/uploads/sites/14/2018/06/macOS-Mojave.png" height="200" width="250"></v-img>
-            <v-btn class="success btn">Buy</v-btn>
-        </v-col>
-        <v-col>
-            <v-btn class="red btn-2">Remove</v-btn>
-            <v-row>
-                
-                <div class="diva">
-<v-card-title>Mac 2020</v-card-title>
-                <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Est illo porro mollitia id odit nostrum molestiae libero tenetur recusandae nesciunt veniam cumque vero cupiditate debitis incidunt repudiandae accusamus, minus blanditiis.</span>
-                </div>
-                
-                <v-rating class="ratings" v-model="rating"></v-rating>
-        </v-row>
-        </v-col>
-        
-         <v-text-field
-            
-            class="mx-4 ex"
-            label="Quantity"
-            
-            max="10"
-            min="1"
-            step="1"
-            
-            type="number"
-          ></v-text-field>
-            <v-expansion-panels>
-      <v-expansion-panel>
-        <v-expansion-panel-header class="orange--text comment">See Some Comments</v-expansion-panel-header>
-       
-        <v-expansion-panel-content>    
-            <div class="com">
-                  <span class="toti">Andrews</span>
+            <div class="image">
+<v-img src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/refurb-iphoneX-spacegray_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1548459944179" height="100" width="100"></v-img>
+            </div>
+            <div class="sub">
 
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            <v-rating class="ratings" v-model="ratings_1"></v-rating>
-                </div>   
-          
-                 
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+           
+<span>Quantity 1</span>
+            <span>Total Ammount 399$</span>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn class="red btn2">Remove</v-btn>
+            <v-btn class="orange btn">Proceed Payment</v-btn>
+
 
             </v-row>
       
@@ -75,9 +45,12 @@ export default {
         return{
             rating:4,
             number:['1','2'],
-            ratings_1:1
+            ratings_1:1,
+              checkbox: true,
         }
-    }
+    },
+    
+    
 }
 </script>
 <style scoped>
@@ -87,49 +60,35 @@ export default {
 
     text-transform: uppercase;
 }
-.diva{
-    margin-right:35px;
-    padding:0;
-}
-.btn-2{
-    margin-right:-290px;
-    margin-top:-10px;
-}
-.like{
-    margin-left:50px;
-}
-.ex{
-    width:1000px;
-}
-.toti{
-    margin-left:100px;
-    font-weight:300;
-    font-size:20px;
-    margin-bottom:10px;
-    font-family:Bold
-}
-.com{
+.sub{
     display: flex;
     flex-direction: column;
+   
+    justify-content: center;
+    margin-left:80px;
 }
-.comment{
-    text-transform: uppercase;
-    font-weight: 700;
+.check{
+    transform:translateY(120px);
+    margin-left:10px
 }
+
+
+
 .centro{
     text-align:center;
     margin-right:50px;
 }
-.btn{
-    margin-left:-198px;
-  
-    width:250px;
-    margin-top:20px;
-}
+
+
 .card{
     margin-left:220px;
 }
-.ratings{
-    margin-top:5px;
+.btn{
+    margin-top:25px;
+}
+.btn2{
+     margin-top:25px;
+     margin-right: 50px;
+
 }
 </style>

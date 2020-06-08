@@ -226,7 +226,8 @@ export default {
             }
         },
         async LogoutHanlder() {
-            await this.Logout()
+            await this.Logout();
+            this.drawer = false;
 
         },
       

@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     prod:[],
-  
+    cart:[],
     videogames: [],
     AllProducts:[],
     TecnologyProducts : [],
@@ -19,26 +19,23 @@ export default new Vuex.Store({
      House:['livingRoom','bedroom','garden'],
      Book:['fantasy','history','action']
    },
-    
-   
     userData:{
       username:null,
       email:null,
       password:null,
       confirmPassword:null,
       role:null,
-     
-    
     },
     isLoggedIn:false
-
   },
   mutations: {
 SETUP_RODUCTS_DATA<T>(state:T,payload:{type:string;data:any}){
 const type = payload.type;
 const data = payload.data;
 state[type as keyof T] = data;
-
+},
+LOAD_USER_DATA(state,payload){
+  state.userData = payload;
 },
     
 SIGNUP(state,payload){
@@ -61,35 +58,33 @@ state.isLoggedIn = false;
 CREATE_NEW_PRODUCTS(state,payload){
 state.prod = payload;
 },
+ADD_TO_CART(state,payload){
+ 
+state.cart = payload;
+},
 CHANGE_ACCOUNT_DETAILS(state,payload){
   state.isLoggedIn = true;
   state.userData = payload;
-
+  
 },
+
 ALL_PRODUCTS(state,payload){
   state.AllProducts = payload;
-
 },
 TECNOLOGY_PRODUCTS(state,payload){
   state.TecnologyProducts = payload;
-
 },
 
 BOOKS_PRODUCTS(state,payload){
   state.BookProducts = payload;
-
 },
 HOUSE_PRODUCTS(state,payload){
   state.HouseProducts = payload;
-
 }
-  
-
     },
-  
   actions: {
     async Signup({ commit },payload){
-      const result = await Api.fetchData(`user/`,true,'PUT',payload);
+      const result = await Api.fetchData(`user`,true,'PUT',payload);
      
       if(!result.ok){
         return
@@ -98,8 +93,18 @@ HOUSE_PRODUCTS(state,payload){
       commit('SIGNUP',data)
 
     },
+    async load({commit}){
+const result = await Api.fetchData(`user/userUpdatings`)
+if(!result.ok){
+  return;
+}
+const data = result.data;
+commit('LOAD_USER_DATA',data)
+
+
+    },
     async Login({commit},payload){
-      const result = await Api.fetchData(`user/`,true,'POST',payload)
+      const result = await Api.fetchData(`user`,true,'POST',payload)
   
       if(!result.ok){
         return
@@ -117,35 +122,24 @@ HOUSE_PRODUCTS(state,payload){
       commit('LOGOUT')
 
     },
-    
-    //async DeleteAccount({commit}){
-   //   const result = await Api.fetchData(`user/logout`,true,'POST')
-//if(!result.ok){
- // return
-//}
-//commit('DELETE_ACCOUNT')
-   // },
-  //  async DeleteProducts({dispatch},payload){
-   //   const id = payload;
-  //    const result = await Api.fetchData(`products/${id}`,true,'DELETE');
-  //    if(!result.ok){
-  //      return;
-  //    }
-      //dispatch();
-//
-  //  },
-   // async upadteProduct({dispatch},payload){
-   //   const currentRoute = router.currentRoute;
-   //   const id = currentRoute.params.id;
-    //  const result = await Api.fetchData(`products/${id}`,true,'PATCH');
-    //  if(!result.ok){
-    //    return;
-     // }
-    //  const data = result.data;
-    //  dispatch()
-    //  return data;
+    async deleteMe({commit}){
+      const result = await Api.fetchData(`user/userUpdatings`,true,'DELETE')
+if(!result.ok){
+  return;
+}
+commit('LOGOUT')
+    },
+    async getAllUsers({commit}){
+      const result = await Api.fetchData(`user`)
+      if(!result.ok){
+        return;
+      }
+      const data = result.data
+      return data;
 
-   // },
+    },
+    
+
     //changeAccountDetails
     async changeAccountDetails({ commit }, payload) {
       console.log(payload)
@@ -164,8 +158,8 @@ HOUSE_PRODUCTS(state,payload){
   },
 
   //Create Product
-    async CreteNewProducts({commit},{userInputsData}){
-const result = await Api.fetchData(`products`,true,'POST',userInputsData)
+    async CreteNewProducts({commit},userInputs){
+const result = await Api.fetchData(`products`,true,'POST',userInputs)
 console.log(result)
 if(!result.ok){
   return;
@@ -175,6 +169,29 @@ console.log(data)
 console.log('3')
 commit('CREATE_NEW_PRODUCTS',data)
 
+    },
+    async makeOrder({commit},payload){
+      const result = await Api.fetchData(`orders`,true,'POST',payload)
+      if(!result.ok){
+        return false;
+      }
+      return true;
+
+
+    },
+
+    async getAllOrders({commit}){
+      const result = await Api.fetchData(`orders`);
+      if(!result.ok){
+        return false;
+
+      }
+      return true
+
+    },
+  async  deleteOrders({commit},payload){
+    await Api.fetchData(`orders` + '/' + payload,true,'DELETE');
+    
     },
    
     async SearchProducts({commit},{searchQuery,categoryType}){

@@ -63,7 +63,11 @@ if(user && (await bcrypt.compare(password,user.password))){
     res.status(200).json({
         status:'Success Login',
         token,
-        data:user
+        data:
+        
+            user
+
+        
         
     })
 } else {
@@ -76,7 +80,7 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     const body = req.body as Partial<IUser>
     const user = req.user
     if(!user){
-        throw new AppError('NO uSER DATA')
+        throw new AppError('no user data')
     }
     const inputData:any = {...body}
     if(inputData.password){
@@ -93,9 +97,17 @@ export const upadteUser:RequestHandler = async(req,res,next)=>{
     await user.save()
     res.status(201).json({
         status:'success',
-        data:{
-            user
-        }
+        data:user
+
+        
+            
+
+        
+           
+
+        
+            
+        
 
     })
 }
@@ -117,22 +129,32 @@ export const getAllUsers:RequestHandler = async (req,res,next)=>{
     }
     res.status(200).json({
         status:'success',
-        data:{
+        data:
+        {
             users
+
         }
+           
+        
     })
 
 }
 export const getOneUser:RequestHandler = async(req,res,next)=>{
     const user = req.user
     if(!user){
-        throw new AppError('No Passowrd',404)
+        throw new AppError('No Auth',404)
     }
     res.status(200).json({
         status:'success',
         data:{
-            user
+user
         }
+        
+           
+
+        
+           
+        
     })
 
 }

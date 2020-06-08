@@ -64,27 +64,25 @@
                         :key="product.id"
                         :products="products"
                     >
-                        <v-card class="pa-5 mx-auto" max-width="400" tile>
+                        <v-card class="pa-6 mx-auto" width="500" tile>
                             <div class="padre">
                                 <v-row>
                                     <v-card-text class="beta">
                                         <v-card-title class="titolo">Product Of The Mounth</v-card-title>
                                         <v-card-subtitle>{{ product.title }}</v-card-subtitle>
-                                        <span>{{product.description}}</span>
+
                                     </v-card-text>
 
                                     <v-img
                                         :src="product.imageUrl"
                                         class="pongo align-end"
-                                        height="190px"
-                                        max-width="230px"
+                                        height="170px"
+                                        max-width="150px"
                                     ></v-img>
-                                    <span class="pu">ONLY</span>
-                                    <span class="sna">{{ product.price }}$</span>
-                                    <span>Rating: {{product.ratings}}</span>
-                                    <span>Max quantity: {{product.MaxQuantity}}</span>
-                                    <span>Sell-by date: {{product.scadenza}}</span>
-                                    <span>Tags: {{product.tags}}</span>
+                                   
+                                   
+                                  <v-rating>{{product.ratings}}</v-rating>
+                                     <span class="sna">{{ product.price }}$</span>
 
                                     <v-card-actions>
                                         <v-btn
@@ -191,7 +189,7 @@ export default {
 }
 .span-1 {
     position: relative;
-    margin-left: 560px;
+    margin-left: 540px;
     text-transform: uppercase;
     font-size: 50px;
     color: white;
@@ -203,5 +201,8 @@ export default {
 .chip {
     margin-left: 850px;
     transform: translateY(-30px);
+}
+.pinoto {
+    margin-left: 8rem;
 }
 </style>

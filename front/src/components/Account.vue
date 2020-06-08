@@ -1,14 +1,16 @@
 <template>
     <div>
         <v-app-bar app class="indigo nav">
-            <span class="fa fa-times cross" router-view to="/"></span>
-         
+           <!-- <span class="fa fa-times cross" router-view to="/"></span>-->
+          <v-btn icon dark @click="exit">
+                    <v-icon>clear</v-icon>
+                </v-btn>
            <v-toolbar-title>
                <span class="rapha white--text">Account</span>
               
                </v-toolbar-title>
                <v-spacer></v-spacer>
-             <v-btn class="orange text" @click="ChangeAccountDetails" >Save</v-btn>
+             <v-btn dark text @click="changeAccountDetailsHandler">Save</v-btn>
 
         </v-app-bar>
            <v-expansion-panels class="pannel-body">
@@ -20,7 +22,7 @@
         
          
                <v-row>
-                   <v-form ref="authForm" v-model="isAuthInputValid">
+                   <v-form ref="authForm">
 
        <v-col cols="12" sm="12">
         <v-text-field
@@ -113,22 +115,25 @@ export default {
     },
     methods:{
              ...mapActions(["changeAccountDetails"]),
-        async ChangeAccountDetails(){
-if(this.isAuthInputValid){
-    console.log('1')
+        async changeAccountDetailsHandler(){
+//if(this.isAuthInputValid){
     const inputData = {...this.authInput};
-    console.log('3')
-    const data = await this.changeAccountDetails(inputData);
-    console.log(data)
-    
-    console.log('4')
+       //Object.keys(inputData).forEach(k => {
+       //             if (!inputData[k]) {
+        //                delete inputData[k];
+         //           }
+     //           });
+ 
+  const data =   await this.changeAccountDetails(inputData);
+  console.log(data)
     this.reset();
-}
-        },
+},
+        
         exit() {
             if (!confirm("Are you sure to exit without saving?")) {
                 return;
             }
+            this.$router.push('/')
           
             this.reset();
         },
@@ -138,9 +143,9 @@ if(this.isAuthInputValid){
         initialize() {
             this.authInput.username = this.userData.username;
             this.authInput.email = this.userData.email;
-          
+           this.authInput.password = "";
             this.authInput.currentUserPhoto = this.userData.currentUserPhoto;
-            this.authInput.changePassword = "";
+           
         },
        
        

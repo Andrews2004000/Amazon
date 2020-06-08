@@ -1,17 +1,17 @@
 import mongoose, { Schema } from 'mongoose'
-export interface IUproducts extends mongoose.Document {
+export interface IUProducts extends mongoose.Document {
     _id: any,
     title: string,
     description: string,
     imageUrl?: string,
     price: number,
     scadenza?: Date,
-    size?: [number],
+    size?: [any],
     tags?: Array<"videogames" | "phones" | "computers" | "fantasy" | "action" | "history" | "livingroom" | "garden" | "bedroom">,
-    colorsAvailable?: "red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available",
+    colorsAvailable?:Array< "red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available">,
     category: 'Tecnology' | 'House' | 'Book' | 'Not Specified',
-    ratings: number,
-    MaxQuantity: number,
+    ratings?: number,
+    MaxQuantity?: number,
     [key: string]: any
 
 
@@ -31,7 +31,7 @@ const ProductsSchema = new mongoose.Schema({
         type: String,
     },
     size: {
-        type: Number,
+        type: [String],
 
     },
     tags:
@@ -43,9 +43,18 @@ const ProductsSchema = new mongoose.Schema({
     },
 
     colorsAvailable: {
-        type: String,
-        enum: ["red", "blue", "green", "yellow", "grey", "Black", "All Available"],
-        default: "All Available"
+        type: [String],
+        enum: ["Red",
+        "Blue",
+        "Orange",
+        "Black",
+        "White",
+        "Green",
+        "Purple",
+        "Violet",
+        "AzulMarine",
+        "pink"],
+       
 
     },
     price: {
@@ -62,7 +71,7 @@ const ProductsSchema = new mongoose.Schema({
     },
     ratings: {
         type: Number,
-        required: true
+     
 
     },
     MaxQuantity: {
@@ -83,5 +92,5 @@ const ProductsSchema = new mongoose.Schema({
 
 },
     { versionKey: false })
-const Product = mongoose.model<IUproducts>('Products', ProductsSchema)
+const Product = mongoose.model<IUProducts>('Products', ProductsSchema)
 export default Product

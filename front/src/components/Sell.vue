@@ -41,7 +41,7 @@
                                 outlined
                                 label="ImageUrl"
                                 placeholder="ImageUrl"
-                                v-model="userInputs.image"
+                                v-model="userInputs.imageUrl"
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12">
@@ -99,8 +99,8 @@
                                 outlined
                                 label="Max Quantity"
                                 placeholder="Max Quantity"
-                                v-model="userInputs.maxQuantity"
-                                :rules="[MaxQuantity]"
+                                v-model="userInputs.MaxQuantity"
+                                
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12">
@@ -153,13 +153,13 @@ export default {
             userInputs: {
                 title: "",
                 description: "",
-                image: "",
-                price: "",
+                imageUrl: "",
+                price: 0,
                 colorsAvailable: "",
                 size: "",
                 category: "",
                 tags: "",
-                maxQuantity: "",
+                MaxQuantity: 0,
                 scadenza: "",
                 ratings: 0
             },
@@ -255,20 +255,21 @@ export default {
             inputDescription: [
                 v => v.length >= 15 || "Minimun Length is 15 Characthers"
             ],
-            MaxQuantity: v => {
-                if (!v.trim()) return true;
-                if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;
-                return "Number has to be between 1 and 20";
-            }
+           // MaxQuantity: v => {
+            //    if (!v.trim()) return true;
+            //    if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;
+            //    return "Number has to be between 1 and 20";
+           // }
         };
     },
     methods: {
         ...mapActions(["CreteNewProducts"]),
         async submit() {
-            console.log("1");
-            await this.CreteNewProducts(this.userInputs);
-            console.log("2");
-            this.$router.push("/");
+         
+            await this.CreteNewProducts({userInputs:this.userInputs});
+        
+           this.$router.push('/')
+            
         }
     },
     computed: {

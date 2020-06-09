@@ -3,7 +3,7 @@
 
 
 <v-app-bar app class="indigo nav">
-                <span class="fa fa-times cross white--text" router-view to="/"></span>
+                <span class="fa fa-times cross white--text" @click="exit"></span>
                 <v-spacer></v-spacer>
                 <v-toolbar-title>
                     <span class="rapha orange--text seller">Details</span>
@@ -25,6 +25,7 @@
             
             class="mx-0 ex"
             label="Quantity"
+            v-model="quantity"
             
             max="10"
             min="1"
@@ -40,6 +41,7 @@
                                 chips
                                 hint="Choose Colors You Have"
                                 persistent-hint
+                                v-model="colorsAvailable"
                             ></v-select>
   <v-select
                                 :items="size"
@@ -49,8 +51,9 @@
                                 chips
                                 hint="Choose Colors You Have"
                                 persistent-hint
+                                v-model="sizeAvailable"
                             ></v-select>
-                            <v-btn class="orange btn">Add To Cart</v-btn>
+                            <v-btn class="orange btn" @click="Go">Add To Cart</v-btn>
         </div>
         
     </div>
@@ -133,6 +136,19 @@ export default {
             ],
             ra:5
 
+        }
+    },
+    methods:{
+exit() {
+            if (!confirm("Are you sure to exit without saving?")) {
+                return;
+            }
+            this.$router.push('/')
+          
+            
+        },
+        Go(){
+            this.$router.push('/ShoppingCart')
         }
     },
       computed: {

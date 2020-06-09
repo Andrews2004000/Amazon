@@ -13,8 +13,8 @@
             <div class="sub">
 
            
-<span>Quantity 1</span>
-            <span>Total Ammount 399$</span>
+<span class="qu">Quantity 1</span>
+            <span class="qu">Total Ammount 399$</span>
             </div>
             <v-spacer></v-spacer>
             <v-btn class="red btn2">Remove</v-btn>
@@ -90,5 +90,9 @@ export default {
      margin-top:25px;
      margin-right: 50px;
 
+}
+.qu{
+    text-transform: uppercase;
+    font-weight: 400;
 }
 </style>

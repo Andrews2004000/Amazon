@@ -158,10 +158,10 @@ user
     })
 
 }
-export const deletAccount:RequestHandler = async(req,res,next)=>{
+export const deleteAccount:RequestHandler = async(req,res,next)=>{
 const user = req.user
 if(!user){
-    throw new AppError('No Passowrd',404)
+    throw new AppError('No User',404)
 }
 const UserId = user.id
 await User.findByIdAndDelete(UserId)

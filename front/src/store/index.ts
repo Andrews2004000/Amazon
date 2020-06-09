@@ -36,6 +36,7 @@ state[type as keyof T] = data;
 },
 LOAD_USER_DATA(state,payload){
   state.userData = payload;
+  state.isLoggedIn = true;
 },
     
 SIGNUP(state,payload){
@@ -49,6 +50,7 @@ state.isLoggedIn = true;
 },
 
 LOGOUT(state){
+  state.userData = {} as any;
 state.isLoggedIn = false;
 },
 
@@ -58,14 +60,12 @@ state.isLoggedIn = false;
 CREATE_NEW_PRODUCTS(state,payload){
 state.prod = payload;
 },
-ADD_TO_CART(state,payload){
- 
+CREATE_NEW_ORDER(state,payload){
 state.cart = payload;
 },
 CHANGE_ACCOUNT_DETAILS(state,payload){
   state.isLoggedIn = true;
   state.userData = payload;
-  
 },
 
 ALL_PRODUCTS(state,payload){
@@ -96,9 +96,11 @@ HOUSE_PRODUCTS(state,payload){
     async load({commit}){
 const result = await Api.fetchData(`user/userUpdatings`)
 if(!result.ok){
+     
   return;
 }
 const data = result.data;
+console.log(data)
 commit('LOAD_USER_DATA',data)
 
 
@@ -127,6 +129,7 @@ commit('LOAD_USER_DATA',data)
 if(!result.ok){
   return;
 }
+console.log(result)
 commit('LOGOUT')
     },
     async getAllUsers({commit}){
@@ -170,29 +173,10 @@ console.log('3')
 commit('CREATE_NEW_PRODUCTS',data)
 
     },
-    async makeOrder({commit},payload){
-      const result = await Api.fetchData(`orders`,true,'POST',payload)
-      if(!result.ok){
-        return false;
-      }
-      return true;
 
+ 
 
-    },
-
-    async getAllOrders({commit}){
-      const result = await Api.fetchData(`orders`);
-      if(!result.ok){
-        return false;
-
-      }
-      return true
-
-    },
-  async  deleteOrders({commit},payload){
-    await Api.fetchData(`orders` + '/' + payload,true,'DELETE');
-    
-    },
+   
    
     async SearchProducts({commit},{searchQuery,categoryType}){
       

@@ -84,7 +84,7 @@
         
    
       
-            <v-btn class="red">
+            <v-btn class="red" @click="DeleteUser">
                 Delete You Account Permanently
             </v-btn>
         </v-expansion-panel-content>
@@ -114,7 +114,21 @@ export default {
         }
     },
     methods:{
-             ...mapActions(["changeAccountDetails"]),
+
+             ...mapActions(["changeAccountDetails","deleteMe"]),
+           async  DeleteUser(){
+                 if (
+                !confirm(
+                    "Are you sure to delete your account (this action can't be undone)?"
+                )
+            ) {
+                return;
+            }
+                
+              
+               await this.deleteMe();
+  this.$router.push('/')
+             },
         async changeAccountDetailsHandler(){
 //if(this.isAuthInputValid){
     const inputData = {...this.authInput};
@@ -125,6 +139,7 @@ export default {
      //           });
  
   const data =   await this.changeAccountDetails(inputData);
+  this.$router.push('/')
   console.log(data)
     this.reset();
 },

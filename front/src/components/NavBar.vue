@@ -8,7 +8,7 @@
                <span class="store orange--text">Store</span>
                </v-toolbar-title>
                <v-spacer></v-spacer>
-               <span class="fa fa-shopping-cart mode-1" v-if="isLoggedIn"></span>
+               <span class="fa fa-shopping-cart mode-1" v-if="isLoggedIn" @click="GoThere"></span>
 
                <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
                <div class="ball orange" v-if="homePage">
@@ -22,7 +22,7 @@
            <span class="fa fa-cog" v-if="userData.role === 'admin' || userData.role === 'vendor'"></span>
 
            
-                   <v-btn class="ma-2" color="darken-2" dark v-if="homePage">
+                   <v-btn class="ma-2" color="darken-2" dark v-if="homePage" router-view to="/">
           <v-icon dark left  v-if="homePage">mdi-arrow-left</v-icon>Back To HomePage
         </v-btn>
          
@@ -38,7 +38,7 @@
 
  
 
-           <span>{{userData.username}}</span>
+           <span class="famous">{{userData.username}}</span>
            </div>
            
           
@@ -234,6 +234,9 @@ export default {
         GoAway(){
             this.$route.push('/')
         },
+        GoThere(){
+            this.$router.push('/ShoppingCart')
+        }
        
        
 
@@ -275,6 +278,13 @@ export default {
     margin-left:5px;
     text-transform:uppercase;
     font-weight:700;
+}
+.famous{
+    text-transform: uppercase;
+    font-size:20px;
+    color:white;
+    margin-left:100px;
+    margin-top:30px;
 }
 .btn-5{
     width:60%;

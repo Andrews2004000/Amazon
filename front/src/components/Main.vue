@@ -72,11 +72,13 @@
                                             class="success putin"
                                            
                                             v-if="isLoggedIn"
+                                            @click="Go"
                                         
                                         >Add To Cart</v-btn>
                                         <v-btn
                                             class="success putin"
                                             disabled
+                                          
                                           
                                             v-if="!isLoggedIn"
                                         >Add To Cart</v-btn>
@@ -126,6 +128,7 @@ import NavBar from "./NavBar";
 export default {
     data() {
         return {
+            ok:false,
             searchField: "",
             open: false,
             amenities: [1, 4],
@@ -171,11 +174,14 @@ export default {
             console.log(searchQuery);
             this.SearchProducts({ searchQuery, categoryType: "AllProducts" });
         },
+      Go(){
+         
+          this.$router.push('/Detail')
+      }
     },
     created() {
         this.$store.dispatch("LoadAllProducts");
-           this.$store.dispatch("load");
-        
+         // this.$store.dispatch("load")
       
     },
     mounted() {},

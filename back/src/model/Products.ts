@@ -8,7 +8,7 @@ export interface IUProducts extends mongoose.Document {
     scadenza?: Date,
     size?: [any],
     tags?: Array<"videogames" | "phones" | "computers" | "fantasy" | "action" | "history" | "livingroom" | "garden" | "bedroom">,
-    colorsAvailable?:Array< "red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available">,
+    colorsAvailable?: Array<"red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available">,
     category: 'Tecnology' | 'House' | 'Book' | 'Not Specified',
     ratings?: number,
     MaxQuantity?: number,
@@ -45,16 +45,16 @@ const ProductsSchema = new mongoose.Schema({
     colorsAvailable: {
         type: [String],
         enum: ["Red",
-        "Blue",
-        "Orange",
-        "Black",
-        "White",
-        "Green",
-        "Purple",
-        "Violet",
-        "AzulMarine",
-        "pink"],
-       
+            "Blue",
+            "Orange",
+            "Black",
+            "White",
+            "Green",
+            "Purple",
+            "Violet",
+            "AzulMarine",
+            "pink"],
+
 
     },
     price: {
@@ -71,7 +71,7 @@ const ProductsSchema = new mongoose.Schema({
     },
     ratings: {
         type: Number,
-     
+
 
     },
     MaxQuantity: {
@@ -92,5 +92,5 @@ const ProductsSchema = new mongoose.Schema({
 
 },
     { versionKey: false })
-const Product = mongoose.model<IUProducts>('Products', ProductsSchema)
+const Product = mongoose.model<IUProducts>('Product', ProductsSchema)
 export default Product

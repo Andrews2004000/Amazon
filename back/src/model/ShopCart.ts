@@ -1,5 +1,4 @@
-import mongoose ,{Schema} from 'mongoose'
-import AppError from '../Error/AppError'
+import mongoose, { Schema } from 'mongoose'
 import { IUser } from './Auth'
 import { IUProducts } from './Products'
 export interface IUCartProduct extends mongoose.Document {
@@ -8,8 +7,8 @@ export interface IUCartProduct extends mongoose.Document {
     product: IUProducts
     details: {
         quantity: number;
-        selectedColor: string;
-        sizeAvailable: number;
+        selectedColor: [string];
+        sizeAvailable: [number];
     }
 
 
@@ -20,8 +19,8 @@ const CartProduct = new mongoose.Schema({
         ref: 'Product',
         type: Schema.Types.ObjectId,
         immutable: true,
-      required: true
-        
+        required: true
+
     },
     details: {
         quantity: {
@@ -29,11 +28,11 @@ const CartProduct = new mongoose.Schema({
             required: true
         },
         selectedColor: {
-            type: String,
+            type: [String],
             required: true
         },
         sizeAvailable: {
-            type: Number,
+            type: [Number],
             required: true
         }
     },

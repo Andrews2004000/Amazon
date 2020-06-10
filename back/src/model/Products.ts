@@ -6,7 +6,7 @@ export interface IUProducts extends mongoose.Document {
     imageUrl?: string,
     price: number,
     scadenza?: Date,
-    size?: [any],
+    size?: [number],
     tags?: Array<"videogames" | "phones" | "computers" | "fantasy" | "action" | "history" | "livingroom" | "garden" | "bedroom">,
     colorsAvailable?: Array<"red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available">,
     category: 'Tecnology' | 'House' | 'Book' | 'Not Specified',

@@ -1,7 +1,7 @@
 import Cart from '../model/ShopCart'
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
- import Product from '../model/Products';
+import Product from '../model/Products';
 
 export const GetAllCart: RequestHandler = async (req, res, next) => {
     let ProductsInCart;
@@ -37,30 +37,30 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
 // }
 
 
- export const PostToCart: RequestHandler = async (req, res, next) => {
+export const PostToCart: RequestHandler = async (req, res, next) => {
     const inputsData = { ...req.body.userInputs };
     if (!inputsData) {
-         throw new AppError('No Data', 404)
-   }
+        throw new AppError('No Data', 404)
+    }
     inputsData.client = req.user?._id;
-   // const product = await Product.findById(inputsData.product)
-   // if(!product){
-   //     throw new AppError('No Product',404)
- //   }
+    // const product = await Product.findById(inputsData.product)
+    // if(!product){
+    //     throw new AppError('No Product',404)
+    //   }
     const newCart = await Cart.create(inputsData)
-  
+
 
 
 
     res.status(201).json({
         status: 'success',
-      data:
-         newCart
+        data:
+            newCart
 
-   })
+    })
 
 
- }
+}
 // export const deleteCart: RequestHandler = async (req, res, next) => {
 //     const ProductsInCart = await Cart.findById(req.params.id);
 //     const user = req.user;
@@ -105,6 +105,28 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
 //     ProductsInCart.save();
 //     res.status(201).json({
 //         status: 'success',
-//         message: 'Order Saved Good'
+//         message: 'Order Saved Good'ßßßssssssssßßßßß
 //     })
 // }
+export const DeleteCartItem: RequestHandler = async (req, res, next) => {
+    const prodId = await Cart.findById(req.params.id)
+    const user = req.user;
+    if (!prodId) {
+        throw new AppError('NO products'
+        )
+    }
+    if (!user) {
+        throw new AppError('You Are Not Authenticate', 404)
+
+    }
+    if (user.role !== 'client') {
+        throw new AppError('You Are Not Authenticate', 404)
+    }
+    await Cart.findByIdAndDelete(prodId)
+    res.status(204).json({
+        message: 'Ok Deleted',
+        data: null
+
+    })
+
+}

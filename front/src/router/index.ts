@@ -20,7 +20,7 @@ Vue.use(VueRouter)
     component: Main
   },
   {
-    path: '/Detail',
+    path: '/Detail/:prodId',
     name: 'Detail',
     component: Detail
   },

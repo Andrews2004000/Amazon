@@ -38,7 +38,7 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
 
 
  export const PostToCart: RequestHandler = async (req, res, next) => {
-    const inputsData = { ...req.body };
+    const inputsData = { ...req.body.userInputs };
     if (!inputsData) {
          throw new AppError('No Data', 404)
    }

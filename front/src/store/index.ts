@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     prod:[],
     cart:[],
+    product:[],
     videogames: [],
     AllProducts:[],
     TecnologyProducts : [],
@@ -60,9 +61,11 @@ state.isLoggedIn = false;
 CREATE_NEW_PRODUCTS(state,payload){
 state.prod = payload;
 },
-CREATE_NEW_ORDER(state,payload){
-state.cart = payload;
-},
+ADD_PRODUCT_TO_CART(state,payload){
+  state.cart = payload;
+  },
+  
+
 CHANGE_ACCOUNT_DETAILS(state,payload){
   state.isLoggedIn = true;
   state.userData = payload;
@@ -80,6 +83,9 @@ BOOKS_PRODUCTS(state,payload){
 },
 HOUSE_PRODUCTS(state,payload){
   state.HouseProducts = payload;
+},
+GET_ONE_PRODUCT(state,payload){
+  state.product = payload;
 }
     },
   actions: {
@@ -206,8 +212,20 @@ commit('CREATE_NEW_PRODUCTS',data)
     
 
     },
-    async getOneProduct({commit},productId){
-      const result = await Api.fetchData(`products/${productId}`)
+    async getOneProduct({commit}){
+      const currentRoute = router.currentRoute;
+      const id = currentRoute.params.prodId;
+      const result = await Api.fetchData(`products/${id}`)
+      if(!result.ok){
+        return;
+
+      }
+    
+      const data = result.data;
+      console.log(data)
+      commit('GET_ONE_PRODUCT',data)
+      
+      
 
     },
     
@@ -244,6 +262,15 @@ commit('CREATE_NEW_PRODUCTS',data)
           commit('BOOKS_PRODUCTS',data)
           
       
+          },
+          async AddToCart({commit},userInputs){
+            const result = await Api.fetchData(`cart`,true,'POST',userInputs)
+            if(!result.ok){
+              return;
+            }
+            const data = result.data;
+            commit('ADD_PRODUCT_TO_CART',data)
+
           }
    
 },

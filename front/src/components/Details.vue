@@ -12,27 +12,27 @@
             </v-app-bar>
     <div class="daddy">
   <div class="iphone">
-          <v-img class="phone" src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-se-red-select-2020_GEO_EMEA?wid=940&hei=1112&fmt=png-alpha&qlt=80&.v=1586574260374"  width="400" height="400"
+          <v-img class="phone" :src="product.imageUrl"  width="400" height="400"
                   ></v-img>
         </div>
         <div class="padre">
-            <span class="titolo">Titolo</span>
-            <span class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet dicta magnam earum provident quis tempora consectetur minima tenetur quas odit nisi odio harum, ab nobis hic, exercitationem reiciendis nihil molestias?</span>
+            <span class="titolo">{{product.title}}</span>
+            <span class="description">{{product.description}}</span>
 <v-rating v-model="ra" class="rating"></v-rating>
-<span class="price">Price 729$</span>
+<span class="price">{{product.price}}$</span>
 <span class="new">New Or Used</span>
  <v-text-field
             
             class="mx-0 ex"
             label="Quantity"
-            v-model="quantity"
+            v-model="userInputs.details.quantity"
             
             max="10"
             min="1"
             step="1"
             
             type="number"
-          >{{}}</v-text-field>
+          ></v-text-field>
  <v-select
         
                                 :items="item"
@@ -41,7 +41,7 @@
                                 chips
                                 hint="Choose Colors You Have"
                                 persistent-hint
-                                v-model="colorsAvailable"
+                                v-model="userInputs.details.selectedColor"
                             ></v-select>
   <v-select
                                 :items="size"
@@ -51,9 +51,9 @@
                                 chips
                                 hint="Choose Colors You Have"
                                 persistent-hint
-                                v-model="sizeAvailable"
+                                v-model="userInputs.details.sizeAvailable"
                             ></v-select>
-                            <v-btn class="orange btn" @click="Go">Add To Cart</v-btn>
+                            <v-btn class="orange btn" @click="submit">Add To Cart</v-btn>
         </div>
         
     </div>
@@ -64,11 +64,24 @@
 
 
 <script>
+import {mapActions} from 'vuex'
 export default {
-   
+   props:['prodId'],
    
     data(){
         return{
+            userInputs:{
+              details:{
+selectedColor:"",
+            sizeAvailable:0,
+            quantity:0,
+                
+              }
+ 
+               
+
+            },
+            
               size: [
                 10,
                 11,
@@ -140,7 +153,21 @@ export default {
 
         }
     },
+    computed: {
+      product(){
+           return this.$store.state.product
+        }
+
+    },
     methods:{
+        ...mapActions(['AddToCart','getOneProduct']),
+           async submit() {
+         
+            await this.AddToCart({userInputs:this.userInputs});
+        
+           this.$router.push('/ShoppingCart')
+            
+        },
 exit() {
             if (!confirm("Are you sure to exit without saving?")) {
                 return;
@@ -149,10 +176,16 @@ exit() {
           
             
         },
+        
         Go(){
             this.$router.push('/ShoppingCart')
         }
     },
+  async  created(){
+      await this.getOneProduct()
+
+    },
+ 
      
 
 }
@@ -178,7 +211,7 @@ margin-top:50px;
     transform:translateY(-290px);
     display: flex;
     flex-direction: column;
-    margin-right:30px;
+    margin-right:10px;
     
 }
 .new{

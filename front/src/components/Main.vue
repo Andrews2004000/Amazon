@@ -49,9 +49,10 @@
                                     <v-card-text class="beta">
                                         <v-card-title class="titolo">Product Of The Mounth</v-card-title>
                                         <v-card-subtitle>{{product.title}}</v-card-subtitle>
-                                     
+                                     <span :prodId="product._id">{{product._id}}</span>
                                           <v-rating>{{product.ratings}}</v-rating>
                                     </v-card-text>
+                                
 
                                     <v-img
                                         :src="product.imageUrl"
@@ -61,6 +62,7 @@
                                         alt="image"
                                     ></v-img>
                                     <v-spacer></v-spacer>
+                                 
                                    <!--_ <span class="pu">ONLY</span> -->
                                 
                                     <span class="sna">{{ product.price }}$</span>
@@ -72,7 +74,7 @@
                                             class="success putin"
                                            
                                             v-if="isLoggedIn"
-                                            @click="Go"
+                                            @click="Go(product._id)"
                                         
                                         >Add To Cart</v-btn>
                                         <v-btn
@@ -128,6 +130,7 @@ import NavBar from "./NavBar";
 export default {
     data() {
         return {
+           
             ok:false,
             searchField: "",
             open: false,
@@ -174,9 +177,9 @@ export default {
             console.log(searchQuery);
             this.SearchProducts({ searchQuery, categoryType: "AllProducts" });
         },
-      Go(){
+      Go(id){
          
-          this.$router.push('/Detail')
+          this.$router.push('Detail/'+id)
       }
     },
     created() {
@@ -190,7 +193,7 @@ export default {
             return this.$store.state.AllProducts;
 
         },
-        ...mapState(["isLoggedIn"])
+        ...mapState(["isLoggedIn","product"])
     }
 };
 </script>

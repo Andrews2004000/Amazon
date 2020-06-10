@@ -64,7 +64,8 @@ export default {
                     selectedColor: "",
                     sizeAvailable: 0,
                     quantity: 0
-                }
+                },
+                product: this.$route.params.prodId
             },
 
             size: [
@@ -145,7 +146,7 @@ export default {
         async submit() {
             await this.AddToCart({ userInputs: this.userInputs });
 
-            //this.$router.push("/ShoppingCart");
+            this.$router.push("/ShoppingCart");
         },
         exit() {
             if (!confirm("Are you sure to exit without saving?")) {

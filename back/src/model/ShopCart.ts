@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose ,{Schema} from 'mongoose'
 import AppError from '../Error/AppError'
 import { IUser } from './Auth'
 import { IUProducts } from './Products'
@@ -18,9 +18,10 @@ export interface IUCartProduct extends mongoose.Document {
 const CartProduct = new mongoose.Schema({
     product: {
         ref: 'Product',
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         immutable: true,
-        required: true
+      required: true
+        
     },
     details: {
         quantity: {
@@ -38,7 +39,7 @@ const CartProduct = new mongoose.Schema({
     },
     client: {
         ref: 'User',
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         immutable: true,
         required: true
     },

@@ -1,7 +1,7 @@
 import Cart from '../model/ShopCart'
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
-// import Product from '../model/Products';
+ import Product from '../model/Products';
 
 export const GetAllCart: RequestHandler = async (req, res, next) => {
     let ProductsInCart;
@@ -37,31 +37,30 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
 // }
 
 
-// export const PostToCart: RequestHandler = async (req, res, next) => {
-//     const inputsData = { ...req.body };
-//     if (!inputsData) {
-//         throw new AppError('No Data', 404)
-//     }
-//     inputsData.client = req.user?._id;
+ export const PostToCart: RequestHandler = async (req, res, next) => {
+    const inputsData = { ...req.body };
+    if (!inputsData) {
+         throw new AppError('No Data', 404)
+   }
+    inputsData.client = req.user?._id;
+   // const product = await Product.findById(inputsData.product)
+   // if(!product){
+   //     throw new AppError('No Product',404)
+ //   }
+    const newCart = await Cart.create(inputsData)
+  
 
 
-//     //  const reservateCart = await Product.findById(inputsData.product)
-//     // if(!reservateCart){
-//     //  throw new AppError('No products with this id',404)
-//     // }
 
-//     const newCart = await Cart.create(inputsData)
+    res.status(201).json({
+        status: 'success',
+      data:
+         newCart
 
-
-//     res.status(201).json({
-//         status: 'success',
-//         data:
-//             newCart
-
-//     })
+   })
 
 
-// }
+ }
 // export const deleteCart: RequestHandler = async (req, res, next) => {
 //     const ProductsInCart = await Cart.findById(req.params.id);
 //     const user = req.user;

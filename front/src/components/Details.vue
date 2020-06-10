@@ -12,7 +12,7 @@
             </v-app-bar>
     <div class="daddy">
   <div class="iphone">
-          <v-img class="phone" src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/refurb-iphoneX-spacegray_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1548459944179"  width="400" height="400"
+          <v-img class="phone" src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-se-red-select-2020_GEO_EMEA?wid=940&hei=1112&fmt=png-alpha&qlt=80&.v=1586574260374"  width="400" height="400"
                   ></v-img>
         </div>
         <div class="padre">
@@ -65,6 +65,8 @@
 
 <script>
 export default {
+   
+   
     data(){
         return{
               size: [
@@ -151,12 +153,8 @@ exit() {
             this.$router.push('/ShoppingCart')
         }
     },
-      computed: {
-        products() {
-            return this.$store.state.AllProducts;
+     
 
-        },
-}
 }
 </script>
 <style scoped>

@@ -42,13 +42,13 @@
         <div>
             <v-container class="pinoto">
                 <v-row>
-                    <v-col v-for="product in products" :key="product.id" :products="products">
+                    <v-col v-for="product in products" :key="product.id" :product="product">
                         <v-card class="pa-5 mx-auto" max-width="400" tile>
                             <div class="padre">
                                 <!--<v-row>-->
                                     <v-card-text class="beta">
                                         <v-card-title class="titolo">Product Of The Mounth</v-card-title>
-                                        <v-card-subtitle>{{ product.title }}</v-card-subtitle>
+                                        <v-card-subtitle>{{product.title}}</v-card-subtitle>
                                      
                                           <v-rating>{{product.ratings}}</v-rating>
                                     </v-card-text>

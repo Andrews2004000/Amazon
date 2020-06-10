@@ -38,7 +38,7 @@ const ProductsSchema = new mongoose.Schema({
     {
         type: [String],
         enum: ["videogames", "phones", "computers", "fantasy", "action", "history", "livingroom", "garden", "bedroom"],
-        default: "Not Specified"
+        default: "phones"
 
     },
 

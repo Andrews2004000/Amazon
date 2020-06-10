@@ -4,7 +4,7 @@ import ExpressPromiseRouter from 'express-promise-router'
 import * as CartController from '../controllers/ShoppingCart'
 const router = ExpressPromiseRouter();
 
-router.route('/').get(protect,CartController.GetAllCart).put(protect,CartController.PostToCart)
-router.route('/:id').patch(protect,CartController.editCart).get(protect,CartController.getCart).delete(protect,CartController.deleteCart)
+router.route('/').get(protect,CartController.GetAllCart).post(protect,CartController.PostToCart)
+
 
 export default router;

@@ -206,6 +206,10 @@ commit('CREATE_NEW_PRODUCTS',data)
     
 
     },
+    async getOneProduct({commit},productId){
+      const result = await Api.fetchData(`products/${productId}`)
+
+    },
     
     async LoadTecnologyProducts({commit}){
       const result = await Api.fetchData(`products?category=Tecnology`,true,'GET')

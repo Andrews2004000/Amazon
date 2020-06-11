@@ -11,13 +11,19 @@ import VendorPage from '../components/Vendor.vue'
 import EditProduct from '../components/EditProduct.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
 import Detail from '../components/Details.vue'
+import Orders from '../components/AllOrders.vue'
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Main',
     component: Main
+  },
+  {
+    path: '/Orders',
+    name: 'Orders',
+    component: Orders
   },
   {
     path: '/Detail/:prodId',
@@ -69,9 +75,9 @@ Vue.use(VueRouter)
     name: 'Tecno',
     component: Tecno
   },
- 
 
- 
+
+
 ]
 
 const router = new VueRouter({

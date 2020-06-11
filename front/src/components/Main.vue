@@ -46,48 +46,40 @@
                         <v-card class="pa-5 mx-auto" max-width="400" tile>
                             <div class="padre">
                                 <!--<v-row>-->
-                                    <v-card-text class="beta">
-                                        <v-card-title class="titolo">Product Of The Mounth</v-card-title>
-                                        <v-card-subtitle>{{product.title}}</v-card-subtitle>
-                                     <span :prodId="product._id">{{product._id}}</span>
-                                          <v-rating>{{product.ratings}}</v-rating>
-                                    </v-card-text>
-                                
+                                <v-card-text class="beta">
+                                    <v-card-title class="titolo">Product Of The Mounth</v-card-title>
+                                    <v-card-subtitle>{{product.title}}</v-card-subtitle>
 
-                                    <v-img
-                                        :src="product.imageUrl"
-                                        class="pongo align-end"
-                                        height="280px"
-                                        max-width="200px"
-                                        alt="image"
-                                    ></v-img>
-                                    <v-spacer></v-spacer>
-                                 
-                                   <!--_ <span class="pu">ONLY</span> -->
-                                
-                                    <span class="sna">{{ product.price }}$</span>
-                                 
-                                   
+                                    <v-rating readonly v-model="product.ratings"></v-rating>
+                                </v-card-text>
 
-                                    <v-card-actions>
-                                        <v-btn
-                                            class="success putin"
-                                           
-                                            v-if="isLoggedIn"
-                                            @click="Go(product._id)"
-                                        
-                                        >Add To Cart</v-btn>
-                                        <v-btn
-                                            class="success putin"
-                                            disabled
-                                          
-                                          
-                                            v-if="!isLoggedIn"
-                                        >Add To Cart</v-btn>
-                                    </v-card-actions>
-                              <!--  </v-row>-->
+                                <v-img
+                                    :src="product.imageUrl"
+                                    class="pongo align-end"
+                                    height="280px"
+                                    max-width="200px"
+                                    alt="image"
+                                ></v-img>
+                                <v-spacer></v-spacer>
+
+                                <!--_ <span class="pu">ONLY</span> -->
+
+                                <span class="sna">{{ product.price }}$</span>
+
+                                <v-card-actions>
+                                    <v-btn
+                                        class="success putin"
+                                        v-if="isLoggedIn"
+                                        @click="Go(product._id)"
+                                    >Add To Cart</v-btn>
+                                    <v-btn
+                                        class="success putin"
+                                        disabled
+                                        v-if="!isLoggedIn"
+                                    >Add To Cart</v-btn>
+                                </v-card-actions>
+                                <!--  </v-row>-->
                             </div>
-                            
                         </v-card>
                     </v-col>
                 </v-row>
@@ -130,8 +122,7 @@ import NavBar from "./NavBar";
 export default {
     data() {
         return {
-           
-            ok:false,
+            ok: false,
             searchField: "",
             open: false,
             amenities: [1, 4],
@@ -169,7 +160,7 @@ export default {
         NavBar
     },
     methods: {
-        ...mapActions(["SearchProducts","AddToCart"]),
+        ...mapActions(["SearchProducts", "AddToCart"]),
         searchHanlder() {
             console.log("Sto Ceracndo");
             const searchField = this.searchField;
@@ -177,23 +168,20 @@ export default {
             console.log(searchQuery);
             this.SearchProducts({ searchQuery, categoryType: "AllProducts" });
         },
-      Go(id){
-         
-          this.$router.push('Detail/'+id)
-      }
+        Go(id) {
+            this.$router.push("Detail/" + id);
+        }
     },
     created() {
         this.$store.dispatch("LoadAllProducts");
-         // this.$store.dispatch("load")
-      
+        // this.$store.dispatch("load")
     },
     mounted() {},
     computed: {
         products() {
             return this.$store.state.AllProducts;
-
         },
-        ...mapState(["isLoggedIn","product"])
+        ...mapState(["isLoggedIn", "product", "userData"])
     }
 };
 </script>
@@ -202,9 +190,9 @@ export default {
     position: absolute;
     width: 100%;
 }
-.padre{
+.padre {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
 }
 .sup {
     position: absolute;

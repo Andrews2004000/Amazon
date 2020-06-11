@@ -15,12 +15,13 @@
             <div class="padre">
                 <span class="titolo">{{product.title}}</span>
                 <span class="description">{{product.description}}</span>
-                <v-rating v-model="ra" class="rating"></v-rating>
+                <v-rating v-model="product.ratings" class="rating" readonly></v-rating>
                 <span class="price">{{product.price}}$</span>
                 <span class="new">New Or Used</span>
                 <v-text-field
                     class="mx-0 ex"
                     label="Quantity"
+                    :rules="MaxQuantity"
                     v-model="userInputs.details.quantity"
                     max="10"
                     min="1"
@@ -28,7 +29,7 @@
                     type="number"
                 ></v-text-field>
                 <v-select
-                    :items="item"
+                    :items="product.colorsAvailable"
                     label="Colors Available"
                     multiple
                     chips
@@ -37,7 +38,7 @@
                     v-model="userInputs.details.selectedColor"
                 ></v-select>
                 <v-select
-                    :items="size"
+                    :items="product.sizeAvailable"
                     label="Size Available"
                     multiple
                     chips
@@ -64,8 +65,14 @@ export default {
                     selectedColor: "",
                     sizeAvailable: 0,
                     quantity: 0
-                }
+                },
+                product: this.$route.params.prodId
             },
+            MaxQuantity: [
+                v =>
+                    v <= this.product.MaxQuantity ||
+                    "Sorry Please Select a minor quantity"
+            ],
 
             size: [
                 10,
@@ -140,12 +147,13 @@ export default {
             return this.$store.state.product;
         }
     },
+    watch: {},
     methods: {
         ...mapActions(["AddToCart", "getOneProduct"]),
         async submit() {
             await this.AddToCart({ userInputs: this.userInputs });
 
-            //this.$router.push("/ShoppingCart");
+            this.$router.push("/ShoppingCart");
         },
         exit() {
             if (!confirm("Are you sure to exit without saving?")) {

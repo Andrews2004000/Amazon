@@ -19,7 +19,8 @@ const CartProduct = new mongoose.Schema({
         ref: 'Product',
         type: Schema.Types.ObjectId,
         immutable: true,
-        required: true
+        required: true,
+
 
     },
     details: {

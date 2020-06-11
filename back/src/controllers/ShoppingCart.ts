@@ -51,23 +51,30 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     //  if (!product) {
     //     throw new AppError('No Product', 404)
     // }
-    const product = await CartItem.find().where('product').equals(inputsData.product)
 
-    if (product) {
-        inputsData.details.quantity++;
+    // Cerca se ci sono altri items nel carrello con lo stesso id: ti restituisce un array
+    const foundProducts = await CartItem.find().where('product').equals(inputsData.product)
+
+    // Se non ci sono items con quel product, creane uno nuovo
+    if (foundProducts.length === 0) {
+        const newCart = await CartItem.create(inputsData)
     }
 
-    const newCart = await CartItem.create(inputsData)
+    // Se c'è un item nel carrello con lo stesso product, aumenta la quantity di quello
+    else if (foundProducts.length === 1) {
+        const product = foundProducts[0];
+        product.details.quantity++;
+        product.save();
+    }
 
-
-
-
+    // Se ci sono più items diversi con lo stesso product, forse c'è stato qualcosa che non va, quindi manda un errore
+    else {
+        throw new Error('Internal Error: multiple items in the cart with the same product id')
+    }
 
 
     res.status(201).json({
         status: 'success',
-        data:
-            newCart
 
     })
 

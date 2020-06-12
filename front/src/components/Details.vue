@@ -11,24 +11,16 @@
         <div class="daddy">
             <div class="iphone">
                 <v-img class="phone" :src="product.imageUrl" width="400" height="400"></v-img>
+                <v-spacer></v-spacer>
             </div>
             <div class="padre">
                 <span class="titolo">{{product.title}}</span>
                 <span class="description">{{product.description}}</span>
                 <v-rating v-model="product.ratings" class="rating" readonly></v-rating>
                 <span class="price">{{product.price}}$</span>
-                <span class="new">New Or Used</span>
-                <v-text-field
-                    class="mx-0 ex"
-                    label="Quantity"
-                    :rules="MaxQuantity"
-                    v-model="userInputs.details.quantity"
-                    max="10"
-                    min="1"
-                    step="1"
-                    type="number"
-                ></v-text-field>
+
                 <v-select
+                    class="sel1"
                     :items="product.colorsAvailable"
                     label="Colors Available"
                     multiple
@@ -38,6 +30,7 @@
                     v-model="userInputs.details.selectedColor"
                 ></v-select>
                 <v-select
+                    width="500"
                     :items="product.sizeAvailable"
                     label="Size Available"
                     multiple
@@ -177,21 +170,24 @@ export default {
     width: 10px;
     height: 10px;
 }
+.sel1 {
+    width: 100%;
+}
 .daddy {
-    display: flex;
-    align-items: baseline;
     margin-top: 50px;
 }
 .price {
     font-size: 20px;
+
     text-transform: uppercase;
     font-weight: 800;
 }
 .padre {
-    transform: translateY(-290px);
+    transform: translateY(-250px);
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
+    margin-right: 40px;
+    margin-left: 29rem;
 }
 .new {
     color: red;

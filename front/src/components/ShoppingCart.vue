@@ -12,7 +12,9 @@
                         </div>
                         <div class="sub">
                             <span class="qu">Quantity {{prod.details.quantity}}</span>
-                            <span class="qu">{{prod.product.price}} $</span>
+                            <span class="qu">{{prod.product.price * prod.details.quantity}} $</span>
+
+                            <span>{{CurrentPrice}}</span>
                         </div>
                         <v-spacer></v-spacer>
                         <v-btn class="red btn2">Remove</v-btn>
@@ -49,6 +51,13 @@ export default {
         product() {
             return this.$store.state.itemFromCart;
         },
+        //CurrentPrice() {
+        //     const QuantityProduct = this.product.map(prod => {
+        //         return prod.product.price * prod.details.quantity;
+        //     });
+        //    return QuantityProduct;
+        // },
+
         TotalAmount() {
             if (this.product.length > 0) {
                 return this.product

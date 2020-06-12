@@ -24,12 +24,12 @@
             <div class="conta">
                 <span class="fa fa-user mode"></span>
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
-                <v-btn
+                <!-- <v-btn
                     class="success user"
                     @click="Go"
                     v-if="userData.user.role === 'vendor'"
-                >Sell Something</v-btn>
-                <v-btn class="btn-5 orange" v-if="!isLoggedIn">
+                >Sell Something</v-btn>-->
+                <v-btn class="btn-5 orange" v-if="isLoggedIn == false">
                     <span class="LoginDetail">Login</span>
                 </v-btn>
             </div>

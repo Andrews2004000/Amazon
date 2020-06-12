@@ -12,7 +12,7 @@ export interface IUser extends mongoose.Document {
     address?: string,
     phone?: number,
     role: 'client' | 'vendor' | 'admin',
-    StripeAccount?: string,
+    stripeAccountId?: string,
     passwordChangedAt: number,
     FavoriteCategories?: 'Tecnology' | 'House' | 'Book',
     status: string,
@@ -76,9 +76,9 @@ const userSchema = new mongoose.Schema({
         enum: ['vendor', 'client', 'admin'],
         default: 'client'
     },
-    StripeAccount: {
+    stripeAccountId: {
         tyep: String,
-        required: false,
+
 
     },
     Favoritecategories: {

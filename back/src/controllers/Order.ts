@@ -1,9 +1,11 @@
 import Cart from '../model/ShopCart'
 import { RequestHandler } from 'express';
+import { Stripe } from 'stripe';
+import { stripe } from '../middlewere/stripe';
 import AppError from '../Error/AppError'
 import Product from '../model/Products';
 import Order from '../model/Order'
-
+import User from '../model/Auth';
 export const makeOrder: RequestHandler = async (req, res, next) => {
     const inputsData = { ...req.body }
     if (!inputsData) {

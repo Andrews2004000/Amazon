@@ -19,6 +19,7 @@
                         <v-form ref="authForm">
                             <v-col cols="12" sm="12">
                                 <v-text-field
+                                    class="col-1"
                                     outlined
                                     label="UserName"
                                     placeholder="Username"
@@ -28,6 +29,7 @@
                             </v-col>
                             <v-col cols="12" sm="12">
                                 <v-text-field
+                                    class="col-1"
                                     outlined
                                     label="Email"
                                     placeholder="Email"
@@ -36,8 +38,9 @@
                                 ></v-text-field>
                             </v-col>
 
-                            <v-col cols="12" sm="12">
+                            <v-col cols="12">
                                 <v-text-field
+                                    class="col-1"
                                     outlined
                                     label="ChangePassword"
                                     placeholder="ChangePassword"
@@ -47,12 +50,15 @@
                             </v-col>
                             <v-col cols="12" sm="12">
                                 <v-text-field
+                                    class="col-1"
                                     outlined
                                     label="ChangeUserPhoto"
                                     placeholder="ChnageUserPhoto"
                                     v-model="authInput.ChangeUserPhoto"
                                     :rules="rules.nameRules"
                                 ></v-text-field>
+
+                                <v-btn class="orange">Connect With Stripe</v-btn>
                             </v-col>
                         </v-form>
                     </v-row>
@@ -76,6 +82,7 @@ export default {
     mixins: [authInput],
     data() {
         return {
+            stripeConnectAccountUrl: "#",
             authInput: {},
             isAuthInputValid: true,
             inputUser: [
@@ -160,6 +167,9 @@ export default {
     margin-top: 40px;
     width: 900px;
     margin-left: 260px;
+}
+.col-1 {
+    width: 10000px;
 }
 .account {
     font-size: 20px;

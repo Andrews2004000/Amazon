@@ -26,7 +26,8 @@ const CartProduct = new mongoose.Schema({
     details: {
         quantity: {
             type: Number,
-            required: true
+            required: true,
+            default: 1
         },
         selectedColor: {
             type: [String],

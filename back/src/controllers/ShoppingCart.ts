@@ -63,6 +63,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     // Se c'è un item nel carrello con lo stesso product, aumenta la quantity di quello
     else if (foundProducts.length === 1) {
         const product = foundProducts[0];
+        console.log(product)
         product.details.quantity++;
         product.save();
     }

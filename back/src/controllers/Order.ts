@@ -6,13 +6,18 @@ import AppError from '../Error/AppError'
 import Product from '../model/Products';
 import Order from '../model/Order'
 import User from '../model/Auth';
-export const makeOrder: RequestHandler = async (req, res, next) => {
-    const inputsData = { ...req.body }
+
+export const postOrder: RequestHandler = async (req, res, next) => {
+    const inputsData = req.body
     if (!inputsData) {
         throw new AppError('No Data', 404)
-
     }
-    inputsData.client = req.user?._id;
+
+    // inputsData.client = req.user?._id;
+    //const OrderProduct = await Product.findById(inputsData.product);
+    //if (!OrderProduct) {
+    //    throw new AppError("Couldn't find any product with that id", 404);
+    //}
     const newOrder = await Order.create(inputsData)
     res.status(200).json({
         message: 'Order success',

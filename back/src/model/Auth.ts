@@ -77,7 +77,7 @@ const userSchema = new mongoose.Schema({
         default: 'client'
     },
     stripeAccountId: {
-        tyep: String,
+        type: String,
 
 
     },

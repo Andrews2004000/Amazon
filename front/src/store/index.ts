@@ -12,6 +12,7 @@ export default new Vuex.Store({
 
     ],
     product: [],
+    order: [],
     itemFromCart: [],
     videogames: [],
     AllProducts: [],
@@ -82,6 +83,10 @@ export default new Vuex.Store({
     },
     DELETE_ITEM_FROM_CART(state, payload) {
       state.cart = []
+    },
+    ADD_PRODUCT_TO_PAYMENT(state, payload) {
+      state.order = payload
+
     },
 
 
@@ -298,6 +303,15 @@ export default new Vuex.Store({
       }
       const data = result.data;
       commit('ADD_PRODUCT_TO_CART', data)
+
+    },
+    async AddFakePaymentToDatabase({ commit }) {
+      const result = await Api.fetchData(`order`, true, 'POST')
+      if (!result.ok) {
+        return;
+      }
+      const data = result.data;
+      commit('ADD_PRODUCT_TO_PAYMENT', data)
 
     },
     async getCartItem() {

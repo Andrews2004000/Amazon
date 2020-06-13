@@ -18,7 +18,7 @@
                         </div>
                         <v-spacer></v-spacer>
                         <v-btn class="red btn2">Remove</v-btn>
-                        <v-btn class="orange btn">Proceed Payment</v-btn>
+                        <v-btn class="orange btn" @click="submit">Proceed Payment</v-btn>
                     </v-row>
                 </v-container>
             </v-card>
@@ -28,7 +28,7 @@
 </template>
 <script>
 import NavBar from "./NavBar";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
     components: {
         NavBar
@@ -41,6 +41,14 @@ export default {
             ratings_1: 1,
             checkbox: true
         };
+    },
+    methods: {
+        ...mapActions(["AddFakePaymentToDatabase"]),
+        async submit() {
+            await this.AddFakePaymentToDatabase();
+
+            this.$router.push("/");
+        }
     },
     created() {
         this.$store.dispatch("getCartItem");

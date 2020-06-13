@@ -58,7 +58,7 @@
                                     :rules="rules.nameRules"
                                 ></v-text-field>
 
-                                <v-btn class="orange">Connect With Stripe</v-btn>
+                                <a :href="stripeConnectAccountUrl">Connect With Stripe</a>
                             </v-col>
                         </v-form>
                     </v-row>
@@ -78,6 +78,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import authInput from "../mixins/authInput";
+import Api from "../store/api";
 export default {
     mixins: [authInput],
     data() {
@@ -120,6 +121,14 @@ export default {
             console.log(data);
             this.reset();
         },
+        async initStripeConnectAccountUrl() {
+            const { data, ok } = await Api.fetchData(
+                "user/stripe-oauth/oauth-link"
+            );
+            if (!ok) return;
+
+            this.stripeConnectAccountUrl = data;
+        },
 
         exit() {
             if (!confirm("Are you sure to exit without saving?")) {
@@ -139,8 +148,14 @@ export default {
             this.authInput.currentUserPhoto = this.userData.currentUserPhoto;
         }
     },
+    mounted() {},
     created() {
         this.initialize();
+        if (!this.userData.stripeAccountId) {
+            this.initStripeConnectAccountUrl();
+        } else {
+            console.log("Nope");
+        }
     },
 
     computed: {
@@ -167,6 +182,14 @@ export default {
     margin-top: 40px;
     width: 900px;
     margin-left: 260px;
+}
+.connectButton {
+    background-position: center;
+    background-size: contain;
+    width: 200px;
+    height: 40px;
+    cursor: pointer;
+    display: block;
 }
 .col-1 {
     width: 10000px;

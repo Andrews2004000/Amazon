@@ -59,12 +59,6 @@ export default {
         product() {
             return this.$store.state.itemFromCart;
         },
-        //CurrentPrice() {
-        //     const QuantityProduct = this.product.map(prod => {
-        //         return prod.product.price * prod.details.quantity;
-        //     });
-        //    return QuantityProduct;
-        // },
 
         TotalAmount() {
             if (this.product.length > 0) {

@@ -14,7 +14,7 @@ export interface IUCartProduct extends mongoose.Document {
 
     [key: string]: any
 }
-const CartProduct = new mongoose.Schema({
+export const CartProduct = new mongoose.Schema({
     product: {
         ref: 'Product',
         type: Schema.Types.ObjectId,

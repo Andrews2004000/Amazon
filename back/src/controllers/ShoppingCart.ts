@@ -9,14 +9,9 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
         throw new AppError('You Are not Authenticate')
 
     }
-    if (req.user.role === 'vendor' || req.user.role === 'client') {
-        ProductsInCart = CartItem.find({
-            client: { _id: req.user.id },
-        })
-            .populate('product')
-    } else {
-        throw new AppError('No Products In Cart', 404)
-    }
+    ProductsInCart = CartItem.find({
+        client: { _id: req.user._id },
+    })
     const cartProducts = await ProductsInCart;
     res.status(200).json({
         status: 'succes',

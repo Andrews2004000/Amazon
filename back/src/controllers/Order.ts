@@ -1,24 +1,35 @@
-import Cart from '../model/ShopCart'
+import CartItem from '../model/ShopCart'
 import { RequestHandler } from 'express';
-import { Stripe } from 'stripe';
-import { stripe } from '../middlewere/stripe';
 import AppError from '../Error/AppError'
-import Product from '../model/Products';
 import Order from '../model/Order'
-import User from '../model/Auth';
+import { cloneObject } from '../utils/cloneObject';
 
 export const postOrder: RequestHandler = async (req, res, next) => {
-    const inputsData = req.body
-    if (!inputsData) {
-        throw new AppError('No Data', 404)
-    }
+    // const inputsData = req.body
+    // if (!inputsData) {
+    //     throw new AppError('No Data', 404)
+    // }
 
     // inputsData.client = req.user?._id;
     //const OrderProduct = await Product.findById(inputsData.product);
     //if (!OrderProduct) {
     //    throw new AppError("Couldn't find any product with that id", 404);
     //}
-    const newOrder = await Order.create(inputsData)
+
+    const user = req.user;
+    if (!user) throw new Error('Cannot get user data');
+
+    const ProductsInCart = await CartItem.find({
+        client: { _id: user._id },
+    })
+
+    const orderedProducts = ProductsInCart.map(cartProduct => {
+        return cloneObject(cartProduct);
+    });
+
+    const newOrder = await Order.create({ orderedProducts })
+
+
     res.status(200).json({
         message: 'Order success',
         data: newOrder

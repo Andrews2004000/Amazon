@@ -47,7 +47,6 @@
 
 
 <script>
-import { mapActions } from "vuex";
 export default {
     props: ["prodId"],
 
@@ -137,14 +136,14 @@ export default {
     },
     computed: {
         product() {
-            return this.$store.state.product;
+            return this.$global.product;
         }
     },
-    watch: {},
+
     methods: {
-        ...mapActions(["AddToCart", "getOneProduct"]),
+        //...mapActions(["AddToCart", "getOneProduct"]),
         async submit() {
-            await this.AddToCart({ userInputs: this.userInputs });
+            await this.$global.AddToCart({ userInputs: this.userInputs });
 
             this.$router.push("/ShoppingCart");
         },
@@ -160,7 +159,7 @@ export default {
         }
     },
     async created() {
-        await this.getOneProduct();
+        await this.$global.getOneProduct();
     }
 };
 </script>

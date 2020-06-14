@@ -28,7 +28,7 @@
 </template>
 <script>
 import NavBar from "./NavBar";
-import { mapState, mapActions } from "vuex";
+
 export default {
     components: {
         NavBar
@@ -43,21 +43,21 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["AddFakePaymentToDatabase"]),
+        // ...mapActions(["AddFakePaymentToDatabase"]),
         async submit() {
-            await this.AddFakePaymentToDatabase();
+            await this.$global.AddFakePaymentToDatabase();
 
             this.$router.push("/");
         }
     },
     created() {
-        this.$store.dispatch("getCartItem");
+        this.$global.getCartItem;
 
         // this.$store.dispatch("load")
     },
     computed: {
         product() {
-            return this.$store.state.itemFromCart;
+            return this.$global.itemFromCart;
         },
 
         TotalAmount() {
@@ -69,7 +69,10 @@ export default {
                 return 0;
             }
         },
-        ...mapState(["cart"])
+        //...mapState(["cart"])
+        cart() {
+            return this.$global.cart;
+        }
     }
 };
 </script>

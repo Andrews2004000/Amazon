@@ -154,7 +154,6 @@
     </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
 import authInput from "../mixins/authInput";
 export default {
     mixins: [authInput],
@@ -190,22 +189,22 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["Signup", "Login", "Logout"]),
+        //...mapActions(["Signup", "Login", "Logout"]),
         async SignUpHandler() {
             if (this.isSignUpDataValid) {
-                await this.Signup(this.userDatas);
+                await this.$global.Signup(this.userDatas);
                 this.dialog = false;
             }
         },
         async LoginHandler() {
             if (this.isLoginDataValid) {
-                await this.Login(this.userDatas);
+                await this.$global.Login(this.userDatas);
 
                 this.dialog = false;
             }
         },
         async LogoutHanlder() {
-            await this.Logout();
+            await this.$global.Logout();
             this.drawer = false;
         },
 
@@ -243,12 +242,18 @@ export default {
                 return false;
             }
         },
-
-        product() {
-            return this.$store.state.itemFromCart;
+        isLoggedIn() {
+            return this.$global.isLoggedIn;
         },
 
-        ...mapState(["isLoggedIn", "userData"])
+        product() {
+            return this.$global.itemFromCart;
+        },
+        userData() {
+            return this.$global.userData;
+        }
+
+        // ...mapState(["isLoggedIn", "userData"])
     }
 };
 </script>

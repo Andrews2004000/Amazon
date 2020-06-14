@@ -70,7 +70,6 @@
                                     <v-card-text class="beta">
                                         <v-card-title class="titolo">Product Of The Mounth</v-card-title>
                                         <v-card-subtitle>{{ product.title }}</v-card-subtitle>
-
                                     </v-card-text>
 
                                     <v-img
@@ -79,10 +78,9 @@
                                         height="170px"
                                         max-width="150px"
                                     ></v-img>
-                                   
-                                   
-                                  <v-rating>{{product.ratings}}</v-rating>
-                                     <span class="sna">{{ product.price }}$</span>
+
+                                    <v-rating>{{product.ratings}}</v-rating>
+                                    <span class="sna">{{ product.price }}$</span>
 
                                     <v-card-actions>
                                         <v-btn
@@ -107,7 +105,6 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
 import NavBar from "./NavBar";
 export default {
     data() {
@@ -120,18 +117,17 @@ export default {
         NavBar
     },
     created() {
-        this.$store.dispatch("LoadTecnologyProducts");
+        this.$global.LoadTecnologyProducts;
     },
     methods: {
-        ...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),
+        //...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),
 
-    
         searchHanlder() {
             console.log("Sto Ceracndo");
             const searchField = this.searchField;
             const searchQuery = searchField.split(" ").join("+");
             console.log(searchQuery);
-            this.SearchProducts({
+            this.$global.SearchProducts({
                 searchQuery,
                 categoryType: "TecnologyProducts"
             });
@@ -165,9 +161,18 @@ export default {
             return filteredProducts;
         },
         products() {
-            return this.$store.state.TecnologyProducts;
+            return this.$global.TecnologyProducts;
         },
-        ...mapState(["isLoggedIn", "TecnologyProducts", "AllTags"])
+        // ...mapState(["isLoggedIn", "TecnologyProducts", "AllTags"])
+        isLoggedIn() {
+            return this.$global.isLoggedIn;
+        },
+        TecnologyProducts() {
+            return this.$global.TecnologyProducts;
+        },
+        AllTags() {
+            return this.$global.AllTags;
+        }
     }
 };
 </script>

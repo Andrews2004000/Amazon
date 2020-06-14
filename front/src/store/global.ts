@@ -73,7 +73,7 @@ export default class App extends VuexModule {
     this.isLoggedIn = false;
   }
   @Mutation
-  CREATE_NEW_PRODUCTS(payload: []) {
+  CREATE_NEW_PRODUCTS(payload: any) {
     this.prod = payload;
   }
   @Mutation

@@ -76,7 +76,6 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
 import authInput from "../mixins/authInput";
 import Api from "../store/api";
 export default {
@@ -101,7 +100,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["changeAccountDetails", "deleteMe"]),
+        // ...mapActions(["changeAccountDetails", "deleteMe"]),
         async DeleteUser() {
             if (
                 !confirm(
@@ -111,12 +110,12 @@ export default {
                 return;
             }
 
-            await this.deleteMe();
+            await this.$global.deleteMe();
             this.$router.push("/");
         },
         async changeAccountDetailsHandler() {
             const inputData = { ...this.authInput };
-            const data = await this.changeAccountDetails(inputData);
+            const data = await this.$global.changeAccountDetails(inputData);
             this.$router.push("/");
             console.log(data);
             this.reset();
@@ -148,7 +147,7 @@ export default {
             this.authInput.currentUserPhoto = this.userData.currentUserPhoto;
         }
     },
-    mounted() {},
+
     created() {
         this.initialize();
         if (!this.userData.stripeAccountId) {
@@ -159,7 +158,10 @@ export default {
     },
 
     computed: {
-        ...mapState(["userData"])
+        // ...mapState(["userData"])
+        userData() {
+            return this.$global.userData;
+        }
     }
 };
 </script>

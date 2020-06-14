@@ -117,7 +117,6 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
 import NavBar from "./NavBar";
 export default {
     data() {
@@ -160,28 +159,37 @@ export default {
         NavBar
     },
     methods: {
-        ...mapActions(["SearchProducts", "AddToCart"]),
+        //  ...mapActions(["SearchProducts", "AddToCart"]),
         searchHanlder() {
             console.log("Sto Ceracndo");
             const searchField = this.searchField;
             const searchQuery = searchField.split(" ").join("+");
             console.log(searchQuery);
-            this.SearchProducts({ searchQuery, categoryType: "AllProducts" });
+            this.$global.SearchProducts({
+                searchQuery,
+                categoryType: "AllProducts"
+            });
         },
         Go(id) {
             this.$router.push("Detail/" + id);
         }
     },
     created() {
-        this.$store.dispatch("LoadAllProducts");
+        this.$global.LoadAllProducts;
         // this.$store.dispatch("load")
     },
-    mounted() {},
+
     computed: {
         products() {
-            return this.$store.state.AllProducts;
+            return this.$global.AllProducts;
         },
-        ...mapState(["isLoggedIn", "product", "userData"])
+        isLoggedIn() {
+            return this.$global.isLoggedIn;
+        },
+        userData() {
+            return this.$global.userData;
+        }
+        //...mapState(["isLoggedIn", "product", "userData"])
     }
 };
 </script>

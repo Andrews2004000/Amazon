@@ -100,7 +100,6 @@
                                 label="Max Quantity"
                                 placeholder="Max Quantity"
                                 v-model="userInputs.MaxQuantity"
-                                
                             ></v-text-field>
                         </v-col>
                         <v-col cols="12">
@@ -146,7 +145,6 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
 export default {
     data() {
         return {
@@ -254,26 +252,29 @@ export default {
             ],
             inputDescription: [
                 v => v.length >= 15 || "Minimun Length is 15 Characthers"
-            ],
-           // MaxQuantity: v => {
+            ]
+            // MaxQuantity: v => {
             //    if (!v.trim()) return true;
             //    if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;
             //    return "Number has to be between 1 and 20";
-           // }
+            // }
         };
     },
     methods: {
-        ...mapActions(["CreteNewProducts"]),
+        // ...mapActions(["CreteNewProducts"]),
         async submit() {
-         
-            await this.CreteNewProducts({userInputs:this.userInputs});
-        
-           this.$router.push('/')
-            
+            await this.$global.CreteNewProducts({
+                userInputs: this.userInputs
+            });
+
+            this.$router.push("/");
         }
     },
     computed: {
-        ...mapState(["userData"])
+        // ...mapState(["userData"])
+        userData() {
+            return this.$global.userData;
+        }
     }
 };
 </script>

@@ -8,7 +8,7 @@ import vueDebounce from 'vue-debounce';
 import { getModule } from 'vuex-module-decorators'
 Vue.use(vueDebounce)
 Vue.prototype.$global = getModule(globalStore);
-
+Vue.config.productionTip = false;
 new Vue({
   router,
   store,

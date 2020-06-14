@@ -1,6 +1,5 @@
-import Vue from 'vue'
+
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import Vuex from 'vuex'
 import store from './index'
 import Api from './api'
 import router from '../router/index'
@@ -145,7 +144,6 @@ export default class App extends VuexModule {
     const data = result.data;
     console.log(data)
     this.LOAD_USER_DATA(data)
-
 
   }
   @Action

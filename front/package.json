@@ -8,6 +8,7 @@
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
+		"@stripe/stripe-js": "^1.7.0",
 		"convert": "^0.7.0-canary",
 		"core-js": "^3.6.4",
 		"vue": "^2.6.11",

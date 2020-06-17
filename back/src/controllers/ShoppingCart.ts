@@ -86,6 +86,8 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
 }
 
 export const DeleteItemFromCart: RequestHandler = async (req, res, next) => {
+    const inputsData = { ...req.body.userInputs };
+
     const prodId = await CartItem.findById(req.params.id)
     const user = req.user;
     if (!prodId) {
@@ -99,6 +101,7 @@ export const DeleteItemFromCart: RequestHandler = async (req, res, next) => {
     if (user.role !== 'client') {
         throw new AppError('You have no permission', 404)
     }
+    // inputsData.details.quantity--;
     await CartItem.findByIdAndDelete(prodId._id)
     res.status(204).json({
         message: 'Ok Deleted',

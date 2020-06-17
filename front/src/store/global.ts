@@ -346,6 +346,13 @@ export default class App extends VuexModule {
 
 
   }
+  @Action
+  async createCheckSession() {
+    const { data, ok } = await Api.fetchData(`order`, true, 'POST')
+    if (!ok) return {}
+    return data;
+
+  }
 
 
 }

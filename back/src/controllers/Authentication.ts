@@ -213,8 +213,9 @@ export const getAuthLink: RequestHandler = async (req, res, next) => {
         scope: 'read_write',
         response_type: 'code',
         'stripe_user[email]': req.user!.email,
+        'suggested_capabilities[]': 'transfers'
     });
-    const url = `https://connect.stripe.com/oauth/authorize?${args.toString()}`;
+    const url = `https://connect.stripe.com/express/oauth/authorize?${args.toString()}`;
     return res.json({
         status: 'success',
         data: url

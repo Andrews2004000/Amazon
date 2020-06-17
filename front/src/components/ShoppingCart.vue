@@ -16,17 +16,17 @@
                         </div>
                         <v-spacer></v-spacer>
                         <v-btn class="red btn2" @click="DeleteProductCart(prod._id)">Remove</v-btn>
-                        <v-btn class="orange btn" @click="submit">Proceed Payment</v-btn>
                     </v-row>
                 </v-container>
             </v-card>
             <span class="totalAmount" v-if="product.length > 0">Total: {{TotalAmount}} $</span>
+            <v-btn class="orange btn" @click="orderHanlder">Proceed Payment</v-btn>
         </div>
     </div>
 </template>
 <script>
 import NavBar from "./NavBar";
-
+import { loadStripe } from "@stripe/stripe-js";
 export default {
     components: {
         NavBar
@@ -75,6 +75,19 @@ export default {
         },
         async DeleteProductCart(prodId) {
             await this.$global.DeleteFromCart(prodId);
+        },
+        async orderHanlder() {
+            const data = await this.$global.createCheckSession();
+            const { vendorStripeAccountId, stripeClientId, sessionId } = data;
+            const stripe = await loadStripe(stripeClientId, {
+                stripeAccount: vendorStripeAccountId
+            });
+            const result = await stripe.redirectToCheckout({
+                sessionId
+            });
+            if (result.error) {
+                alert("An Error occured: +" + result.error);
+            }
         }
         //  async bookHandler() {
         //    if (!this.sessionId) return;
@@ -143,7 +156,7 @@ export default {
     margin-top: 20px;
 }
 .btn {
-    margin-top: 25px;
+    margin-left: 20px;
 }
 .btn2 {
     margin-top: 25px;

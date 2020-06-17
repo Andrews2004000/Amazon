@@ -136,6 +136,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
         message: 'success',
         data: {
             // ProductsInCart
+            sessionId: session.id,
             vendorStripeAccountId: stripeAccountId,
             stripeClientId: 'ca_HS1snREeNE3h2aOj2DVw0CBUZ1yCb7a8'
 

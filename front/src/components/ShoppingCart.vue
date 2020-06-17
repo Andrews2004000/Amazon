@@ -4,7 +4,7 @@
         <div class="centro">
             <span class="emp" v-if="product.length == 0">Your Cart Is Empty</span>
 
-            <v-card class="pa-5 card" width="1000" v-for="prod in product" :key="prod.id">
+            <v-card class="pa-6 card" width="1000" v-for="prod in product" :key="prod.id">
                 <v-container>
                     <v-row>
                         <div class="image">
@@ -13,16 +13,14 @@
                         <div class="sub">
                             <span class="qu">Quantity {{prod.details.quantity}}</span>
                             <span class="qu">{{prod.product.price * prod.details.quantity}} $</span>
-
-                            <span>{{CurrentPrice}}</span>
                         </div>
                         <v-spacer></v-spacer>
-                        <v-btn class="red btn2">Remove</v-btn>
+                        <v-btn class="red btn2" @click="DeleteProductCart(prod._id)">Remove</v-btn>
                         <v-btn class="orange btn" @click="submit">Proceed Payment</v-btn>
                     </v-row>
                 </v-container>
             </v-card>
-            <span class="totalAmount">Total: {{TotalAmount}}</span>
+            <span class="totalAmount" v-if="product.length > 0">Total: {{TotalAmount}} $</span>
         </div>
     </div>
 </template>
@@ -36,11 +34,37 @@ export default {
 
     data() {
         return {
+            sessionId: null,
             rating: 4,
             number: ["1", "2"],
             ratings_1: 1,
             checkbox: true
         };
+    },
+    async mounted() {
+        // try {
+        //     const result = await Api.fetchData(
+        //         "bookings/checkout-session",
+        //         true,
+        //        "POST",
+        //       {
+        //           bookingData: this.inputFormattedData
+        //        }
+        //   );
+        //   if (!result.ok) return;
+        //   if (
+        //      !result.data.sessionId ||
+        //      !result.data.vendorStripeAccountId ||
+        //      !result.data.stripeClientId
+        //  )
+        //   throw new Error("Cannot create stripe session");
+        //this.sessionId = result.data.sessionId;
+        // stripe = await loadStripe(result.data.stripeClientId, {
+        //    stripeAccount: result.data.vendorStripeAccountId
+        //  });
+        //   } catch (err) {
+        //       alert(err);
+        //   }
     },
     methods: {
         // ...mapActions(["AddFakePaymentToDatabase"]),
@@ -48,10 +72,22 @@ export default {
             await this.$global.AddFakePaymentToDatabase();
 
             this.$router.push("/");
+        },
+        async DeleteProductCart(prodId) {
+            await this.$global.DeleteFromCart(prodId);
         }
+        //  async bookHandler() {
+        //    if (!this.sessionId) return;
+        //
+        //    const { error } = await stripe.redirectToCheckout({
+        //        sessionId: this.sessionId
+        //  });
+        //  if (error) {
+        //      alert(error.message);
+        //  }
     },
     created() {
-        this.$global.getCartItem;
+        this.$global.getCartItem();
 
         // this.$store.dispatch("load")
     },
@@ -61,17 +97,13 @@ export default {
         },
 
         TotalAmount() {
-            if (this.product.length > 0) {
+            if (this.product.length >= 1) {
                 return this.product
-                    .map(item => item.product.price)
+                    .map(item => item.product.price * item.details.quantity)
                     .reduce((total, amount) => total + amount);
             } else {
                 return 0;
             }
-        },
-        //...mapState(["cart"])
-        cart() {
-            return this.$global.cart;
         }
     }
 };
@@ -108,6 +140,7 @@ export default {
 
 .card {
     margin-left: 220px;
+    margin-top: 20px;
 }
 .btn {
     margin-top: 25px;

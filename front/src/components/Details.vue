@@ -42,6 +42,7 @@
                 <v-btn class="orange btn" @click="submit">Add To Cart</v-btn>
             </div>
         </div>
+        <h1 class="com-title">Comment Section</h1>
     </div>
 </template>
 
@@ -158,8 +159,8 @@ export default {
             this.$router.push("/ShoppingCart");
         }
     },
-    async created() {
-        await this.$global.getOneProduct();
+    created() {
+        this.$global.getOneProduct();
     }
 };
 </script>
@@ -209,5 +210,12 @@ export default {
 }
 .iphone {
     transform: translateY(150px);
+}
+.com-title {
+    margin: 0px 0px 0px 35.9rem;
+}
+.cross {
+    font-size: 25px;
+    cursor: pointer;
 }
 </style>

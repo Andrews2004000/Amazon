@@ -21,7 +21,7 @@ export default class App extends VuexModule {
   order = []
   itemFromCart = []
   videogames = []
-  AllProducts = []
+  Products = []
   TecnologyProducts = []
   HouseProducts = []
   BookProducts = []
@@ -41,11 +41,11 @@ export default class App extends VuexModule {
 
 
   @Mutation
-  SETUP_RODUCTS_DATA({ type, data }: { type: string, data: any }) {
-    // const type = payload.type;
-    // const data = payload.data;
-    // state[type as keyof T] = data;
+  SETUP_RODUCTS_DATA(payload: { type: string; data: any }) {
+    const type = payload.type;
+    const data = payload.data;
     this[type] = data;
+    //this[type] = data;
   }
   @Mutation
   LOAD_USER_DATA(payload: IGenericObject) {
@@ -76,19 +76,16 @@ export default class App extends VuexModule {
     this.prod = payload;
   }
   @Mutation
-  ADD_PRODUCT_TO_CART(payload: any) {
+  ADD_PRODUCT_TO_CART(payload?) {
 
     this.cart = payload;
   }
   @Mutation
-  GET_ITEM_FROM_CART(payload: any) {
+  GET_ITEM_FROM_CART(payload) {
 
     this.itemFromCart = payload;
   }
-  @Mutation
-  DELETE_ITEM_FROM_CART() {
-    this.cart = []
-  }
+
   @Mutation
   ADD_PRODUCT_TO_PAYMENT(payload: any) {
     this.order = payload
@@ -103,7 +100,7 @@ export default class App extends VuexModule {
   }
   @Mutation
   ALL_PRODUCTS(payload: any) {
-    this.AllProducts = payload;
+    this.Products = payload;
   }
   @Mutation
   TECNOLOGY_PRODUCTS(payload: any) {
@@ -118,7 +115,7 @@ export default class App extends VuexModule {
     this.HouseProducts = payload;
   }
   @Mutation
-  GET_ONE_PRODUCT(payload: any) {
+  GET_ONE_PRODUCT(payload) {
     this.product = payload;
   }
 
@@ -154,6 +151,7 @@ export default class App extends VuexModule {
       return
     }
     const data = result.data;
+    console.log(data)
     this.LOGIN(data)
 
   }
@@ -225,7 +223,7 @@ export default class App extends VuexModule {
 
 
   @Action
-  async SearchProducts({ searchQuery, categoryType }: { searchQuery: any, categoryType: any }) {
+  async SearchProducts({ searchQuery, categoryType }) {
 
     const result = await Api.fetchData(
       `products?search=${searchQuery}`
@@ -241,15 +239,13 @@ export default class App extends VuexModule {
   @Action
   async LoadAllProducts() {
     const result = await Api.fetchData(`products`, true, 'GET')
-
+    console.log('Ok')
     if (!result.ok) {
       return;
     }
 
     const data = result.data;
-
-
-
+    console.log('1')
     this.ALL_PRODUCTS(data)
 
 
@@ -339,14 +335,13 @@ export default class App extends VuexModule {
     this.GET_ITEM_FROM_CART(data)
   }
   @Action
-  async DeleteFromCart(payload: any) {
+  async DeleteFromCart(id: string) {
 
-    const id = payload;
     const result = await Api.fetchData(`cart/${id}`, true, 'DELETE')
     if (!result.ok) {
       return;
     }
-    this.DELETE_ITEM_FROM_CART
+    this.getCartItem()
 
 
 

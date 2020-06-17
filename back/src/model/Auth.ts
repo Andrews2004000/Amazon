@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import AppError from '../Error/AppError'
+import crypto from 'crypto'
 
 export interface IUser extends mongoose.Document {
     _id: any,
@@ -23,6 +24,7 @@ export interface IUser extends mongoose.Document {
     [key: string]: any,
     isAdmin(): string,
     getJwt(): Promise<string>,
+    createPasswordResetToken(): string,
 
 
 
@@ -95,7 +97,7 @@ const userSchema = new mongoose.Schema({
         default: true,
         select: false
     },
-    passwordChangedAt: Date,
+    // passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
 
@@ -133,6 +135,14 @@ class UserClass extends mongoose.Model {
 
         })
 
+
+
+    }
+    createPasswordResetToken() {
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        crypto.createHash('sha256').update(resetToken).digest('hex');
+        this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+        return resetToken;
 
 
     }

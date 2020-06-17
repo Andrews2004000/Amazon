@@ -11,8 +11,8 @@
             <span class="fa fa-shopping-cart mode-1" v-if="isLoggedIn" @click="GoThere"></span>
 
             <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
-            <div class="ball orange" v-if="homePage">
-                <span class="number dark">{{product.length}}</span>
+            <div class="ball orange" v-if="isLoggedIn">
+                <span class="number dark" v-if="isLoggedIn">{{product.length}}</span>
             </div>
         </v-app-bar>
 
@@ -20,18 +20,22 @@
             <v-btn class="ma-2" color="darken-2" dark v-if="homePage" router-view to="/">
                 <v-icon dark left v-if="homePage">mdi-arrow-left</v-icon>Back To HomePage
             </v-btn>
+            <!-- <span else>ok</span>-->
 
             <div class="conta">
                 <span class="fa fa-user mode"></span>
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
-                <!-- <v-btn
-                    class="success user"
-                    @click="Go"
-                    v-if="userData.user.role === 'vendor'"
-                >Sell Something</v-btn>-->
+                <!-- <span else>oki</span>-->
+
+                <v-btn class="success user" @click="Go" v-if="userData ">Sell Something</v-btn>
+
+                <!-- <span else>ok</span>-->
+                <span class="name" v-if="userData">{{userData.user.username}}</span>
+                <!-- <span else>ok</span>-->
                 <v-btn class="btn-5 orange" v-if="isLoggedIn == false">
                     <span class="LoginDetail">Login</span>
                 </v-btn>
+                <!--  <span else>ok</span>-->
             </div>
 
             <v-list class="listona">
@@ -92,7 +96,7 @@
                                         type="password"
                                         required
                                         v-model="userDatas.passwordConfirmation"
-                                        :rules="rules.passwordConfirmation"
+                                        :rules="passwordConfirmationRule"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
@@ -157,6 +161,7 @@
 import authInput from "../mixins/authInput";
 export default {
     mixins: [authInput],
+
     data() {
         return {
             drawer: false,
@@ -230,6 +235,12 @@ export default {
         }
     },
     computed: {
+        passwordConfirmationRule() {
+            return () =>
+                this.userDatas.password ===
+                    this.userDatas.passwordConfirmation ||
+                "Password must match";
+        },
         homePage() {
             if (
                 this.$route.path == "/Tecnology" ||
@@ -242,15 +253,15 @@ export default {
                 return false;
             }
         },
+        product() {
+            return this.$global.itemFromCart;
+        },
         isLoggedIn() {
             return this.$global.isLoggedIn;
         },
 
-        product() {
-            return this.$global.itemFromCart;
-        },
         userData() {
-            return this.$global.userData;
+            return this.$global.userData.role === "vendor";
         }
 
         // ...mapState(["isLoggedIn", "userData"])
@@ -286,6 +297,13 @@ export default {
 .rapha {
     text-transform: uppercase;
     font-weight: 700;
+}
+.name {
+    color: white;
+    margin-left: 95px;
+    font-size: 20px;
+    font-weight: 300;
+    text-transform: uppercase;
 }
 .cerca {
     font-size: 20px;

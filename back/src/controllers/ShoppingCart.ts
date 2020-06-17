@@ -57,6 +57,9 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
 
     // Se non ci sono items con quel product, creane uno nuovo
     if (foundProducts.length === 0) {
+        // const product = foundProducts[1];
+        //   product.details.quantity = 1;
+        inputsData.details.quantity = 1;
         const newCart = await CartItem.create(inputsData)
     }
 
@@ -82,11 +85,11 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
 
 }
 
-export const DeleteCartItem: RequestHandler = async (req, res, next) => {
+export const DeleteItemFromCart: RequestHandler = async (req, res, next) => {
     const prodId = await CartItem.findById(req.params.id)
     const user = req.user;
     if (!prodId) {
-        throw new AppError('NO products')
+        throw new AppError(' no products in cart')
 
     }
     if (!user) {
@@ -94,9 +97,9 @@ export const DeleteCartItem: RequestHandler = async (req, res, next) => {
 
     }
     if (user.role !== 'client') {
-        throw new AppError('You Are Not Authenticate', 404)
+        throw new AppError('You have no permission', 404)
     }
-    await CartItem.findByIdAndDelete(prodId)
+    await CartItem.findByIdAndDelete(prodId._id)
     res.status(204).json({
         message: 'Ok Deleted',
         data: null

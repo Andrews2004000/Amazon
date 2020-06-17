@@ -37,6 +37,13 @@
                         </v-row>
                     </v-container>
                 </v-form>
+                <v-row justify="space-around">
+                    <v-col cols="12" sm="6">
+                        <v-chip-group multiple active-class="primary--text">
+                            <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
+                        </v-chip-group>
+                    </v-col>
+                </v-row>
             </div>
         </div>
         <div>
@@ -85,14 +92,6 @@
                 </v-row>
             </v-container>
         </div>
-
-        <v-row justify="space-around">
-            <v-col cols="12" sm="6">
-                <v-chip-group multiple active-class="primary--text">
-                    <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
-                </v-chip-group>
-            </v-col>
-        </v-row>
 
         <v-footer dark padless>
             <v-card flat tile class="indigo lighten-1 white--text text-center">
@@ -175,13 +174,13 @@ export default {
         }
     },
     created() {
-        this.$global.LoadAllProducts;
+        this.$global.LoadAllProducts();
         // this.$store.dispatch("load")
     },
 
     computed: {
         products() {
-            return this.$global.AllProducts;
+            return this.$global.Products;
         },
         isLoggedIn() {
             return this.$global.isLoggedIn;

@@ -117,7 +117,7 @@ export default {
         NavBar
     },
     created() {
-        this.$global.LoadTecnologyProducts;
+        this.$global.LoadTecnologyProducts();
     },
     methods: {
         //...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),

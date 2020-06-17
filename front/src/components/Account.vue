@@ -49,14 +49,15 @@
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12">
-                                <v-text-field
+                                <v-file-input
+                                    :rules="rules"
                                     class="col-1"
-                                    outlined
-                                    label="ChangeUserPhoto"
-                                    placeholder="ChnageUserPhoto"
-                                    v-model="authInput.ChangeUserPhoto"
-                                    :rules="rules.nameRules"
-                                ></v-text-field>
+                                    accept="image/png, image/jpeg, image/bmp"
+                                    placeholder="Pick an avatar"
+                                    prepend-icon="mdi-camera"
+                                    label="Avatar"
+                                    model="authInput.photo"
+                                ></v-file-input>
 
                                 <a :href="stripeConnectAccountUrl">Connect With Stripe</a>
                             </v-col>
@@ -141,10 +142,10 @@ export default {
             this.initialize();
         },
         initialize() {
-            this.authInput.username = this.userData.username;
-            this.authInput.email = this.userData.email;
+            this.authInput.username = this.userData.user.username;
+            this.authInput.email = this.userData.user.email;
             this.authInput.password = "";
-            this.authInput.currentUserPhoto = this.userData.currentUserPhoto;
+            this.authInput.currentUserPhoto = this.userData.user.currentUserPhoto;
         }
     },
 

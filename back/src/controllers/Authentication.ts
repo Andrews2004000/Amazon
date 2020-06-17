@@ -3,10 +3,45 @@ import { IUser } from '../model/Auth';
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import mongoose from 'mongoose'
+import sharp from 'sharp'
 import { stripe } from '../middlewere/stripe';
 import AppError from '../Error/AppError'
 import { v4 as uuidv4 } from 'uuid';
+import multer from 'multer';
 import { RequestHandler, Request, Response, NextFunction } from 'express'
+//const multerStorage = multer.diskStorage({
+///  destination: (req, file, cb) => {
+//      cb(null, 'public/image')
+//   },
+// filename: (req, file, cb) => {
+//user-77005043739467-3338292929.jpeg
+//     const extension = file.mimetype.split('/')[1]
+//     cb(null, `user-${req.user?.id}.${Date.now()}.${extension}`)
+//  }
+//});
+
+//Multer Filter
+const multerStorage = multer.memoryStorage();
+const multerFilter = async (req: Request, file: any, cb: any) => {
+    if (file.mimetype.startWith('image')) {
+        cb(null, true)
+    } else {
+        cb(new AppError("That's's Not A Image", 400), false)
+    }
+}
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
+
+export const uploadUserPhoto = upload.single('image')
+
+export const resizeUserPhoto: RequestHandler = async (req, res, next) => {
+    if (!req.file) return next()
+    req.file.filename = `user-${req.user?.id}.${Date.now()}.jpeg`
+    sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile('public/images/')
+    next()
+}
+
+
+
 
 function SendCookieToken(res: Response, token?: string) {
     if (token) {
@@ -86,9 +121,11 @@ export const upadteUser: RequestHandler = async (req, res, next) => {
         throw new AppError('no user data')
     }
     const inputData: any = { ...body }
+
     if (inputData.password) {
         inputData.password = await bcrypt.hash(inputData.password, 12)
     }
+    if (req.file) inputData.photo = req.file.filename
     Object.keys(inputData).forEach((k) => {
         if (k in user) {
             user[k] = inputData[k];
@@ -215,3 +252,5 @@ function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; use
     user.stripeAccountId = stripeAccountId;
     user.save();
 }
+
+export default SendCookieToken;

@@ -118,29 +118,36 @@ export default {
                 searchQuery,
                 categoryType: "HouseProducts"
             });
+        },
+
+        filteredProducts() {
+            const products = this.products;
+            if (!this.searchTags) return products;
+
+            const filteredTags = this.products.filter(product => {
+                if (
+                    product.tags &&
+                    Array.isArray(product.tags) &&
+                    product.tags.includes(this.searchTags)
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (filteredTags.length === 0) {
+                return products;
+            }
+            return filteredTags;
         }
     },
-    filteredProducts() {
-        const products = this.products;
-        if (!this.searchTags) return products;
-
-        const filteredTags = this.products.filter(product => {
-            if (
-                product.tags &&
-                Array.isArray(product.tags) &&
-                product.tags.includes(this.searchTags)
-            ) {
-                return true;
-            } else {
-                return false;
-            }
-        });
-        if (filteredTags.length === 0) {
-            return products;
-        }
-        return filteredTags;
+    created() {
+        this.$global.LoadBooksProducts();
     },
     computed: {
+        products() {
+            return this.$global.BookProducts;
+        },
         // ...mapState(["isLoggedIn"])
         isLoggedIn() {
             return this.$global.isLoggedIn;

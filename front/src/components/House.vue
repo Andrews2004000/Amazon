@@ -120,7 +120,7 @@ export default {
         }
     },
     created() {
-        this.$global.LoadHouseProducts;
+        this.$global.LoadHouseProducts();
     },
     computed: {
         filteredProducts() {

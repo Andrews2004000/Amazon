@@ -93,6 +93,9 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     const productTotalPrice = ProductsInCart.map(prod => {
         return prod.product.price * prod.details.quantity
     }).reduce((acc, total) => acc + total, 0)
+    const singleProductPrice = ProductsInCart.map(prod => {
+        return prod.product.price;
+    })
     const productTitle = ProductsInCart.map(prod => {
         return prod.product.title
     })
@@ -110,6 +113,13 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
 
 
     if (!vendorWithStripeAccount) throw new AppError('no Account', 404)
+    const uniqueVendorStripeAccountId = [...new Set(vendorWithStripeAccount)]
+    const ForEachVendor = {
+        uniqueVendorStripeAccountId,
+        singleProductPrice
+
+    }
+    console.log(ForEachVendor)
 
 
 
@@ -132,7 +142,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
             },
             success_url: `localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}&vendor_account=${vendorWithStripeAccount}`,
             cancel_url: `localhost:8080/order-product/cancel`,
-            metadata: convertObjectToMetadataList(productTotalPrice),
+            metadata: convertObjectToMetadataList(orderedData),
         },
         {
             stripeAccount: vendorWithStripeAccount as any,

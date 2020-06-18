@@ -63,7 +63,7 @@ export const deleteOrder: RequestHandler = async (req, res, next) => {
 export const getAllOrders: RequestHandler = async (req, res, next) => {
 
     const user = req.user?._id
-    const order = await Order.find().populate('product');
+    const order = await Order.find().populate('product')
     if (!user) {
         throw new AppError('No Authenticate', 404)
 
@@ -99,8 +99,17 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     const productImage = ProductsInCart.map(prod => {
         return prod.product.imageUrl
     })
-    const stripeAccountId = user.stripeAccountId
-    if (!stripeAccountId) throw new AppError('no Account', 404)
+
+
+    const vendorWithStripeAccount = ProductsInCart.map((prod => {
+        return prod.vendorStripeAccountId;
+    }))
+
+    console.log(vendorWithStripeAccount)
+
+
+
+    if (!vendorWithStripeAccount) throw new AppError('no Account', 404)
 
 
 
@@ -111,7 +120,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
                 {
                     name: `${productTitle} Order`,
                     description: 'Order Yor Product now',
-                    images: productImage as string[],
+                    images: productImage as any,
                     amount: productTotalPrice * 100, //1 ammount = 0.01 money
                     currency: 'usd',
                     quantity: 1,
@@ -121,12 +130,12 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
             payment_intent_data: {
                 application_fee_amount: productTotalPrice * 25,
             },
-            success_url: `localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}&vendor_account=${stripeAccountId}`,
+            success_url: `localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}&vendor_account=${vendorWithStripeAccount}`,
             cancel_url: `localhost:8080/order-product/cancel`,
             metadata: convertObjectToMetadataList(productTotalPrice),
         },
         {
-            stripeAccount: stripeAccountId as string,
+            stripeAccount: vendorWithStripeAccount as any,
         }
     );
 
@@ -135,9 +144,9 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     res.status(200).json({
         message: 'success',
         data: {
-            // ProductsInCart
+
             sessionId: session.id,
-            vendorStripeAccountId: stripeAccountId,
+            vendorStripeAccountId: vendorWithStripeAccount,
             stripeClientId: 'ca_HS1snREeNE3h2aOj2DVw0CBUZ1yCb7a8'
 
         }

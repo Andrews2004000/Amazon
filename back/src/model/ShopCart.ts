@@ -4,11 +4,14 @@ import { IUProducts } from './Products'
 export interface IUCartProduct extends mongoose.Document {
     _id: any,
     client: IUser,
-    product: IUProducts
+    product: IUProducts,
+    vendorStripeAccountId: string;
+
     details: {
         quantity: number;
         selectedColor: [string];
         sizeAvailable: [number];
+
     }
 
 
@@ -36,13 +39,18 @@ export const CartProduct = new mongoose.Schema({
         sizeAvailable: {
             type: [Number],
             required: true
-        }
+        },
+
     },
+
     client: {
         ref: 'User',
         type: Schema.Types.ObjectId,
         immutable: true,
         required: true
+    },
+    vendorStripeAccountId: {
+        type: String,
     },
 }, { versionKey: false })
 const Cart = mongoose.model<IUCartProduct>('CartProduct', CartProduct)

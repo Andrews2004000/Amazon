@@ -7,9 +7,11 @@
             <v-card class="pa-6 card" width="1000" v-for="prod in product" :key="prod.id">
                 <v-container>
                     <v-row>
+                        <span>{{product}}</span>
                         <div class="image">
                             <v-img :src="prod.product.imageUrl" height="100" width="100"></v-img>
                         </div>
+
                         <div class="sub">
                             <span class="qu">Quantity {{prod.details.quantity}}</span>
                             <span class="qu">{{prod.product.price * prod.details.quantity}} $</span>

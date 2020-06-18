@@ -14,7 +14,8 @@ export const getAllProducts: RequestHandler = async (req, res, next) => {
     if (req.token && req.query.owned == 'true') {
         const currentUserId = await User.getIdFromJwt(req.token)
         const currentUser = await User.findById(currentUserId)
-        if (!currentUser?.isAdmin()) {
+
+        if (currentUser?.role.includes('vendor')) {
             productQuery = productQuery.where('vendor').equals(currentUserId)
         }
     }
@@ -43,7 +44,9 @@ export const getProduct: RequestHandler = async (req, res, next) => {
 }
 export const createProducts: RequestHandler = async (req, res, next) => {
     const ProductData = { ...req.body.userInputs };
-    ProductData.vendor = req.user?._id;
+    if (!req.user) throw new AppError('No Authenticate ')
+    ProductData.vendor = req.user._id;
+    // ProductData.vendor.stripeAccountId = req.user.stripeAccountId
     const newProduct = await Product.create(ProductData)
 
     if (!newProduct) {

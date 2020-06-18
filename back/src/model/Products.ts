@@ -7,11 +7,12 @@ export interface IUProducts extends mongoose.Document {
     price: number,
     scadenza?: Date,
     size?: [number],
+
     tags?: Array<"videogames" | "phones" | "computers" | "fantasy" | "action" | "history" | "livingroom" | "garden" | "bedroom">,
     colorsAvailable?: Array<"red" | "blue" | "green" | "yellow" | "grey" | "Black" | "All Available">,
     category: 'Tecnology' | 'House' | 'Book' | 'Not Specified',
     ratings?: number,
-    MaxQuantity?: number,
+    MaxQuantity: number,
     [key: string]: any
 
 
@@ -83,6 +84,11 @@ const ProductsSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         immutable: true,
 
+    },
+    stripeAccountId: {
+        ref: 'User',
+        type: Schema.Types.ObjectId,
+        immutable: true,
     },
     scadenza: {
         type: Date,

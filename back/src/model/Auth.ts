@@ -22,7 +22,7 @@ export interface IUser extends mongoose.Document {
     active: boolean,
     Country?: [string],
     [key: string]: any,
-    isAdmin(): string,
+    isVendor(): string,
     getJwt(): Promise<string>,
     createPasswordResetToken(): string,
 
@@ -112,8 +112,8 @@ interface UserModel extends mongoose.Model<IUser> {
 }
 
 class UserClass extends mongoose.Model {
-    idAdmin() {
-        return this.role === 'admin'
+    idVendor() {
+        return this.role === 'vendor'
     }
     getJwt() {
         return new Promise((resolve, reject) => {

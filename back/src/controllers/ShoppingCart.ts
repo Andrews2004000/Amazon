@@ -1,10 +1,12 @@
 import CartItem from '../model/ShopCart'
+import User from '../model/Auth'
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
 import Product from '../model/Products';
 
 export const GetAllCart: RequestHandler = async (req, res, next) => {
     let ProductsInCart;
+
     if (!req.user) {
         throw new AppError('You Are not Authenticate')
 
@@ -20,7 +22,9 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
     const cartProducts = await ProductsInCart;
     res.status(200).json({
         status: 'succes',
-        data: cartProducts
+        data: cartProducts,
+
+
     })
 
 }
@@ -42,10 +46,8 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     if (!inputsData) {
         throw new AppError('No Data', 404)
     }
-
-    inputsData.client = req.user?._id;
-
-
+    if (!req.user) throw new AppError('no user')
+    inputsData.client = req.user._id;
 
     //const product = await Product.findById(inputsData.product)
     //  if (!product) {
@@ -58,8 +60,23 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     // Se non ci sono items con quel product, creane uno nuovo
     if (foundProducts.length === 0) {
         // const product = foundProducts[1];
-        //   product.details.quantity = 1;
+        //  product.details.quantity = 1;
+
         inputsData.details.quantity = 1;
+        const productId = await Product.findById(inputsData.product).populate('vendor')
+        if (!productId) throw new AppError('no productId')
+        console.log(productId.vendor.stripeAccountId)
+        const StripeId = productId.vendor.stripeAccountId
+        //console.log(inputsData.product.vendor)
+        //   if (!inputsData.vendor) throw new AppError('There is no vendor')
+        //  const vendorId = await User.findById(inputsData.product.vendor)
+        //   if (!vendorId) throw new AppError('No Vendor Id')
+        //  if (!inputsData.vendorStripeAccountId) throw new AppError('No StripeAccountId')
+        // inputsData.vendorStripeAccountId = vendorId.stripeAccountId
+        // console.log(vendorId)
+        //  if (!inputsData.vendorStripeAccountId) throw new AppError('this vendor has no stripeAccount');
+        //  inputsData.vendorStripeAccount
+        inputsData.vendorStripeAccountId = StripeId
         const newCart = await CartItem.create(inputsData)
     }
 

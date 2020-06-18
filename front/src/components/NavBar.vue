@@ -25,12 +25,11 @@
             <div class="conta">
                 <span class="fa fa-user mode"></span>
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
-                <!-- <span else>oki</span>-->
 
-                <v-btn class="success user" @click="Go" v-if="userData ">Sell Something</v-btn>
+                <v-btn class="success user" @click="Go">sell</v-btn>
 
                 <!-- <span else>ok</span>-->
-                <span class="name" v-if="userData">{{userData.user.username}}</span>
+                <span class="name" v-if="userDataRole">{{userData.user.username}}</span>
                 <!-- <span else>ok</span>-->
                 <v-btn class="btn-5 orange" v-if="isLoggedIn == false">
                     <span class="LoginDetail">Login</span>
@@ -260,8 +259,11 @@ export default {
             return this.$global.isLoggedIn;
         },
 
-        userData() {
+        userDataRole() {
             return this.$global.userData.role === "vendor";
+        },
+        userData() {
+            return this.$global.userData;
         }
 
         // ...mapState(["isLoggedIn", "userData"])

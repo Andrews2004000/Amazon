@@ -53,6 +53,8 @@
                         <v-card class="pa-5 mx-auto" max-width="400" tile>
                             <div class="padre">
                                 <!--<v-row>-->
+                                <span>{{product}}</span>
+
                                 <v-card-text class="beta">
                                     <v-card-title class="titolo">Product Of The Mounth</v-card-title>
                                     <v-card-subtitle>{{product.title}}</v-card-subtitle>

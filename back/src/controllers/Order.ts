@@ -136,7 +136,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
             payment_method_types: ['card'],
             line_items: orderLineItems,
             payment_intent_data: {
-                application_fee_amount: orderTotalPrice * 25,
+                //  application_fee_amount: orderTotalPrice * 25,
                 transfer_group: orderId,
             },
             success_url: `http://localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}`,

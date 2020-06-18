@@ -6,6 +6,7 @@ import { cloneObject } from '../utils/cloneObject';
 import { Stripe } from 'stripe';
 import { stripe } from '../middlewere/stripe';
 import Product from '../model/Products';
+import mongoose from 'mongoose'
 function convertObjectToMetadataList<T>(obj: T) {
     const jsonObj = JSON.stringify(obj);
     const listElements = jsonObj.match(/.{1,500}/g);
@@ -81,61 +82,66 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     const user = req.user;
     if (!user) throw new Error('Cannot get user data');
 
-    const ProductsInCart = await CartItem.find(
+    // Get products from cart
+    const productsInCart = await CartItem.find({ client: { _id: user._id } }).populate('product');
 
-        {
-            client: { _id: user._id },
-        }).populate('product')
-
-    const orderedData = ProductsInCart.map(cartProduct => {
+    // Create orderData
+    const orderedProducts = productsInCart.map(cartProduct => {
         return cloneObject(cartProduct);
     });
-    const productTotalPrice = ProductsInCart.map(prod => {
+
+    const orderTotalPrice = productsInCart.map(prod => {
         return prod.product.price * prod.details.quantity
-    }).reduce((acc, total) => acc + total, 0)
-    const productTitle = ProductsInCart.map(prod => {
-        return prod.product.title
+    }).reduce((acc, total) => acc + total, 0);
+
+    const orderLineItems = productsInCart.map(cartItem => {
+        return {
+            name: cartItem.product.title,
+            description: cartItem.product.description,
+            images: [cartItem.product.imageUrl ? cartItem.product.imageUrl : ''],
+            amount: cartItem.product.price * 100,
+            currency: 'usd',
+            quantity: cartItem.details.quantity
+        };
     })
-    const productImage = ProductsInCart.map(prod => {
-        return prod.product.imageUrl
-    })
 
+    // const productTitle = productsInCart.map(prod => {
+    //     return prod.product.title
+    // })
+    // const productImagesRaw = productsInCart.map(prod => {
+    //     return prod.product.imageUrl
+    // })
+    // const productImages = productImagesRaw.filter((url) => {
+    //     if (url) return true;
+    //     return false;
+    // }) as string[];
 
-    const vendorWithStripeAccount = ProductsInCart.map((prod => {
-        return prod.vendorStripeAccountId;
-    }))
+    // Potrebbero servirci per dopo
 
-    console.log(vendorWithStripeAccount)
+    // const vendorWithStripeAccount = productsInCart.map((prod => {
+    //     return prod.vendorStripeAccountId;
+    // }))
 
+    // if (!vendorWithStripeAccount) throw new AppError('no Account', 404)
 
+    // Create order _id
+    const orderId = new mongoose.Types.ObjectId().toHexString();
 
-    if (!vendorWithStripeAccount) throw new AppError('no Account', 404)
+    // Create order data
+    const orderData = { orderedProducts, _id: orderId, totalPrice: orderTotalPrice }
 
-
-
+    // Create stripe session
     const session = await stripe.checkout.sessions.create(
         {
             payment_method_types: ['card'],
-            line_items: [
-                {
-                    name: `${productTitle} Order`,
-                    description: 'Order Yor Product now',
-                    images: productImage as any,
-                    amount: productTotalPrice * 100, //1 ammount = 0.01 money
-                    currency: 'usd',
-                    quantity: 1,
-
-                },
-            ],
+            line_items: orderLineItems,
             payment_intent_data: {
-                application_fee_amount: productTotalPrice * 25,
+                application_fee_amount: orderTotalPrice * 25,
+                transfer_group: orderId,
             },
-            success_url: `localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}&vendor_account=${vendorWithStripeAccount}`,
-            cancel_url: `localhost:8080/order-product/cancel`,
-            metadata: convertObjectToMetadataList(productTotalPrice),
-        },
-        {
-            stripeAccount: vendorWithStripeAccount as any,
+            success_url: `http://localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `http://localhost:8080/order-product/cancel`,
+            metadata: convertObjectToMetadataList(orderData),
         }
     );
 
@@ -144,16 +150,9 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     res.status(200).json({
         message: 'success',
         data: {
-
             sessionId: session.id,
-            vendorStripeAccountId: vendorWithStripeAccount,
             stripeClientId: 'ca_HS1snREeNE3h2aOj2DVw0CBUZ1yCb7a8'
-
         }
-
-
-
-
     })
 }
 

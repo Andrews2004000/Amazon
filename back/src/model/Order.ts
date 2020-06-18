@@ -4,14 +4,14 @@ import { IUser } from '../model/Auth'
 
 interface IUOrder extends mongoose.Document {
     _id: any,
-    product: IUCartProduct,
-
-
+    orderedProducts: IUCartProduct[],
+    totalPrice: number
 }
 
 
 const orderSchema = new mongoose.Schema({
     orderedProducts: [CartProduct],
+    totalPrice: Number
 
 },
     { versionKey: false }

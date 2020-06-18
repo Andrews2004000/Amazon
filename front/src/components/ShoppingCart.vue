@@ -80,10 +80,8 @@ export default {
         },
         async orderHanlder() {
             const data = await this.$global.createCheckSession();
-            const { vendorStripeAccountId, stripeClientId, sessionId } = data;
-            const stripe = await loadStripe(stripeClientId, {
-                stripeAccount: vendorStripeAccountId
-            });
+            const { stripeClientId, sessionId } = data;
+            const stripe = await loadStripe(stripeClientId);
             const result = await stripe.redirectToCheckout({
                 sessionId
             });

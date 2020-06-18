@@ -80,17 +80,14 @@ export default {
         },
         async orderHanlder() {
             const data = await this.$global.createCheckSession();
-            const { vendorStripeAccountId, stripeClientId, sessionId } = data;
-            console.log(data);
-            //  const stripe = await loadStripe(stripeClientId, {
-            //      stripeAccount: vendorStripeAccountId
-            //  });
-            // const result = await stripe.redirectToCheckout({
-            //     sessionId
-            // });
-            //  if (result.error) {
-            //       alert("An Error occured: +" + result.error);
-            //  }
+            const { stripeClientId, sessionId } = data;
+            const stripe = await loadStripe(stripeClientId);
+            const result = await stripe.redirectToCheckout({
+                sessionId
+            });
+            if (result.error) {
+                alert("An Error occured: +" + result.error);
+            }
         }
         //  async bookHandler() {
         //    if (!this.sessionId) return;

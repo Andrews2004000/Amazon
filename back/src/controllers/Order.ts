@@ -105,16 +105,16 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
         };
     })
 
-    // const productTitle = productsInCart.map(prod => {
-    //     return prod.product.title
-    // })
-    // const productImagesRaw = productsInCart.map(prod => {
-    //     return prod.product.imageUrl
-    // })
-    // const productImages = productImagesRaw.filter((url) => {
-    //     if (url) return true;
-    //     return false;
-    // }) as string[];
+    const productTitle = productsInCart.map(prod => {
+        return prod.product.title
+    })
+    const productImagesRaw = productsInCart.map(prod => {
+        return prod.product.imageUrl
+    })
+    const productImages = productImagesRaw.filter((url) => {
+        if (url) return true;
+        return false;
+    }) as string[];
 
     // Potrebbero servirci per dopo
 
@@ -134,14 +134,23 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     const session = await stripe.checkout.sessions.create(
         {
             payment_method_types: ['card'],
-            line_items: orderLineItems,
-            payment_intent_data: {
-                //  application_fee_amount: orderTotalPrice * 25,
-                transfer_group: orderId,
-            },
+            line_items: [{
+                name: `${productTitle}--Order Boom`,
+                description: 'Buy Your Product',
+                images: productImages,
+                amount: orderTotalPrice * 100,
+                quantity: 1,
+                currency: 'usd',
+            }],
+            //  payment_intent_data: {
+            //  application_fee_amount: orderTotalPrice * 25,
+            //     transfer_group: orderId,
+            //    },
+
+            mode: 'payment',
             success_url: `http://localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `http://localhost:8080/order-product/cancel`,
-            metadata: convertObjectToMetadataList(orderData),
+            // metadata: convertObjectToMetadataList(orderData),
         }
     );
 
@@ -151,7 +160,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
         message: 'success',
         data: {
             sessionId: session.id,
-            stripeClientId: 'ca_HS1snREeNE3h2aOj2DVw0CBUZ1yCb7a8'
+            stripeClientId: 'pk_test_aHRgrAbca3xoC2uAeJ23MHP300xReY1EAc'
         }
     })
 }

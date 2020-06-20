@@ -7,7 +7,6 @@
             <v-card class="pa-6 card" width="1000" v-for="prod in product" :key="prod.id">
                 <v-container>
                     <v-row>
-                        <span>{{product}}</span>
                         <div class="image">
                             <v-img :src="prod.product.imageUrl" height="100" width="100"></v-img>
                         </div>
@@ -79,15 +78,25 @@ export default {
             await this.$global.DeleteFromCart(prodId);
         },
         async orderHanlder() {
+            console.log("1");
             const data = await this.$global.createCheckSession();
+            console.log("2");
             const { stripeClientId, sessionId } = data;
+            console.log(sessionId);
+            console.log(stripeClientId);
+
+            console.log("3");
             const stripe = await loadStripe(stripeClientId);
+            console.log(stripe);
+            console.log("4");
             const result = await stripe.redirectToCheckout({
                 sessionId
             });
+            console.log("5");
             if (result.error) {
                 alert("An Error occured: +" + result.error);
             }
+            console.log("6");
         }
         //  async bookHandler() {
         //    if (!this.sessionId) return;

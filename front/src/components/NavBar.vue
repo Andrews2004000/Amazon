@@ -26,7 +26,7 @@
                 <span class="fa fa-user mode"></span>
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
 
-                <v-btn class="success user" @click="Go">sell</v-btn>
+                <v-btn class="success user" @click="Go" v-if="userData">sell</v-btn>
 
                 <!-- <span else>ok</span>-->
                 <span class="name" v-if="userDataRole">{{userData.user.username}}</span>

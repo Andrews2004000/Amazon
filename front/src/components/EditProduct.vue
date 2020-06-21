@@ -125,115 +125,117 @@
     </div>
 </template>
 <script>
-export default {
-    data() {
-        return {
-            inputData: {
-                dates: []
-            },
-            notEmptyRule: [v => !!v || "This field is required"],
-            e6: [],
-            e7: [],
-            ratings: 4,
-            title: "",
-            description: "",
-            price: "",
-            data: "",
-            category: "",
-            maxQuantity: "",
-            image: "",
-            size: [
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28,
-                29,
-                30,
-                31,
-                32,
-                33,
-                34,
-                35,
-                36,
-                37,
-                38,
-                39,
-                40,
-                41,
-                42,
-                43,
-                44,
-                45,
-                46,
-                47,
-                48,
-                49,
-                50
-            ],
-            items: ["Tecnology", "House", "Book"],
-            item: [
-                "Red",
-                "Blue",
-                "Orange",
-                "Black",
-                "White",
-                "Green",
-                "Purple",
-                "Violet",
-                "AzulMarine",
-                "pink"
-            ],
-            inputUser: [
-                v => v.length >= 3 || "Minimun Length is 3 Characthers"
-            ],
-            EmailUser: [
-                v =>
-                    !v ||
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-                    "E-mail must be valid"
-            ],
-            imageUrl: [
-                v =>
-                    !v ||
-                    /\.(gif|jpe?g|tiff|png|webp|bmp)$/i.test(v) ||
-                    "Image Not valid"
-            ],
-            inputPassword: [
-                v => v.length >= 4 || "Minimun Length is 4 Characthers"
-            ],
-            inputDescription: [
-                v => v.length >= 15 || "Minimun Length is 15 Characthers"
-            ],
-            MaxQuantity: v => {
-                if (!v.trim()) return true;
-                if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;
-                return "Number has to be between 1 and 20";
-            }
-        };
-    },
-    methods: {},
-    computed: {
-        //  ...mapState(["userData"]),
-        userData() {
-            return this.$global.userData;
-        }
+import { Vue, Component } from "vue-property-decorator";
+@Component
+export default class AnonymousComponent extends Vue {
+    inputData = {
+        dates: []
+    };
+
+    notEmptyRule = [v => !!v || "This field is required"];
+    e6 = [];
+    e7 = [];
+    ratings = 4;
+    title = "";
+    description = "";
+    price = "";
+    data = "";
+    category = "";
+    maxQuantity = "";
+    image = "";
+
+    size = [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+    ];
+
+    items = ["Tecnology", "House", "Book"];
+
+    item = [
+        "Red",
+        "Blue",
+        "Orange",
+        "Black",
+        "White",
+        "Green",
+        "Purple",
+        "Violet",
+        "AzulMarine",
+        "pink"
+    ];
+
+    inputUser = [v => v.length >= 3 || "Minimun Length is 3 Characthers"];
+
+    EmailUser = [
+        v =>
+            !v ||
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+            "E-mail must be valid"
+    ];
+
+    imageUrl = [
+        v =>
+            !v ||
+            /\.(gif|jpe?g|tiff|png|webp|bmp)$/i.test(v) ||
+            "Image Not valid"
+    ];
+
+    inputPassword = [v => v.length >= 4 || "Minimun Length is 4 Characthers"];
+
+    inputDescription = [
+        v => v.length >= 15 || "Minimun Length is 15 Characthers"
+    ];
+
+    MaxQuantity = v => {
+        if (!v.trim()) return true;
+        if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;
+        return "Number has to be between 1 and 20";
+    };
+
+    //  ...mapState(["userData"]),
+    get userData() {
+        return this.$global.userData;
     }
-};
+}
 </script>
 <style scoped>
 .cross {

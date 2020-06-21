@@ -96,64 +96,63 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
-export default {
-    data() {
-        return {
-            searchField: "",
-            searchTags: ""
-        };
-    },
+@Component({
     components: {
         NavBar
-    },
-    methods: {
-        // ...mapActions(["SearchProducts"]),
-        searchHanlder() {
-            console.log("Sto Ceracndo");
-            const searchField = this.searchField;
-            const searchQuery = searchField.split(" ").join("+");
-            console.log(searchQuery);
-            this.$global.SearchProducts({
-                searchQuery,
-                categoryType: "HouseProducts"
-            });
-        },
+    }
+})
+export default class AnonymousComponent extends Vue {
+    searchField = "";
+    searchTags = "";
 
-        filteredProducts() {
-            const products = this.products;
-            if (!this.searchTags) return products;
+    // ...mapActions(["SearchProducts"]),
+    searchHanlder() {
+        console.log("Sto Ceracndo");
+        const searchField = this.searchField;
+        const searchQuery = searchField.split(" ").join("+");
+        console.log(searchQuery);
+        this.$global.SearchProducts({
+            searchQuery,
+            categoryType: "HouseProducts"
+        });
+    }
 
-            const filteredTags = this.products.filter(product => {
-                if (
-                    product.tags &&
-                    Array.isArray(product.tags) &&
-                    product.tags.includes(this.searchTags)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-            if (filteredTags.length === 0) {
-                return products;
+    filteredProducts() {
+        const products = this.products;
+        if (!this.searchTags) return products;
+
+        const filteredTags = this.products.filter(product => {
+            if (
+                product.tags &&
+                Array.isArray(product.tags) &&
+                product.tags.includes(this.searchTags)
+            ) {
+                return true;
+            } else {
+                return false;
             }
-            return filteredTags;
+        });
+        if (filteredTags.length === 0) {
+            return products;
         }
-    },
+        return filteredTags;
+    }
+
     created() {
         this.$global.LoadBooksProducts();
-    },
-    computed: {
-        products() {
-            return this.$global.BookProducts;
-        },
-        // ...mapState(["isLoggedIn"])
-        isLoggedIn() {
-            return this.$global.isLoggedIn;
-        }
     }
-};
+
+    get products() {
+        return this.$global.BookProducts;
+    }
+
+    // ...mapState(["isLoggedIn"])
+    get isLoggedIn() {
+        return this.$global.isLoggedIn;
+    }
+}
 </script>
 <style scoped>
 .image-container {

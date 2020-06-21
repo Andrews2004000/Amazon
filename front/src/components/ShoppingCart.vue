@@ -26,23 +26,22 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
 import { loadStripe } from "@stripe/stripe-js";
-export default {
+@Component({
     components: {
         NavBar
-    },
+    }
+})
+export default class AnonymousComponent extends Vue {
+    sessionId = null;
+    rating = 4;
+    number = ["1", "2"];
+    ratings_1 = 1;
+    checkbox = true;
 
-    data() {
-        return {
-            sessionId: null,
-            rating: 4,
-            number: ["1", "2"],
-            ratings_1: 1,
-            checkbox: true
-        };
-    },
-    async mounted() {
+    mounted() {
         // try {
         //     const result = await Api.fetchData(
         //         "bookings/checkout-session",
@@ -66,69 +65,61 @@ export default {
         //   } catch (err) {
         //       alert(err);
         //   }
-    },
-    methods: {
-        // ...mapActions(["AddFakePaymentToDatabase"]),
-        async submit() {
-            await this.$global.AddFakePaymentToDatabase();
+    }
 
-            this.$router.push("/");
-        },
-        async DeleteProductCart(prodId) {
-            await this.$global.DeleteFromCart(prodId);
-        },
-        async orderHanlder() {
-            console.log("1");
-            const data = await this.$global.createCheckSession();
-            console.log("2");
-            const { stripeClientId, sessionId } = data;
-            console.log(sessionId);
-            console.log(stripeClientId);
+    // ...mapActions(["AddFakePaymentToDatabase"]),
+    async submit() {
+        await this.$global.AddFakePaymentToDatabase();
 
-            console.log("3");
-            const stripe = await loadStripe(stripeClientId);
-            console.log(stripe);
-            console.log("4");
-            const result = await stripe.redirectToCheckout({
-                sessionId
-            });
-            console.log("5");
-            if (result.error) {
-                alert("An Error occured: +" + result.error);
-            }
-            console.log("6");
+        this.$router.push("/");
+    }
+
+    async DeleteProductCart(prodId) {
+        await this.$global.DeleteFromCart(prodId);
+    }
+
+    async orderHanlder() {
+        console.log("1");
+        const data = await this.$global.createCheckSession();
+        console.log("2");
+        const { stripeClientId, sessionId } = data;
+        console.log(sessionId);
+        console.log(stripeClientId);
+
+        console.log("3");
+        const stripe = await loadStripe(stripeClientId);
+        console.log(stripe);
+        console.log("4");
+        const result = await stripe.redirectToCheckout({
+            sessionId
+        });
+        console.log("5");
+        if (result.error) {
+            alert("An Error occured: +" + result.error);
         }
-        //  async bookHandler() {
-        //    if (!this.sessionId) return;
-        //
-        //    const { error } = await stripe.redirectToCheckout({
-        //        sessionId: this.sessionId
-        //  });
-        //  if (error) {
-        //      alert(error.message);
-        //  }
-    },
+        console.log("6");
+    } //  async bookHandler() {//    if (!this.sessionId) return;////    const { error } = await stripe.redirectToCheckout({//        sessionId: this.sessionId//  });//  if (error) {//      alert(error.message);//  }
+
     created() {
         this.$global.getCartItem();
 
         // this.$store.dispatch("load")
-    },
-    computed: {
-        product() {
-            return this.$global.itemFromCart;
-        },
+    }
 
-        TotalAmount() {
-            if (this.product.length >= 1) {
-                return this.product
-                    .map(item => item.product.price * item.details.quantity)
-                    .reduce((total, amount) => total + amount);
-            } else {
-                return 0;
-            }
+    get product() {
+        return this.$global.itemFromCart;
+    }
+
+    get TotalAmount() {
+        if (this.product.length >= 1) {
+            return this.product
+                .map(item => item.product.price * item.details.quantity)
+                .reduce((total, amount) => total + amount);
+        } else {
+            return 0;
         }
     }
-};
+}
 </script>
 <style scoped>
 .emp {

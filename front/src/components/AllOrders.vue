@@ -35,18 +35,18 @@
     </div>
 </template>
 <script>
-export default {
-    methods: {
-        exit() {
-            if (!confirm("Are you sure to exit without saving?")) {
-                return;
-            }
-            this.$router.push("/");
-
-            this.reset();
+import { Vue, Component } from "vue-property-decorator";
+@Component
+export default class AnonymousComponent extends Vue {
+    exit() {
+        if (!confirm("Are you sure to exit without saving?")) {
+            return;
         }
+        this.$router.push("/");
+
+        this.reset();
     }
-};
+}
 </script>
 <style>
 .qu {

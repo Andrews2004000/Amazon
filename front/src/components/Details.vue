@@ -48,8 +48,87 @@
 
 
 <script>
-export default {
-    props: ["prodId"],
+import { Vue, Component, Prop } from "vue-property-decorator";
+@Component
+export default class AnonymousComponent extends Vue {
+    @Prop()
+    prodId;
+
+    // vue-convert: This property will initialized in data() method, with `this` reference.
+    userInputs = undefined;
+
+    // vue-convert: This property will initialized in data() method, with `this` reference.
+    MaxQuantity = undefined;
+
+    size = [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+    ];
+
+    item = [
+        "Red",
+        "Blue",
+        "Orange",
+        "Black",
+        "White",
+        "Green",
+        "Purple",
+        "Violet",
+        "AzulMarine",
+        "pink"
+    ];
+
+    it = [
+        {
+            src:
+                "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/refurb-iphoneX-spacegray_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1548459944179"
+        },
+        {
+            src:
+                "https://images-na.ssl-images-amazon.com/images/I/51hKehpBWML._AC_SX679_.jpg"
+        }
+    ];
+
+    ra = 5;
 
     data() {
         return {
@@ -61,108 +140,41 @@ export default {
                 },
                 product: this.$route.params.prodId
             },
+
             MaxQuantity: [
                 v =>
                     v <= this.product.MaxQuantity ||
                     "Sorry Please Select a minor quantity"
-            ],
-
-            size: [
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28,
-                29,
-                30,
-                31,
-                32,
-                33,
-                34,
-                35,
-                36,
-                37,
-                38,
-                39,
-                40,
-                41,
-                42,
-                43,
-                44,
-                45,
-                46,
-                47,
-                48,
-                49,
-                50
-            ],
-            item: [
-                "Red",
-                "Blue",
-                "Orange",
-                "Black",
-                "White",
-                "Green",
-                "Purple",
-                "Violet",
-                "AzulMarine",
-                "pink"
-            ],
-            it: [
-                {
-                    src:
-                        "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/refurb-iphoneX-spacegray_AV2?wid=1144&hei=1144&fmt=jpeg&qlt=80&op_usm=0.5,0.5&.v=1548459944179"
-                },
-                {
-                    src:
-                        "https://images-na.ssl-images-amazon.com/images/I/51hKehpBWML._AC_SX679_.jpg"
-                }
-            ],
-            ra: 5
+            ]
         };
-    },
-    computed: {
-        product() {
-            return this.$global.product;
+    }
+
+    get product() {
+        return this.$global.product;
+    }
+
+    //...mapActions(["AddToCart", "getOneProduct"]),
+    async submit() {
+        await this.$global.AddToCart({ userInputs: this.userInputs });
+
+        this.$router.push("/ShoppingCart");
+    }
+
+    exit() {
+        if (!confirm("Are you sure to exit without saving?")) {
+            return;
         }
-    },
+        this.$router.push("/");
+    }
 
-    methods: {
-        //...mapActions(["AddToCart", "getOneProduct"]),
-        async submit() {
-            await this.$global.AddToCart({ userInputs: this.userInputs });
+    Go() {
+        this.$router.push("/ShoppingCart");
+    }
 
-            this.$router.push("/ShoppingCart");
-        },
-        exit() {
-            if (!confirm("Are you sure to exit without saving?")) {
-                return;
-            }
-            this.$router.push("/");
-        },
-
-        Go() {
-            this.$router.push("/ShoppingCart");
-        }
-    },
     created() {
         this.$global.getOneProduct();
     }
-};
+}
 </script>
 <style scoped>
 .phone {

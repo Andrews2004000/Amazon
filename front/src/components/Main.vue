@@ -117,81 +117,78 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
-export default {
-    data() {
-        return {
-            ok: false,
-            searchField: "",
-            open: false,
-            amenities: [1, 4],
-            neighborhoods: [1],
-            tags: [
-                "MaxPrice",
-                "Best Ratings",
-                "LowerPrice",
-                "Country",
-                "EarlyScadenza",
-                "LowerRatings",
-                "JustScadenza"
-            ],
-            icons: [
-                "mdi-facebook",
-                "mdi-twitter",
-                "mdi-linkedin",
-                "mdi-instagram"
-            ],
-            items: [
-                {
-                    src:
-                        "https://leganerd.com/wp-content/uploads/2018/10/d39w7f4ix9f5s9.cloudfront-999x485.png",
-                    title: "Alexa Products"
-                },
-                {
-                    src:
-                        "https://www.lifestyleblog.it/wp-content/uploads/2020/01/xbox-series-x-.jpg",
-                    title: "Xbox Series X"
-                }
-            ]
-        };
-    },
+@Component({
     components: {
         NavBar
-    },
-    methods: {
-        //  ...mapActions(["SearchProducts", "AddToCart"]),
-        searchHanlder() {
-            console.log("Sto Ceracndo");
-            const searchField = this.searchField;
-            const searchQuery = searchField.split(" ").join("+");
-            console.log(searchQuery);
-            this.$global.SearchProducts({
-                searchQuery,
-                categoryType: "AllProducts"
-            });
+    }
+})
+export default class AnonymousComponent extends Vue {
+    ok = false;
+    searchField = "";
+    open = false;
+    amenities = [1, 4];
+    neighborhoods = [1];
+
+    tags = [
+        "MaxPrice",
+        "Best Ratings",
+        "LowerPrice",
+        "Country",
+        "EarlyScadenza",
+        "LowerRatings",
+        "JustScadenza"
+    ];
+
+    icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
+
+    items = [
+        {
+            src:
+                "https://leganerd.com/wp-content/uploads/2018/10/d39w7f4ix9f5s9.cloudfront-999x485.png",
+            title: "Alexa Products"
         },
-        Go(id) {
-            this.$router.push("Detail/" + id);
+        {
+            src:
+                "https://www.lifestyleblog.it/wp-content/uploads/2020/01/xbox-series-x-.jpg",
+            title: "Xbox Series X"
         }
-    },
+    ];
+
+    //  ...mapActions(["SearchProducts", "AddToCart"]),
+    searchHanlder() {
+        console.log("Sto Ceracndo");
+        const searchField = this.searchField;
+        const searchQuery = searchField.split(" ").join("+");
+        console.log(searchQuery);
+        this.$global.SearchProducts({
+            searchQuery,
+            categoryType: "AllProducts"
+        });
+    }
+
+    Go(id) {
+        this.$router.push("Detail/" + id);
+    }
+
     created() {
         this.$global.LoadAllProducts();
         // this.$store.dispatch("load")
-    },
-
-    computed: {
-        products() {
-            return this.$global.Products;
-        },
-        isLoggedIn() {
-            return this.$global.isLoggedIn;
-        },
-        userData() {
-            return this.$global.userData;
-        }
-        //...mapState(["isLoggedIn", "product", "userData"])
     }
-};
+
+    get products() {
+        return this.$global.Products;
+    }
+
+    get isLoggedIn() {
+        return this.$global.isLoggedIn;
+    }
+
+    get userData() {
+        return this.$global.userData;
+    } //...mapState(["isLoggedIn", "product", "userData"])
+}
 </script>
 <style scoped>
 .slide {

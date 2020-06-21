@@ -105,76 +105,77 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
-export default {
-    data() {
-        return {
-            searchField: "",
-            selectedTag: ""
-        };
-    },
+@Component({
     components: {
         NavBar
-    },
+    }
+})
+export default class AnonymousComponent extends Vue {
+    searchField = "";
+    selectedTag = "";
+
     created() {
         this.$global.LoadTecnologyProducts();
-    },
-    methods: {
-        //...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),
-
-        searchHanlder() {
-            console.log("Sto Ceracndo");
-            const searchField = this.searchField;
-            const searchQuery = searchField.split(" ").join("+");
-            console.log(searchQuery);
-            this.$global.SearchProducts({
-                searchQuery,
-                categoryType: "TecnologyProducts"
-            });
-        }
-    },
-    computed: {
-        filteredProducts() {
-            const products = this.products;
-
-            // Se non è selezionato alcun tag, restituisci tutti i prodotti
-            if (!this.selectedTag) return products;
-
-            // Crea un array di prodotti che presentano il tag selezionato e restituiscilo
-            const filteredProducts = products.filter(product => {
-                // Controlla se product tags esiste, se è un array e se include il tag con cui si sta filtrando
-                if (
-                    product.tags &&
-                    Array.isArray(product.tags) &&
-                    product.tags.includes(this.selectedTag)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            // Se non ha trovato nulla, restituisci tutti i prodotti
-            if (filteredProducts.length === 0) return products;
-
-            // Altrimenti restituisci quelli filtrati
-            return filteredProducts;
-        },
-        products() {
-            return this.$global.TecnologyProducts;
-        },
-        // ...mapState(["isLoggedIn", "TecnologyProducts", "AllTags"])
-        isLoggedIn() {
-            return this.$global.isLoggedIn;
-        },
-        TecnologyProducts() {
-            return this.$global.TecnologyProducts;
-        },
-        AllTags() {
-            return this.$global.AllTags;
-        }
     }
-};
+
+    //...mapActions(["SearchProducts", "LoadTagsTecnologyProducts"]),
+    searchHanlder() {
+        console.log("Sto Ceracndo");
+        const searchField = this.searchField;
+        const searchQuery = searchField.split(" ").join("+");
+        console.log(searchQuery);
+        this.$global.SearchProducts({
+            searchQuery,
+            categoryType: "TecnologyProducts"
+        });
+    }
+
+    get filteredProducts() {
+        const products = this.products;
+
+        // Se non è selezionato alcun tag, restituisci tutti i prodotti
+        if (!this.selectedTag) return products;
+
+        // Crea un array di prodotti che presentano il tag selezionato e restituiscilo
+        const filteredProducts = products.filter(product => {
+            // Controlla se product tags esiste, se è un array e se include il tag con cui si sta filtrando
+            if (
+                product.tags &&
+                Array.isArray(product.tags) &&
+                product.tags.includes(this.selectedTag)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        // Se non ha trovato nulla, restituisci tutti i prodotti
+        if (filteredProducts.length === 0) return products;
+
+        // Altrimenti restituisci quelli filtrati
+        return filteredProducts;
+    }
+
+    get products() {
+        return this.$global.TecnologyProducts;
+    }
+
+    // ...mapState(["isLoggedIn", "TecnologyProducts", "AllTags"])
+    get isLoggedIn() {
+        return this.$global.isLoggedIn;
+    }
+
+    get TecnologyProducts() {
+        return this.$global.TecnologyProducts;
+    }
+
+    get AllTags() {
+        return this.$global.AllTags;
+    }
+}
 </script>
 <style scoped>
 .image-container {

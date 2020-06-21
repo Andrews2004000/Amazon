@@ -95,70 +95,69 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
-export default {
-    data() {
-        return {
-            searchField: "",
-            selectedTag: ""
-        };
-    },
+@Component({
     components: {
         NavBar
-    },
-    methods: {
-        // ...mapActions(["SearchProducts"]),
-        searchHanlder() {
-            console.log("Sto Ceracndo");
-            const searchField = this.searchField;
-            const searchQuery = searchField.split(" ").join("+");
-            console.log(searchQuery);
-            this.$global.SearchProducts({
-                searchQuery,
-                categoryType: "HouseProducts"
-            });
-        }
-    },
+    }
+})
+export default class AnonymousComponent extends Vue {
+    searchField = "";
+    selectedTag = "";
+
+    // ...mapActions(["SearchProducts"]),
+    searchHanlder() {
+        console.log("Sto Ceracndo");
+        const searchField = this.searchField;
+        const searchQuery = searchField.split(" ").join("+");
+        console.log(searchQuery);
+        this.$global.SearchProducts({
+            searchQuery,
+            categoryType: "HouseProducts"
+        });
+    }
+
     created() {
         this.$global.LoadHouseProducts();
-    },
-    computed: {
-        filteredProducts() {
-            const products = this.products;
-
-            // Se non è selezionato alcun tag, restituisci tutti i prodotti
-            if (!this.selectedTag) return products;
-
-            // Crea un array di prodotti che presentano il tag selezionato e restituiscilo
-            const filteredProducts = products.filter(product => {
-                // Controlla se product tags esiste, se è un array e se include il tag con cui si sta filtrando
-                if (
-                    product.tags &&
-                    Array.isArray(product.tags) &&
-                    product.tags.includes(this.selectedTag)
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
-            // Se non ha trovato nulla, restituisci tutti i prodotti
-            if (filteredProducts.length === 0) return products;
-
-            // Altrimenti restituisci quelli filtrati
-            return filteredProducts;
-        },
-
-        products() {
-            return this.$global.HouseProducts;
-        },
-        //    ...mapState(["isLoggedIn"])
-        isLoggedIn() {
-            return this.$global.isLoggedIn;
-        }
     }
-};
+
+    get filteredProducts() {
+        const products = this.products;
+
+        // Se non è selezionato alcun tag, restituisci tutti i prodotti
+        if (!this.selectedTag) return products;
+
+        // Crea un array di prodotti che presentano il tag selezionato e restituiscilo
+        const filteredProducts = products.filter(product => {
+            // Controlla se product tags esiste, se è un array e se include il tag con cui si sta filtrando
+            if (
+                product.tags &&
+                Array.isArray(product.tags) &&
+                product.tags.includes(this.selectedTag)
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+
+        // Se non ha trovato nulla, restituisci tutti i prodotti
+        if (filteredProducts.length === 0) return products;
+
+        // Altrimenti restituisci quelli filtrati
+        return filteredProducts;
+    }
+
+    get products() {
+        return this.$global.HouseProducts;
+    }
+
+    //    ...mapState(["isLoggedIn"])
+    get isLoggedIn() {
+        return this.$global.isLoggedIn;
+    }
+}
 </script>
 <style scoped>
 .image-container {

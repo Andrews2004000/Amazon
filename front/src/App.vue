@@ -6,8 +6,10 @@
    </v-app>
 </template>
 <script>
-export default {
-  created(){
+import { Vue, Component } from "vue-property-decorator";
+@Component
+export default class AnonymousComponent extends Vue {
+  created() {
     this.$store.dispatch("load")
   }
 }

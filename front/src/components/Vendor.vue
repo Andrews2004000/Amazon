@@ -62,9 +62,9 @@
 
 </template>
 <script>
-export default {
-    
-}
+import { Vue, Component } from "vue-property-decorator";
+@Component
+export default class AnonymousComponent extends Vue {}
 </script>
 <style scoped>
 .cross{

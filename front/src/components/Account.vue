@@ -77,77 +77,78 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import authInput from "../mixins/authInput";
 import Api from "../store/api";
-export default {
-    mixins: [authInput],
-    data() {
-        return {
-            stripeConnectAccountUrl: "#",
-            authInput: {},
-            isAuthInputValid: true,
-            inputUser: [
-                v => v.length >= 5 || "Minimun Length is 5 Characthers"
-            ],
-            EmailUser: [
-                v =>
-                    !v ||
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-                    "E-mail must be valid"
-            ],
-            inputPassword: [
-                v => v.length >= 4 || "Minimun Length is 4 Characthers"
-            ]
-        };
-    },
-    methods: {
-        // ...mapActions(["changeAccountDetails", "deleteMe"]),
-        async DeleteUser() {
-            if (
-                !confirm(
-                    "Are you sure to delete your account (this action can't be undone)?"
-                )
-            ) {
-                return;
-            }
+@Component({
+    mixins: [authInput]
+})
+export default class AnonymousComponent extends Vue {
+    stripeConnectAccountUrl = "#";
+    authInput = {};
+    isAuthInputValid = true;
 
-            await this.$global.deleteMe();
-            this.$router.push("/");
-        },
-        async changeAccountDetailsHandler() {
-            const inputData = { ...this.authInput };
-            const data = await this.$global.changeAccountDetails(inputData);
-            this.$router.push("/");
-            console.log(data);
-            this.reset();
-        },
-        async initStripeConnectAccountUrl() {
-            const { data, ok } = await Api.fetchData(
-                "user/stripe-oauth/oauth-link"
-            );
-            if (!ok) return;
+    inputUser = [v => v.length >= 5 || "Minimun Length is 5 Characthers"];
 
-            this.stripeConnectAccountUrl = data;
-        },
+    EmailUser = [
+        v =>
+            !v ||
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+            "E-mail must be valid"
+    ];
 
-        exit() {
-            if (!confirm("Are you sure to exit without saving?")) {
-                return;
-            }
-            this.$router.push("/");
+    inputPassword = [v => v.length >= 4 || "Minimun Length is 4 Characthers"];
 
-            this.reset();
-        },
-        reset() {
-            this.initialize();
-        },
-        initialize() {
-            this.authInput.username = this.userData.user.username;
-            this.authInput.email = this.userData.user.email;
-            this.authInput.password = "";
-            this.authInput.currentUserPhoto = this.userData.user.currentUserPhoto;
+    // ...mapActions(["changeAccountDetails", "deleteMe"]),
+    async DeleteUser() {
+        if (
+            !confirm(
+                "Are you sure to delete your account (this action can't be undone)?"
+            )
+        ) {
+            return;
         }
-    },
+
+        await this.$global.deleteMe();
+        this.$router.push("/");
+    }
+
+    async changeAccountDetailsHandler() {
+        const inputData = { ...this.authInput };
+        const data = await this.$global.changeAccountDetails(inputData);
+        this.$router.push("/");
+        console.log(data);
+        this.reset();
+    }
+
+    async initStripeConnectAccountUrl() {
+        const { data, ok } = await Api.fetchData(
+            "user/stripe-oauth/oauth-link"
+        );
+        if (!ok) return;
+
+        this.stripeConnectAccountUrl = data;
+    }
+
+    exit() {
+        if (!confirm("Are you sure to exit without saving?")) {
+            return;
+        }
+        this.$router.push("/");
+
+        this.reset();
+    }
+
+    reset() {
+        this.initialize();
+    }
+
+    initialize() {
+        this.authInput.username = this.userData.user.username;
+        this.authInput.email = this.userData.user.email;
+        this.authInput.password = "";
+        this.authInput.currentUserPhoto = this.userData.user.currentUserPhoto;
+    }
 
     created() {
         this.initialize();
@@ -156,15 +157,13 @@ export default {
         } else {
             console.log("Nope");
         }
-    },
-
-    computed: {
-        // ...mapState(["userData"])
-        userData() {
-            return this.$global.userData;
-        }
     }
-};
+
+    // ...mapState(["userData"])
+    get userData() {
+        return this.$global.userData;
+    }
+}
 </script>
 <style scoped>
 .cross {

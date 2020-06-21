@@ -157,72 +157,11 @@
     </div>
 </template>
 <script>
+import { Vue, Component } from "vue-property-decorator";
 import authInput from "../mixins/authInput";
-export default {
+@Component({
     mixins: [authInput],
 
-    data() {
-        return {
-            drawer: false,
-            dialog: false,
-            valid: false,
-
-            isAlreadyRegistered: true,
-            isLoginDataValid: true,
-            isSignUpDataValid: true,
-            userDatas: {},
-
-            lazy: false,
-            inputUser: [
-                v => v.length >= 5 || "Minimun Length is 5 Characthers"
-            ],
-            EmailUser: [
-                v =>
-                    !v ||
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-                    "E-mail must be valid"
-            ],
-            inputPassword: [
-                v => v.length >= 4 || "Minimun Length is 4 Characthers"
-            ],
-            lista: [
-                { title: "Tecnology", route: "/Tecnology" },
-                { title: "Books", route: "/Book" },
-                { title: "House", route: "/House" }
-            ]
-        };
-    },
-    methods: {
-        //...mapActions(["Signup", "Login", "Logout"]),
-        async SignUpHandler() {
-            if (this.isSignUpDataValid) {
-                await this.$global.Signup(this.userDatas);
-                this.dialog = false;
-            }
-        },
-        async LoginHandler() {
-            if (this.isLoginDataValid) {
-                await this.$global.Login(this.userDatas);
-
-                this.dialog = false;
-            }
-        },
-        async LogoutHanlder() {
-            await this.$global.Logout();
-            this.drawer = false;
-        },
-
-        GoAway() {
-            this.$route.push("/");
-        },
-        Go() {
-            this.$router.push("/Sell");
-        },
-
-        GoThere() {
-            this.$router.push("/ShoppingCart");
-        }
-    },
     watch: {
         isAlreadyRegistered() {
             if (this.$refs.signupForm) {
@@ -232,43 +171,103 @@ export default {
                 this.$refs.loginForm.resetValidation();
             }
         }
-    },
-    computed: {
-        passwordConfirmationRule() {
-            return () =>
-                this.userDatas.password ===
-                    this.userDatas.passwordConfirmation ||
-                "Password must match";
-        },
-        homePage() {
-            if (
-                this.$route.path == "/Tecnology" ||
-                this.$route.path == "/House" ||
-                this.$route.path == "/Book" ||
-                this.$route.path == "/ShoppingCart"
-            ) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        product() {
-            return this.$global.itemFromCart;
-        },
-        isLoggedIn() {
-            return this.$global.isLoggedIn;
-        },
-
-        userDataRole() {
-            return this.$global.userData.role === "vendor";
-        },
-        userData() {
-            return this.$global.userData;
-        }
-
-        // ...mapState(["isLoggedIn", "userData"])
     }
-};
+})
+export default class AnonymousComponent extends Vue {
+    drawer = false;
+    dialog = false;
+    valid = false;
+    isAlreadyRegistered = true;
+    isLoginDataValid = true;
+    isSignUpDataValid = true;
+    userDatas = {};
+    lazy = false;
+
+    inputUser = [v => v.length >= 5 || "Minimun Length is 5 Characthers"];
+
+    EmailUser = [
+        v =>
+            !v ||
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+            "E-mail must be valid"
+    ];
+
+    inputPassword = [v => v.length >= 4 || "Minimun Length is 4 Characthers"];
+
+    lista = [
+        { title: "Tecnology", route: "/Tecnology" },
+        { title: "Books", route: "/Book" },
+        { title: "House", route: "/House" }
+    ];
+
+    //...mapActions(["Signup", "Login", "Logout"]),
+    async SignUpHandler() {
+        if (this.isSignUpDataValid) {
+            await this.$global.Signup(this.userDatas);
+            this.dialog = false;
+        }
+    }
+
+    async LoginHandler() {
+        if (this.isLoginDataValid) {
+            await this.$global.Login(this.userDatas);
+
+            this.dialog = false;
+        }
+    }
+
+    async LogoutHanlder() {
+        await this.$global.Logout();
+        this.drawer = false;
+    }
+
+    GoAway() {
+        this.$route.push("/");
+    }
+
+    Go() {
+        this.$router.push("/Sell");
+    }
+
+    GoThere() {
+        this.$router.push("/ShoppingCart");
+    }
+
+    get passwordConfirmationRule() {
+        return () =>
+            this.userDatas.password === this.userDatas.passwordConfirmation ||
+            "Password must match";
+    }
+
+    get homePage() {
+        if (
+            this.$route.path == "/Tecnology" ||
+            this.$route.path == "/House" ||
+            this.$route.path == "/Book" ||
+            this.$route.path == "/ShoppingCart"
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    get product() {
+        return this.$global.itemFromCart;
+    }
+
+    get isLoggedIn() {
+        return this.$global.isLoggedIn;
+    }
+
+    get userDataRole() {
+        return this.$global.userData.role === "vendor";
+    }
+
+    get userData() {
+        return this.$global.userData;
+    } // ...mapState(["isLoggedIn", "userData"])
+}
 </script>
 <style scoped>
 .sma {

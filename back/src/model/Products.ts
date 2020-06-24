@@ -20,30 +20,30 @@ import { UserClass } from './Auth';
 }*/
 import { getModelForClass, prop, modelOptions, getName, Ref } from '@typegoose/typegoose';
 type Reference<T> = Ref<T & { _id: Types.ObjectId }, Types.ObjectId & { _id: Types.ObjectId }>
-enum TagsType {
-    VIDEOGAMES = " videogames",
-    PHONE = "phones",
-    COMPUTERS = "computers",
-    FANTASY = "fantasy",
-    ACTION = "action",
-    HISTORY = "history",
-    LIVINGROOM = "livingroom",
-    GARDEN = "garden",
-    BEDROOM = "bedroom"
-}
-enum ColorsAvailable {
-    RED = "Red",
-    BLUE = "Blue",
-    ORANGE = "Orange",
-    BLACK = "Black",
-    WHITE = "White",
-    GREEEN = "Green",
-    PURPLE = "Purple",
-    VIOLET = "Violet",
-    AZULMARINE = "AzulMarine",
-    PINK = "pink"
+// enum TagsType {
+//     VIDEOGAMES = " videogames",
+//     PHONE = "phones",
+//     COMPUTERS = "computers",
+//     FANTASY = "fantasy",
+//     ACTION = "action",
+//     HISTORY = "history",
+//     LIVINGROOM = "livingroom",
+//     GARDEN = "garden",
+//     BEDROOM = "bedroom"
+//  }
+// enum ColorsAvailable {
+//     RED = "Red",
+//     BLUE = "Blue",
+//     ORANGE = "Orange",
+//     BLACK = "Black",
+//     WHITE = "White",
+//     GREEEN = "Green",
+//     PURPLE = "Purple",
+//     VIOLET = "Violet",
+//     AZULMARINE = "AzulMarine",
+//     PINK = "pink"
 
-}
+// }
 enum AllCategory {
     TECNOLOGY = 'Tecnology',
     HOUSE = 'House',
@@ -51,6 +51,7 @@ enum AllCategory {
     NOT_SPECIFIED = 'Not Specified'
 
 }
+
 export class ProductClass {
     @prop({ auto: true })
     _id!: mongoose.Types.ObjectId;
@@ -62,14 +63,14 @@ export class ProductClass {
     imageUrl?: string;
     @prop({ type: String })
     size?: string[];
-    @prop({ enum: TagsType, type: TagsType })
-    tags?: TagsType[];
-    @prop({ enum: ColorsAvailable, default: 'ALL Available', type: ColorsAvailable })
-    colorsAvailable?: ColorsAvailable[]
+    @prop({ type: String })
+    tags?: string[];
+    @prop({ default: 'ALL Available', type: String })
+    colorsAvailable?: string[]
     @prop({ required: true })
     price!: number
-    @prop({ enum: AllCategory, type: AllCategory })
-    category?: AllCategory[]
+    @prop({ enum: AllCategory })
+    category?: AllCategory
     @prop()
     ratings!: number;
     @prop()

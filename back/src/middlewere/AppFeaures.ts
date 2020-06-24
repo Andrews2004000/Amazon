@@ -38,7 +38,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
     if (!user) throw new AppError('No user email', 404)
     //2) Generate the random reset token
-    const resetToken = User.createPasswordResetToken()
+    const resetToken = user.createPasswordResetToken()
     await user.save()
 
     const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/user/resetPassword/${resetToken}`
@@ -62,7 +62,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
     const user = await User.findOne({
         passwordResetToken: hashedToken,
-        passwordResetExpires: { $gt: Date.now() }
+        passwordResetExpires: { $gt: new Date() }
     });
     if (!user) throw new AppError('No User', 404)
 

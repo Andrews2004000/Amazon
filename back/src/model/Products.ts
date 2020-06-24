@@ -63,19 +63,19 @@ export class ProductClass {
     @prop({ type: String })
     size?: string[];
     @prop({ enum: TagsType, type: TagsType })
-    tags?: [TagsType];
+    tags?: TagsType[];
     @prop({ enum: ColorsAvailable, default: 'ALL Available', type: ColorsAvailable })
-    colorsAvailable?: [ColorsAvailable]
+    colorsAvailable?: ColorsAvailable[]
     @prop({ required: true })
-    price!: string
+    price!: number
     @prop({ enum: AllCategory, type: AllCategory })
-    category?: [AllCategory]
+    category?: AllCategory[]
     @prop()
     ratings!: number;
     @prop()
     MaxQuantity!: number;
     @prop({ ref: getName(UserClass), required: true, immutable: true })
-    vendor!: Ref<UserClass>;
+    vendor!: Reference<UserClass>;
     @prop({ ref: getName(UserClass), immutable: true })
     stripeAccountId?: Reference<UserClass>
     @prop({ default: Date.now() })

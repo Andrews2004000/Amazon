@@ -8,6 +8,7 @@ import { Stripe } from 'stripe';
 import { stripe } from '../middlewere/stripe';
 import { Product, ProductClass } from '../model/Products';
 import mongoose from 'mongoose'
+import { isDocument } from '@typegoose/typegoose';
 function convertObjectToMetadataList<T>(obj: T) {
     const jsonObj = JSON.stringify(obj);
     const listElements = jsonObj.match(/.{1,500}/g);
@@ -25,7 +26,7 @@ export const postOrder: RequestHandler = async (req, res, next) => {
     if (!user) throw new Error('Cannot get user data');
 
     const ProductsInCart = await ShoppingCart.find({
-        client: user._id,
+        client: user._id.toHexString(),
     })
 
     const orderedProducts = ProductsInCart.map(cartProduct => {
@@ -62,29 +63,32 @@ export const deleteOrder: RequestHandler = async (req, res, next) => {
 
 }
 
-export const getAllOrders: RequestHandler = async (req, res, next) => {
+// export const getAllOrders: RequestHandler = async (req, res, next) => {
+//     const user = req.user?._id
+//     const order = await Order.find().populate('product')
+//     if (!user) {
+//         throw new AppError('No Authenticate', 404)
 
-    const user = req.user?._id
-    const order = await Order.find().populate('product')
-    if (!user) {
-        throw new AppError('No Authenticate', 404)
+//     }
+//     if (!isDocument(order.user)) {
+//         throw new Error("Cannot get user data");
+//     }
 
-    }
-    if (user.role !== 'client') {
-        throw new AppError('No Authneticate', 404)
-    }
-    if (!order) {
-        throw new AppError('No Order', 404)
+//     if (user.role !== 'client') {
+//         throw new AppError('No Authneticate', 404)
+//     }
+//     if (!order) {
+//         throw new AppError('No Order', 404)
 
-    }
+//     }
 
-}
+// }
 export const createCheckout: RequestHandler = async (req, res, next) => {
     const user = req.user;
     if (!user) throw new Error('Cannot get user data');
 
     // Get products from cart
-    const productsInCart = await ShoppingCart.find({ client: user._id }).populate('product');
+    const productsInCart = await ShoppingCart.find({ client: user._id.toHexString() }).populate('product');
 
     // Create orderData
     const orderedProducts = productsInCart.map(cartProduct => {
@@ -92,8 +96,11 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     });
 
     const orderTotalPrice = productsInCart.map(prod => {
-
-        return prod.product.price * prod.details.quantity
+        let price = 0;
+        if (isDocument(prod.product)) {
+            price = prod.product.price * (prod.details.quantity || 0);
+        }
+        return price;
     }).reduce((acc, total) => acc + total, 0);
 
     /* const orderLineItems = productsInCart.map(CartItem => {
@@ -108,10 +115,18 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
      })*/
 
     const productTitle = productsInCart.map(prod => {
-        return prod.product.title
+        if (isDocument(prod.product)) {
+            return prod.product.title
+        } else {
+            return '';
+        }
     })
     const productImagesRaw = productsInCart.map(prod => {
-        return prod.product.imageUrl
+        if (isDocument(prod.product)) {
+            return prod.product.imageUrl
+        } else {
+            return '';
+        }
     })
     const productImages = productImagesRaw.filter((url) => {
         if (url) return true;

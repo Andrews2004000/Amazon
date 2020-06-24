@@ -25,7 +25,7 @@ export enum FavoriteCategories {
         },
     }
 })
-/*export interface IUser extends mongoose.Document {
+/*export interface UserClass extends mongoose.Document {
     _id: any,
     username: string,
     email: string,
@@ -66,13 +66,13 @@ export class UserClass {
     @prop({ required: true })
     passwordConfirmation!: string;
     @prop({ type: String })
-    photo?: [string];
+    photo?: string[]
     @prop()
     phone?: number;
     @prop({ required: false, unique: false })
     adress?: string;
     @prop({ required: false, type: String })
-    Country?: [string]
+    Country?: string[]
     @prop()
     stripeAccountId?: string
     @prop({ default: 'Hi I am a new User' })
@@ -84,11 +84,6 @@ export class UserClass {
     @prop()
     passwordResetExpires?: number | Date;
     static passwordResetExpires: number;
-
-
-
-
-
 
 
     /*const userSchema = new mongoose.Schema({
@@ -169,7 +164,7 @@ export class UserClass {
    },
        { versionKey: false })
        */
-    /*interface UserModel extends mongoose.Model<IUser> {
+    /*interface UserModel extends mongoose.Model<UserClass> {
         getIdFromJwt(token: string): Promise<string>
     
     }*/
@@ -231,7 +226,7 @@ export class UserClass {
 
 //userSchema.loadClass(UserClass);
 
-//const User = mongoose.model<IUser, UserModel>('User', userSchema);
+//const User = mongoose.model<UserClass, UserModel>('User', userSchema);
 
 //export default User;
 export const User = getModelForClass(UserClass, {

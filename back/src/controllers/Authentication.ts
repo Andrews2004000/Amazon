@@ -9,6 +9,7 @@ import AppError from '../Error/AppError'
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { RequestHandler, Request, Response, NextFunction } from 'express'
+import { DocumentType } from '@typegoose/typegoose'
 //const multerStorage = multer.diskStorage({
 ///  destination: (req, file, cb) => {
 //      cb(null, 'public/image')
@@ -35,7 +36,7 @@ export const uploadUserPhoto = upload.single('image')
 
 export const resizeUserPhoto: RequestHandler = async (req, res, next) => {
     if (!req.file) return next()
-    req.file.filename = `user-${req.user?.id}.${Date.now()}.jpeg`
+    req.file.filename = `user-${req.user?._id}.${Date.now()}.jpeg`
     sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile('public/images/')
     next()
 }
@@ -116,7 +117,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
 export const upadteUser: RequestHandler = async (req, res, next) => {
     const body = req.body as Partial<UserClass>
-    const user = req.user
+    const user = req.user as any;
     if (!user) {
         throw new AppError('no user data')
     }
@@ -131,7 +132,6 @@ export const upadteUser: RequestHandler = async (req, res, next) => {
             user[k] = inputData[k];
 
         }
-
     });
 
     await user.save()
@@ -194,7 +194,7 @@ export const deleteAccount: RequestHandler = async (req, res, next) => {
     if (!user) {
         throw new AppError('No User', 404)
     }
-    const UserId = user.id
+    const UserId = user._id
     await User.findByIdAndDelete(UserId)
     SendCookieToken(res)
     res.status(204).json({
@@ -206,7 +206,8 @@ export const getAuthLink: RequestHandler = async (req, res, next) => {
     // const state = uuidv4();
     // if (!req.session) throw new AppError('No Session', 404)
     //req.session.state = state;
-    const state = req.user?._id
+    const state = req.user?._id.toHexString();
+    if (!state) throw new Error('Not authenticated')
     const args = new URLSearchParams({
         state,
         client_id: 'ca_HS1snREeNE3h2aOj2DVw0CBUZ1yCb7a8',
@@ -248,10 +249,10 @@ export const authorizeAuth: RequestHandler = async (req, res, next) => {
         }
     }
 }
-//function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; user: UserClass }) {
-//   // Save the connected account ID from the response to your database.
-//   user.stripeAccountId = stripeAccountId;
-//   user.save();
-//}
+function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; user: DocumentType<UserClass> }) {
+    // Save the connected account ID from the response to your database.
+    user.stripeAccountId = stripeAccountId;
+    user.save();
+}
 
 export default SendCookieToken;

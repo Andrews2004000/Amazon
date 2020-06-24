@@ -3,6 +3,7 @@ import { User, UserClass } from '../model/Auth'
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
 import { Product, ProductClass } from '../model/Products';
+import { isDocument } from '@typegoose/typegoose'
 
 export const GetAllCart: RequestHandler = async (req, res, next) => {
     let ProductsInCart;
@@ -13,7 +14,7 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
     }
     if (req.user.role === 'vendor' || req.user.role === 'client') {
         ProductsInCart = ShoppingCart.find({
-            client: { _id: req.user.id },
+            client: req.user._id.toHexString(),
         })
             .populate('product')
     } else {
@@ -65,6 +66,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
         inputsData.details.quantity = 1;
         const productId = await Product.findById(inputsData.product).populate('vendor')
         if (!productId) throw new AppError('no productId')
+        if (!isDocument(productId.vendor)) throw new Error('Could not get vendor')
         console.log(productId.vendor.stripeAccountId)
         const StripeId = productId.vendor.stripeAccountId
         //console.log(inputsData.product.vendor)
@@ -84,7 +86,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     else if (foundProducts.length === 1) {
         const product = foundProducts[0];
         console.log(product)
-        product.details.quantity++;
+        if (product.details.quantity) product.details.quantity++;
         product.save();
     }
 

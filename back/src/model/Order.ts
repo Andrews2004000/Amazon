@@ -12,9 +12,11 @@ export class OrderClass {
     @prop({ auto: true })
     _id!: mongoose.Types.ObjectId;
     @prop({ type: ShoppingClass })
-    orderedProducts!: [ShoppingClass]
+    orderedProducts!: ShoppingClass[]
     @prop()
     totalPrice?: number
+    // @prop({ ref: getName(UserClass) })
+    // user!: Reference<UserClass>;
 }
 
 

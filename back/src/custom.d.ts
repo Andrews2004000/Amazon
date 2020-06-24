@@ -1,9 +1,10 @@
-import { IUser } from './model/Auth';
+import { UserClass } from './model/Auth';
+import { DocumentType } from '@typegoose/typegoose'
 
 declare global {
     namespace Express {
         export interface Request {
-            user?: IUser;
+            user?: DocumentType<UserClass>;
             [key: string]: any;
         }
     }

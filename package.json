@@ -1,0 +1,11 @@
+{
+	"name": "amazon",
+	"scripts": {
+		"start": "concurrently -c blue,blue,green -n backend-watch,backend-serve,frontend \"cd back && npm run watch\" \"cd back && npm run serve\" \"cd front && npm run serve\"",
+		"build": "concurrently -c blue,green -n backend,frontend \"cd back && npm run build\" \"cd front && npm run build\"",
+		"install": "concurrently -c blue,green -n backend,frontend \"cd back && npm install\" \"cd front && npm install\""
+	},
+	"devDependencies": {
+		"concurrently": "^5.2.0"
+	}
+}

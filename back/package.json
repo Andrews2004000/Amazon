@@ -4,10 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon -r source-map-support/register -r dotenv/config dist/app.js",
-		"dev": "nodemon  src/app.ts ",
+		"serve": "nodemon -r source-map-support/register -r dotenv/config dist/app.js",
 		"watch": "tsc -w",
-		"build": "tsc -p"
+		"build": "tsc"
 	},
 	"author": "",
 	"license": "ISC",

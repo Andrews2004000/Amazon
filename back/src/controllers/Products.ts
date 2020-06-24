@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { Product, ProductClass } from '../model/Products'
 import { RequestHandler } from 'express'
 import AppError from '../Error/AppError'
-import { User, UserClass } from '../model/Auth'
+import { User, UserClass, UserRole } from '../model/Auth'
 
 export const getAllProducts: RequestHandler = async (req, res, next) => {
     const reqQuery = { ...req.query }
@@ -15,7 +15,7 @@ export const getAllProducts: RequestHandler = async (req, res, next) => {
         const currentUserId = await User.getIdFromJwt(req.token)
         const currentUser = await User.findById(currentUserId)
 
-        if (currentUser?.role.includes('vendor')) {
+        if (currentUser?.role === (UserRole.VENDOR)) {
             productQuery = productQuery.where('vendor').equals(currentUserId)
         }
     }
@@ -58,7 +58,7 @@ export const createProducts: RequestHandler = async (req, res, next) => {
     })
 }
 export const editProduct: RequestHandler = async (req, res, next) => {
-    const product = await Product.findById(req.params.prodId)
+    const product = await Product.findById(req.params.prodId) as any;
     if (!product) {
         throw new AppError('NO PRODUCTS', 404)
     }
@@ -67,7 +67,7 @@ export const editProduct: RequestHandler = async (req, res, next) => {
         throw new AppError('NO User', 404)
     }
     if (user.role !== 'admin') {
-        if (user.vendor._id.toString() !== user._id.toString()) {
+        if (product.vendor._id.toString() !== user._id.toString()) {
             throw new AppError('NO Capable', 404)
         }
 

@@ -5,7 +5,7 @@ import { ProductClass } from './Products'
 import { getModelForClass, prop, modelOptions, getName, Ref } from '@typegoose/typegoose';
 /*export interface IUCartProduct extends mongoose.Document {
     _id: any,
-    client: IUser,
+    client: UserClass,
     product: IUProducts,
     vendorStripeAccountId: string;
 

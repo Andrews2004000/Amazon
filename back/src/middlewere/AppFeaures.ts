@@ -1,6 +1,5 @@
 import crypto from 'crypto';
-import User from '../model/Auth';
-import { IUser } from '../model/Auth';
+import { User, UserClass } from '../model/Auth';
 import nodemailer from 'nodemailer'
 import SendCookieToken from '../controllers/Authentication'
 import { RequestHandler } from 'express'
@@ -21,7 +20,7 @@ export const protect: RequestHandler = async (req, res, next) => {
     next()
 }
 
-export const restrictRole = (...roles: Array<IUser['role']>) => {
+export const restrictRole = (...roles: Array<UserClass['role']>) => {
     const handler: RequestHandler = (req, res, next) => {
         const user = req!.user
         if (user && !roles.includes(user.role)) {
@@ -39,7 +38,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email })
     if (!user) throw new AppError('No user email', 404)
     //2) Generate the random reset token
-    const resetToken = user.createPasswordResetToken()
+    const resetToken = User.createPasswordResetToken()
     await user.save()
 
     const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/user/resetPassword/${resetToken}`
@@ -73,7 +72,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
     await user.save()
 
 
-    const token = user._id;
+    const token = user._id.toHexString();
     SendCookieToken(res, token)
 
     res.status(200).json({

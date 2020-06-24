@@ -86,6 +86,7 @@ export class UserClass {
     static passwordResetExpires: number;
 
 
+
     /*const userSchema = new mongoose.Schema({
        username: {
            type: String,
@@ -170,9 +171,7 @@ export class UserClass {
     }*/
 
 
-    get idVendor() {
-        return this.role === UserRole.VENDOR
-    }
+
     getJwt(): Promise<string> {
         return new Promise((resolve, reject) => {
             jwt.sign(
@@ -196,7 +195,7 @@ export class UserClass {
 
 
     }
-    static createPasswordResetToken() {
+    createPasswordResetToken() {
         const resetToken = crypto.randomBytes(32).toString('hex')
         crypto.createHash('sha256').update(resetToken).digest('hex');
         this.passwordResetExpires = Date.now() + 10 * 60 * 1000;

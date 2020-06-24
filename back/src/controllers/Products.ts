@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
-import Product from '../model/Products'
+import { Product, ProductClass } from '../model/Products'
 import { RequestHandler } from 'express'
 import AppError from '../Error/AppError'
-import User from '../model/Auth'
+import { User, UserClass } from '../model/Auth'
 
 export const getAllProducts: RequestHandler = async (req, res, next) => {
     const reqQuery = { ...req.query }

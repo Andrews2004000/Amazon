@@ -1,5 +1,6 @@
-import mongoose, { Schema } from 'mongoose'
-export interface IUProducts extends mongoose.Document {
+import mongoose, { Schema, Types } from 'mongoose'
+import { UserClass } from './Auth';
+/*export interface IUProducts extends mongoose.Document {
     _id: any,
     title: string,
     description: string,
@@ -16,9 +17,73 @@ export interface IUProducts extends mongoose.Document {
     [key: string]: any
 
 
+}*/
+import { getModelForClass, prop, modelOptions, getName, Ref } from '@typegoose/typegoose';
+type Reference<T> = Ref<T & { _id: Types.ObjectId }, Types.ObjectId & { _id: Types.ObjectId }>
+enum TagsType {
+    VIDEOGAMES = " videogames",
+    PHONE = "phones",
+    COMPUTERS = "computers",
+    FANTASY = "fantasy",
+    ACTION = "action",
+    HISTORY = "history",
+    LIVINGROOM = "livingroom",
+    GARDEN = "garden",
+    BEDROOM = "bedroom"
+}
+enum ColorsAvailable {
+    RED = "Red",
+    BLUE = "Blue",
+    ORANGE = "Orange",
+    BLACK = "Black",
+    WHITE = "White",
+    GREEEN = "Green",
+    PURPLE = "Purple",
+    VIOLET = "Violet",
+    AZULMARINE = "AzulMarine",
+    PINK = "pink"
+
+}
+enum AllCategory {
+    TECNOLOGY = 'Tecnology',
+    HOUSE = 'House',
+    BOOK = 'Book',
+    NOT_SPECIFIED = 'Not Specified'
+
+}
+export class ProductClass {
+    @prop({ auto: true })
+    _id!: mongoose.Types.ObjectId;
+    @prop({ required: true })
+    title!: string;
+    @prop({ required: true, trim: true })
+    description?: string;
+    @prop()
+    imageUrl?: string;
+    @prop({ type: String })
+    size?: string[];
+    @prop({ enum: TagsType, type: TagsType })
+    tags?: [TagsType];
+    @prop({ enum: ColorsAvailable, default: 'ALL Available', type: ColorsAvailable })
+    colorsAvailable?: [ColorsAvailable]
+    @prop({ required: true })
+    price!: string
+    @prop({ enum: AllCategory, type: AllCategory })
+    category?: [AllCategory]
+    @prop()
+    ratings!: number;
+    @prop()
+    MaxQuantity!: number;
+    @prop({ ref: getName(UserClass), required: true, immutable: true })
+    vendor!: Ref<UserClass>;
+    @prop({ ref: getName(UserClass), immutable: true })
+    stripeAccountId?: Reference<UserClass>
+    @prop({ default: Date.now() })
+    scadenza?: Date
+
 }
 
-const ProductsSchema = new mongoose.Schema({
+/*const ProductsSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -97,6 +162,7 @@ const ProductsSchema = new mongoose.Schema({
 
 
 },
-    { versionKey: false })
-const Product = mongoose.model<IUProducts>('Product', ProductsSchema)
-export default Product
+    { versionKey: false })*/
+export const Product = getModelForClass(ProductClass, {
+    schemaOptions: { collection: 'products' }
+});

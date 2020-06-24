@@ -1,5 +1,5 @@
-import User from '../model/Auth';
-import { IUser } from '../model/Auth';
+
+import { User, UserClass } from '../model/Auth';
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import mongoose from 'mongoose'
@@ -115,7 +115,7 @@ export const login: RequestHandler = async (req, res, next) => {
 }
 
 export const upadteUser: RequestHandler = async (req, res, next) => {
-    const body = req.body as Partial<IUser>
+    const body = req.body as Partial<UserClass>
     const user = req.user
     if (!user) {
         throw new AppError('no user data')
@@ -248,10 +248,10 @@ export const authorizeAuth: RequestHandler = async (req, res, next) => {
         }
     }
 }
-function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; user: IUser }) {
-    // Save the connected account ID from the response to your database.
-    user.stripeAccountId = stripeAccountId;
-    user.save();
-}
+//function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; user: UserClass }) {
+//   // Save the connected account ID from the response to your database.
+//   user.stripeAccountId = stripeAccountId;
+//   user.save();
+//}
 
 export default SendCookieToken;

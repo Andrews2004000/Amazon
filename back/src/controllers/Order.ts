@@ -1,11 +1,12 @@
-import CartItem from '../model/ShopCart'
+import { ShoppingClass, ShoppingCart } from '../model/ShopCart'
+
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
-import Order from '../model/Order'
+import { Order, OrderClass } from '../model/Order'
 import { cloneObject } from '../utils/cloneObject';
 import { Stripe } from 'stripe';
 import { stripe } from '../middlewere/stripe';
-import Product from '../model/Products';
+import { Product, ProductClass } from '../model/Products';
 import mongoose from 'mongoose'
 function convertObjectToMetadataList<T>(obj: T) {
     const jsonObj = JSON.stringify(obj);
@@ -23,8 +24,8 @@ export const postOrder: RequestHandler = async (req, res, next) => {
     const user = req.user;
     if (!user) throw new Error('Cannot get user data');
 
-    const ProductsInCart = await CartItem.find({
-        client: { _id: user._id },
+    const ProductsInCart = await ShoppingCart.find({
+        client: user._id,
     })
 
     const orderedProducts = ProductsInCart.map(cartProduct => {
@@ -83,7 +84,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     if (!user) throw new Error('Cannot get user data');
 
     // Get products from cart
-    const productsInCart = await CartItem.find({ client: { _id: user._id } }).populate('product');
+    const productsInCart = await ShoppingCart.find({ client: user._id }).populate('product');
 
     // Create orderData
     const orderedProducts = productsInCart.map(cartProduct => {
@@ -91,19 +92,20 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
     });
 
     const orderTotalPrice = productsInCart.map(prod => {
+
         return prod.product.price * prod.details.quantity
     }).reduce((acc, total) => acc + total, 0);
 
-    const orderLineItems = productsInCart.map(cartItem => {
-        return {
-            name: cartItem.product.title,
-            description: cartItem.product.description,
-            images: [cartItem.product.imageUrl ? cartItem.product.imageUrl : ''],
-            amount: cartItem.product.price * 100,
-            currency: 'usd',
-            quantity: cartItem.details.quantity
-        };
-    })
+    /* const orderLineItems = productsInCart.map(CartItem => {
+         return {
+             name: CartItem.product.title,
+             description: CartItem.product.description,
+             images: [CartItem.product.imageUrl ? CartItem.product.imageUrl : ''],
+             amount: CartItem.product.price * 100,
+             currency: 'usd',
+             quantity: CartItem.details.quantity
+         };
+     })*/
 
     const productTitle = productsInCart.map(prod => {
         return prod.product.title

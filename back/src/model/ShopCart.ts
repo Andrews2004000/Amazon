@@ -1,7 +1,9 @@
-import mongoose, { Schema } from 'mongoose'
-import { IUser } from './Auth'
-import { IUProducts } from './Products'
-export interface IUCartProduct extends mongoose.Document {
+import mongoose, { Schema, Types } from 'mongoose'
+import { UserClass } from './Auth'
+import { ProductClass } from './Products'
+
+import { getModelForClass, prop, modelOptions, getName, Ref } from '@typegoose/typegoose';
+/*export interface IUCartProduct extends mongoose.Document {
     _id: any,
     client: IUser,
     product: IUProducts,
@@ -16,8 +18,32 @@ export interface IUCartProduct extends mongoose.Document {
 
 
     [key: string]: any
+*/
+type Reference<T> = Ref<T & { _id: Types.ObjectId }, Types.ObjectId & { _id: Types.ObjectId }>
+
+class DetailsProducts {
+    @prop()
+    quantity?: number;
+    @prop({ type: String })
+    selectedColor!: string[];
+    @prop({ type: Number })
+    sizeAvailable!: number[];
 }
-export const CartProduct = new mongoose.Schema({
+export class ShoppingClass {
+    @prop({ auto: true })
+    _id!: mongoose.Types.ObjectId;
+    @prop({ immutable: true, required: true, ref: getName(UserClass) })
+    client!: Reference<UserClass>
+    @prop({ ref: getName(ProductClass), required: true, immutable: true })
+    product!: Reference<ProductClass>
+    @prop({ _id: false })
+    details!: DetailsProducts
+    @prop()
+    vendorStripeAccountId?: string
+
+
+}
+/*export const CartProduct = new mongoose.Schema({
     product: {
         ref: 'Product',
         type: Schema.Types.ObjectId,
@@ -52,6 +78,7 @@ export const CartProduct = new mongoose.Schema({
     vendorStripeAccountId: {
         type: String,
     },
-}, { versionKey: false })
-const Cart = mongoose.model<IUCartProduct>('CartProduct', CartProduct)
-export default Cart;
+}, { versionKey: false })*/
+export const ShoppingCart = getModelForClass(ShoppingClass, {
+    schemaOptions: { collection: 'cart' }
+});

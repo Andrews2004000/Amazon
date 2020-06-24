@@ -1,8 +1,8 @@
-import CartItem from '../model/ShopCart'
-import User from '../model/Auth'
+import { ShoppingCart, ShoppingClass } from '../model/ShopCart'
+import { User, UserClass } from '../model/Auth'
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
-import Product from '../model/Products';
+import { Product, ProductClass } from '../model/Products';
 
 export const GetAllCart: RequestHandler = async (req, res, next) => {
     let ProductsInCart;
@@ -12,7 +12,7 @@ export const GetAllCart: RequestHandler = async (req, res, next) => {
 
     }
     if (req.user.role === 'vendor' || req.user.role === 'client') {
-        ProductsInCart = CartItem.find({
+        ProductsInCart = ShoppingCart.find({
             client: { _id: req.user.id },
         })
             .populate('product')
@@ -55,7 +55,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
     // }
 
     // Cerca se ci sono altri items nel carrello con lo stesso id: ti restituisce un array
-    const foundProducts = await CartItem.find().where('product').equals(inputsData.product)
+    const foundProducts = await ShoppingCart.find().where('product').equals(inputsData.product)
 
     // Se non ci sono items con quel product, creane uno nuovo
     if (foundProducts.length === 0) {
@@ -77,7 +77,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
         //  if (!inputsData.vendorStripeAccountId) throw new AppError('this vendor has no stripeAccount');
         //  inputsData.vendorStripeAccount
         inputsData.vendorStripeAccountId = StripeId
-        const newCart = await CartItem.create(inputsData)
+        const newCart = await ShoppingCart.create(inputsData)
     }
 
     // Se c'è un item nel carrello con lo stesso product, aumenta la quantity di quello
@@ -105,7 +105,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
 export const DeleteItemFromCart: RequestHandler = async (req, res, next) => {
     const inputsData = { ...req.body.userInputs };
 
-    const prodId = await CartItem.findById(req.params.id)
+    const prodId = await ShoppingCart.findById(req.params.id)
     const user = req.user;
     if (!prodId) {
         throw new AppError(' no products in cart')
@@ -119,7 +119,7 @@ export const DeleteItemFromCart: RequestHandler = async (req, res, next) => {
         throw new AppError('You have no permission', 404)
     }
     // inputsData.details.quantity--;
-    await CartItem.findByIdAndDelete(prodId._id)
+    await ShoppingCart.findByIdAndDelete(prodId._id)
     res.status(204).json({
         message: 'Ok Deleted',
         data: null

@@ -82,8 +82,7 @@ export class UserClass {
     @prop()
     passwordResetToken?: string
     @prop()
-    passwordResetExpires?: number | Date;
-    static passwordResetExpires: number;
+    passwordResetExpires?: Date;
 
 
     /*const userSchema = new mongoose.Schema({
@@ -196,10 +195,10 @@ export class UserClass {
 
 
     }
-    static createPasswordResetToken() {
+    createPasswordResetToken() {
         const resetToken = crypto.randomBytes(32).toString('hex')
         crypto.createHash('sha256').update(resetToken).digest('hex');
-        this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+        this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
         return resetToken;
 
 

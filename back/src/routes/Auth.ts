@@ -11,7 +11,8 @@ const router = ExpressPromiseRouter();
 //Routes For Normal Things
 router.route('/')
     .post(UserController.login)
-    .put(UserController.signUp)
+    .put(UserController.uploadUserPhoto, UserController.resizeUserPhoto, UserController.signUp)
+
     .get(protect, UserController.getAllUsers)
 
 router.route('/forgotPassword').post(UserController.login)

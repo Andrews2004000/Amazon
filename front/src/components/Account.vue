@@ -56,7 +56,7 @@
                                     placeholder="Pick an avatar"
                                     prepend-icon="mdi-camera"
                                     label="Avatar"
-                                    model="authInput.photo"
+                                    model="authInput.photoProfile"
                                 ></v-file-input>
 
                                 <a :href="stripeConnectAccountUrl">Connect With Stripe</a>

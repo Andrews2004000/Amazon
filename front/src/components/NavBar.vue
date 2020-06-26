@@ -95,8 +95,15 @@
                                         type="password"
                                         required
                                         v-model="userDatas.passwordConfirmation"
-                                        :rules="passwordConfirmationRule"
                                     ></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12">
+                                    <v-file-input
+                                        placeholder="PhotoProfile"
+                                        prepend-icon="mdi-camera"
+                                        label="Profile"
+                                        v-model="photoProfile"
+                                    ></v-file-input>
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -177,6 +184,7 @@ export default class AnonymousComponent extends Vue {
     drawer = false;
     dialog = false;
     valid = false;
+    photoProfile = null;
     isAlreadyRegistered = true;
     isLoginDataValid = true;
     isSignUpDataValid = true;
@@ -210,7 +218,7 @@ export default class AnonymousComponent extends Vue {
 
     async LoginHandler() {
         if (this.isLoginDataValid) {
-            await this.$global.Login(this.userDatas);
+            await this.$global.Login(this.userDatas, this.photoProfile);
 
             this.dialog = false;
         }

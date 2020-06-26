@@ -66,7 +66,7 @@ export class UserClass {
     @prop({ required: true })
     passwordConfirmation!: string;
     @prop({ type: String })
-    photo?: string[]
+    photoProfile?: string[]
     @prop()
     phone?: number;
     @prop({ required: false, unique: false })
@@ -76,7 +76,7 @@ export class UserClass {
     @prop()
     stripeAccountId?: string
     @prop({ default: 'Hi I am a new User' })
-    status!: string
+    status?: string
     @prop({ default: true, select: false })
     active?: boolean
     @prop()

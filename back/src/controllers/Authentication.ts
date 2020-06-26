@@ -37,7 +37,7 @@ export const uploadUserPhoto = upload.single('image')
 export const resizeUserPhoto: RequestHandler = async (req, res, next) => {
     if (!req.file) return next()
     req.file.filename = `user-${req.user?._id}.${Date.now()}.jpeg`
-    sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile('public/images/')
+    sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile('public/image/')
     next()
 }
 
@@ -62,17 +62,18 @@ function SendCookieToken(res: Response, token?: string) {
 }
 
 export const signUp: RequestHandler = async (req, res, next) => {
-    const userData = { ...req.body }
+    const userData = req.body
     if (!userData.password) {
-        throw new AppError('No Passowrd', 404)
+        throw new AppError('No Passowrd provide', 404)
     }
     const HashPassword = await bcrypt.hash(userData.password, 12)
     if (!HashPassword) {
-        throw new AppError('No Passowrd', 404)
+        throw new AppError('Cant hash the password', 404)
     }
     userData.role = 'client'
     userData.password = HashPassword
     userData.passwordConfirmation = HashPassword
+    userData.photoProfile = req.file.filename
     const newUser = await User.create(userData)
 
     const token = await newUser.getJwt()

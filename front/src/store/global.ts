@@ -55,6 +55,7 @@ export default class App extends VuexModule {
   @Mutation
   SIGNUP(payload: IGenericObject) {
     this.userData = payload;
+
     this.isLoggedIn = true;
   }
   @Mutation
@@ -120,9 +121,13 @@ export default class App extends VuexModule {
   }
 
   @Action
-  async Signup(payload: any) {
-    const result = await Api.fetchData(`user`, true, 'PUT', payload);
-
+  async Signup<T>(payload: T, file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('body', JSON.stringify(payload));
+    console.log(formData)
+    const result = await Api.fetchData(`user`, true, 'PUT', formData);
+    console.log(result)
     if (!result.ok) {
       return
     }

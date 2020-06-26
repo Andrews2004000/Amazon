@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
+import path from 'path';
+
+
 //const multerStorage = multer.diskStorage({
 ///  destination: (req, file, cb) => {
 //      cb(null, 'public/image')
@@ -23,21 +26,21 @@ import { DocumentType } from '@typegoose/typegoose'
 
 //Multer Filter
 const multerStorage = multer.memoryStorage();
-const multerFilter = async (req: Request, file: any, cb: any) => {
-    if (file.mimetype.startWith('image')) {
-        cb(null, true)
-    } else {
-        cb(new AppError("That's's Not A Image", 400), false)
-    }
-}
-const upload = multer({ storage: multerStorage, fileFilter: multerFilter })
+// const multerFilter = async (req: Request, file: any, cb: any) => {
+//     if (file.mimetype.startWith('image')) {
+//         cb(null, true)
+//     } else {
+//         cb(new AppError("That's's Not A Image", 400), false)
+//     }
+// }
+const upload = multer({ storage: multerStorage })
 
-export const uploadUserPhoto = upload.single('image')
+export const uploadUserPhoto = upload.single('photoProfile')
 
-export const resizeUserPhoto: RequestHandler = async (req, res, next) => {
+export const resizeAndSaveUserPhoto: RequestHandler = async (req, res, next) => {
     if (!req.file) return next()
-    req.file.filename = `user-${req.user?._id}.${Date.now()}.jpeg`
-    sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile('public/image/')
+    req.file.filename = `user-${req.user?._id || req.documentId}${path.extname(req.file.originalname)}`;
+    sharp(req.file.buffer).resize(500, 600).toFormat('jpeg').jpeg({ quality: 90 }).toFile(path.join(process.cwd(), 'public', 'images', req.file.filename))
     next()
 }
 
@@ -73,7 +76,8 @@ export const signUp: RequestHandler = async (req, res, next) => {
     userData.role = 'client'
     userData.password = HashPassword
     userData.passwordConfirmation = HashPassword
-    userData.photoProfile = req.file.filename
+    userData._id = req.documentId;
+    if (req.file) userData.photoProfile = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     const newUser = await User.create(userData)
 
     const token = await newUser.getJwt()
@@ -127,7 +131,9 @@ export const upadteUser: RequestHandler = async (req, res, next) => {
     if (inputData.password) {
         inputData.password = await bcrypt.hash(inputData.password, 12)
     }
-    if (req.file) inputData.photo = req.file.filename
+    if (req.file) inputData.photoProfile = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+
+
     Object.keys(inputData).forEach((k) => {
         if (k in user) {
             user[k] = inputData[k];

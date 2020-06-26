@@ -23,6 +23,9 @@ const csrfConnection = csrf({ cookie: true });
 db.mongooseconnect()
 const app = express();
 app.use(compression());
+
+app.use(express.static(process.cwd() + '/public'));
+
 app.use(mongoSanitize());
 app.use(cors({ credentials: true, origin: 'http://localhost:8080' }))
 app.use(

@@ -3,6 +3,7 @@ import multer from 'multer'
 import { protect, restrictRole } from '../middlewere/AppFeaures';
 import ExpressPromiseRouter from 'express-promise-router'
 import * as UserController from '../controllers/Authentication'
+import { getNewDocumentId } from '../middlewere/utilsMiddlewares';
 const router = ExpressPromiseRouter();
 //multer
 
@@ -11,7 +12,7 @@ const router = ExpressPromiseRouter();
 //Routes For Normal Things
 router.route('/')
     .post(UserController.login)
-    .put(UserController.uploadUserPhoto, UserController.resizeUserPhoto, UserController.signUp)
+    .put(getNewDocumentId, UserController.uploadUserPhoto, UserController.resizeAndSaveUserPhoto, UserController.signUp)
 
     .get(protect, UserController.getAllUsers)
 
@@ -21,8 +22,8 @@ router.route('/resetPassword/:token').post(UserController.login)
 router.route('/userUpdatings')
 
     .get(protect, UserController.getOneUser)
-    .patch(protect, UserController.uploadUserPhoto, UserController.resizeUserPhoto, UserController.upadteUser)
-    .post(UserController.Logout)
+    .patch(protect, UserController.uploadUserPhoto, UserController.resizeAndSaveUserPhoto, UserController.upadteUser)
+    .post(protect, UserController.Logout)
     .delete(protect, UserController.deleteAccount)
 
 

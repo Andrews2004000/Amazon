@@ -3,6 +3,7 @@
         <v-app-bar app class="indigo nav">
             <span class="fa fa-bars barra" @click="drawer = !drawer"></span>
             <v-spacer></v-spacer>
+
             <v-toolbar-title>
                 <span class="rapha orange--text">Rapha</span>
                 <span class="store orange--text">Store</span>
@@ -211,14 +212,14 @@ export default class AnonymousComponent extends Vue {
     //...mapActions(["Signup", "Login", "Logout"]),
     async SignUpHandler() {
         if (this.isSignUpDataValid) {
-            await this.$global.Signup(this.userDatas);
+            await this.$global.Signup(this.userDatas, this.photoProfile);
             this.dialog = false;
         }
     }
 
     async LoginHandler() {
         if (this.isLoginDataValid) {
-            await this.$global.Login(this.userDatas, this.photoProfile);
+            await this.$global.Login(this.userDatas);
 
             this.dialog = false;
         }

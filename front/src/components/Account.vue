@@ -23,7 +23,7 @@
                                     outlined
                                     label="UserName"
                                     placeholder="Username"
-                                    v-model="authInput.username"
+                                    v-model="authInputs.username"
                                     :rules="rules.nameRules"
                                 ></v-text-field>
                             </v-col>
@@ -33,7 +33,7 @@
                                     outlined
                                     label="Email"
                                     placeholder="Email"
-                                    v-model="authInput.email"
+                                    v-model="authInputs.email"
                                     :rules="rules.emailUser"
                                 ></v-text-field>
                             </v-col>
@@ -44,19 +44,17 @@
                                     outlined
                                     label="ChangePassword"
                                     placeholder="ChangePassword"
-                                    v-model="authInput.password"
+                                    v-model="authInputs.password"
                                     :rules="rules.changePasswordRules"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12">
                                 <v-file-input
-                                    :rules="rules"
                                     class="col-1"
                                     accept="image/png, image/jpeg, image/bmp"
                                     placeholder="Pick an avatar"
                                     prepend-icon="mdi-camera"
                                     label="Avatar"
-                                    model="authInput.photoProfile"
                                 ></v-file-input>
 
                                 <a :href="stripeConnectAccountUrl">Connect With Stripe</a>
@@ -77,15 +75,15 @@
     </div>
 </template>
 <script>
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import authInput from "../mixins/authInput";
 import Api from "../store/api";
 @Component({
     mixins: [authInput]
 })
-export default class AnonymousComponent extends Vue {
+export default class AccountComponent extends Vue {
     stripeConnectAccountUrl = "#";
-    authInput = {};
+    authInputs = {};
     isAuthInputValid = true;
 
     inputUser = [v => v.length >= 5 || "Minimun Length is 5 Characthers"];
@@ -142,12 +140,19 @@ export default class AnonymousComponent extends Vue {
     reset() {
         this.initialize();
     }
+    @Watch("UserData.user")
+    WatchingUserData() {
+        this.initialize();
+    }
 
     initialize() {
-        this.authInput.username = this.userData.user.username;
-        this.authInput.email = this.userData.user.email;
-        this.authInput.password = "";
-        this.authInput.currentUserPhoto = this.userData.user.currentUserPhoto;
+        if (this.userData.user) {
+            this.authInputs.username = this.userData.user.username;
+            this.authInputs.email = this.userData.user.email;
+            this.authInputs.password = "";
+        } else {
+            console.log("Please SignUp or Login");
+        }
     }
 
     created() {

@@ -121,12 +121,15 @@ export default class App extends VuexModule {
   }
 
   @Action
-  async Signup<T>(payload: T, file: File) {
+  async Signup(payload: any, photoProfile: File) {
     const formData = new FormData()
-    formData.append('file', file)
-    formData.append('body', JSON.stringify(payload));
+    formData.append('photoProfile', photoProfile)
+    const currentKey = Object.keys(payload);
+    currentKey.forEach((key) => {
+      formData.append(key, payload[key])
+    })
     console.log(formData)
-    const result = await Api.fetchData(`user`, true, 'PUT', formData);
+    const result = await Api.fetchData(`user`, true, 'PUT', formData, false);
     console.log(result)
     if (!result.ok) {
       return

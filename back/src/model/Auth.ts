@@ -66,7 +66,7 @@ export class UserClass {
     @prop({ required: true })
     passwordConfirmation!: string;
     @prop()
-    photoProfile?: string // Perchè avevi messo array?
+    photoProfile?: string
     @prop()
     phone?: number;
     @prop({ required: false, unique: false })

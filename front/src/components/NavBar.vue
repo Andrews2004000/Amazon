@@ -164,9 +164,14 @@
         </v-dialog>
     </div>
 </template>
-<script>
+<script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import authInput from "../mixins/authInput";
+
+interface GenericObject {
+    [key: string]: any;
+}
+
 @Component({
     mixins: [authInput],
 
@@ -185,11 +190,11 @@ export default class AnonymousComponent extends Vue {
     drawer = false;
     dialog = false;
     valid = false;
-    photoProfile = null;
+    photoProfile: File = null;
     isAlreadyRegistered = true;
     isLoginDataValid = true;
     isSignUpDataValid = true;
-    userDatas = {};
+    userDatas: GenericObject = {};
     lazy = false;
 
     inputUser = [v => v.length >= 5 || "Minimun Length is 5 Characthers"];
@@ -212,7 +217,10 @@ export default class AnonymousComponent extends Vue {
     //...mapActions(["Signup", "Login", "Logout"]),
     async SignUpHandler() {
         if (this.isSignUpDataValid) {
-            await this.$global.Signup(this.userDatas, this.photoProfile);
+            await this.$global.Signup({
+                body: this.userDatas,
+                photoProfile: this.photoProfile
+            });
             this.dialog = false;
         }
     }
@@ -231,7 +239,7 @@ export default class AnonymousComponent extends Vue {
     }
 
     GoAway() {
-        this.$route.push("/");
+        this.$router.push("/");
     }
 
     Go() {

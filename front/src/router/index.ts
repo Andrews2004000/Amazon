@@ -11,69 +11,80 @@ import VendorPage from '../components/Vendor.vue'
 import EditProduct from '../components/EditProduct.vue'
 import ShoppingCart from '../components/ShoppingCart.vue'
 import Detail from '../components/Details.vue'
+import SendEmail from '../components/Reset.vue'
 import Orders from '../components/AllOrders.vue'
+import ResetPassword from '../components/ResetPassword.vue'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'Main',
-    component: Main
+    component: () => import('../components/Main.vue'),
+  },
+  {
+    path: '/Reset',
+
+    component: () => import('../components/Reset.vue'),
   },
   {
     path: '/Orders',
-    name: 'Orders',
-    component: Orders
+    component: () => import('../components/AllOrders.vue'),
   },
   {
     path: '/Detail/:prodId',
     name: 'Detail',
-    component: Detail
+    component: () => import('../components/Details.vue'),
   },
   {
     path: '/EditProduct',
     name: 'Edit',
-    component: EditProduct
+    component: () => import('../components/EditProduct.vue'),
   },
   {
     path: '/VendorPageDetails',
     name: 'VendorPage',
-    component: VendorPage
+    component: () => import('../components/Vendor.vue'),
   },
   {
     path: '/UpgradedUser',
     name: 'UpgradedeUser',
-    component: Upgrade
+    component: () => import('../components/Upgrade.vue'),
   },
   {
     path: '/Sell',
     name: 'Sell',
-    component: Sell
+    component: () => import('../components/Sell.vue'),
   },
   {
     path: '/ShoppingCart/',
     name: 'ShoppingCart',
-    component: ShoppingCart
+    component: () => import('../components/ShoppingCart.vue'),
+  },
+  {
+    path: '/ResetPassword/:token',
+
+    component: () => import('../components/ResetPassword.vue'),
   },
   {
     path: '/Account',
     name: 'Account',
-    component: Account
+    component: () => import('../components/Account.vue'),
   },
   {
     path: '/House',
     name: 'House',
-    component: House
+    component: () => import('../components/House.vue'),
   },
   {
     path: '/Book',
     name: 'Book',
-    component: Book
+    component: () => import('../components/Book.vue'),
   },
   {
     path: '/Tecnology',
     name: 'Tecno',
-    component: Tecno
+    component: () => import('../components/Tecno.vue'),
   },
 
 

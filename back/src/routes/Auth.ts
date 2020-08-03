@@ -1,6 +1,7 @@
 import express from 'express'
 import multer from 'multer'
-import { protect, restrictRole } from '../middlewere/AppFeaures';
+
+import { protect, restrictRole, resetPassword, forgotPassword } from '../middlewere/AppFeaures';
 import ExpressPromiseRouter from 'express-promise-router'
 import * as UserController from '../controllers/Authentication'
 import { getNewDocumentId } from '../middlewere/utilsMiddlewares';
@@ -13,11 +14,10 @@ const router = ExpressPromiseRouter();
 router.route('/')
     .post(UserController.login)
     .put(getNewDocumentId, UserController.uploadUserPhoto, UserController.resizeAndSaveUserPhoto, UserController.signUp)
-
     .get(protect, UserController.getAllUsers)
-
-router.route('/forgotPassword').post(UserController.login)
-router.route('/resetPassword/:token').post(UserController.login)
+//Resetting Password
+router.route('/forgotPassword').post(forgotPassword)
+router.route('/resetPassword').patch(resetPassword)
 /// Routes For Updatings
 router.route('/userUpdatings')
 
@@ -27,7 +27,7 @@ router.route('/userUpdatings')
     .delete(protect, UserController.deleteAccount)
 
 
-
+//stripe
 router.get('/stripe-oauth/oauth-link', protect, UserController.getAuthLink);
 router.get('/stripe-oauth/authorize', protect, UserController.authorizeAuth);
 export default router;

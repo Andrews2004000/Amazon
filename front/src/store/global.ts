@@ -192,7 +192,30 @@ export default class App extends VuexModule {
     return data;
 
   }
+  @Action
+  async forgotPassword<T extends object>(payload: T) {
+    const result = await Api.fetchData(`user/forgotPassword`, true, 'POST', payload);
+    if (!result.ok) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  @Action
+  async resetPassword({ userData, resetToken }) {
+    if (!resetToken) {
+      alert('Could not reset The password')
+      return false;
+    }
+    const result = await Api.fetchData(`user/resetPassword?resetToken=${resetToken}`, true, 'PATCH', userData);
+    if (!result.ok) {
+      return false;
+    } else {
+      return true;
+    }
 
+
+  }
 
   //changeAccountDetails
   @Action

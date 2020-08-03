@@ -6,6 +6,7 @@ declare global {
         export interface Request {
             user?: DocumentType<UserClass>;
             [key: string]: any;
+
         }
     }
 }

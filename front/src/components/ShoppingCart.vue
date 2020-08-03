@@ -21,7 +21,11 @@
                 </v-container>
             </v-card>
             <span class="totalAmount" v-if="product.length > 0">Total: {{TotalAmount}} $</span>
-            <v-btn class="orange btn" @click="orderHanlder">Proceed Payment</v-btn>
+            <v-btn
+                class="orange btn"
+                @click="orderHanlder"
+                v-if="product.length > 0"
+            >Proceed Payment</v-btn>
         </div>
     </div>
 </template>

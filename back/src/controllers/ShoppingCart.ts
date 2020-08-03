@@ -69,15 +69,7 @@ export const PostToCart: RequestHandler = async (req, res, next) => {
         if (!isDocument(productId.vendor)) throw new Error('Could not get vendor')
         console.log(productId.vendor.stripeAccountId)
         const StripeId = productId.vendor.stripeAccountId
-        //console.log(inputsData.product.vendor)
-        //   if (!inputsData.vendor) throw new AppError('There is no vendor')
-        //  const vendorId = await User.findById(inputsData.product.vendor)
-        //   if (!vendorId) throw new AppError('No Vendor Id')
-        //  if (!inputsData.vendorStripeAccountId) throw new AppError('No StripeAccountId')
-        // inputsData.vendorStripeAccountId = vendorId.stripeAccountId
-        // console.log(vendorId)
-        //  if (!inputsData.vendorStripeAccountId) throw new AppError('this vendor has no stripeAccount');
-        //  inputsData.vendorStripeAccount
+
         inputsData.vendorStripeAccountId = StripeId
         const newCart = await ShoppingCart.create(inputsData)
     }

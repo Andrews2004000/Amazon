@@ -14,6 +14,11 @@ export enum FavoriteCategories {
     BOOK = 'Book',
     HOUSE = 'House'
 }
+export enum AccountProvider {
+    EMAIL = 'email',
+    GOOGLE = 'google',
+    FACEBOOK = 'facebook'
+}
 @modelOptions({
     schemaOptions: {
         versionKey: false,
@@ -64,7 +69,7 @@ export class UserClass {
     @prop({ required: true, select: false, unique: false })
     password!: string;
     @prop({ required: true })
-    passwordConfirmation!: string;
+    passwordConfirmation?: string;
     @prop()
     photoProfile?: string
     @prop()
@@ -79,10 +84,16 @@ export class UserClass {
     status?: string
     @prop({ default: true, select: false })
     active?: boolean
+    //  @prop()
+    // passwordResetToken?: string
+    // @prop()
+    // passwordResetExpires?: Date;
     @prop()
-    passwordResetToken?: string
+    passwordResetTokenHashed?: string;
+
     @prop()
-    passwordResetExpires?: Date;
+    passwordResetTokenExpires?: Date;
+
 
 
 
@@ -194,14 +205,26 @@ export class UserClass {
 
 
     }
-    createPasswordResetToken() {
-        const resetToken = crypto.randomBytes(32).toString('hex')
-        crypto.createHash('sha256').update(resetToken).digest('hex');
-        this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
-        return resetToken;
+    // createPasswordResetToken() {
+    //     const resetToken = crypto.randomBytes(32).toString('hex')
+    //    crypto.createHash('sha256').update(resetToken).digest('hex');
+    //    this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
+    //    return resetToken;
 
 
+    // }
+    static createPasswordResetToken() {
+        const passwordResetToken = crypto.randomBytes(32).toString('hex');
+        const passwordResetTokenHashed = this.hashPasswordResetToken(passwordResetToken);
+        const passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+        return { passwordResetToken, passwordResetTokenHashed, passwordResetTokenExpires }
     }
+
+    static hashPasswordResetToken(passwordResetToken: string) {
+        return crypto.createHash('sha256').update(passwordResetToken).digest('hex');
+    }
+
     static getIdFromJwt(token: string) {
         return new Promise((resolve, reject) => {
             jwt.verify(token, 'secret' || '',

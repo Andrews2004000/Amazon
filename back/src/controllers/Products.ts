@@ -6,8 +6,12 @@ import { User, UserClass, UserRole } from '../model/Auth'
 
 export const getAllProducts: RequestHandler = async (req, res, next) => {
     const reqQuery = { ...req.query }
+
     delete reqQuery.owned;
     delete reqQuery.search;
+    delete reqQuery.limit;
+    delete reqQuery.page;
+
     const querySearch = req.query.search as string;
     let productQuery = Product.find(reqQuery)
 
@@ -25,6 +29,8 @@ export const getAllProducts: RequestHandler = async (req, res, next) => {
         productQuery.where('title').regex(new RegExp(searchKeyWord, 'i'))
 
     }
+
+
     const products = await productQuery;
     res.json({
         status: 'success',

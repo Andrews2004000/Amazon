@@ -12,6 +12,7 @@
             <span class="fa fa-shopping-cart mode-1" v-if="isLoggedIn" @click="GoThere"></span>
 
             <span class="fa fa-user cerca" @click="dialog = !dialog" v-else></span>
+
             <div class="ball orange" v-if="isLoggedIn">
                 <span class="number dark" v-if="isLoggedIn">{{product.length}}</span>
             </div>
@@ -24,10 +25,17 @@
             <!-- <span else>ok</span>-->
 
             <div class="conta">
-                <span class="fa fa-user mode"></span>
+                <v-img
+                    :src="userData.user.photoProfile"
+                    v-if="userData.user.photoProfile"
+                    class="photoProfile"
+                ></v-img>
+                <span class="fa fa-user mode" v-else></span>
+                <span class="username">{{userData.user.username}}</span>
+
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
 
-                <v-btn class="success user" @click="Go" v-if="userData">sell</v-btn>
+                <v-btn class="success user" @click="Go" v-if="userDataRole">sell</v-btn>
 
                 <!-- <span else>ok</span>-->
                 <span class="name" v-if="userDataRole">{{userData.user.username}}</span>
@@ -144,6 +152,9 @@
                                         :rules="rules.passwordRules"
                                     ></v-text-field>
                                 </v-col>
+                                <small>
+                                    <a @click="ResetPassword">Forgot Password? Go To This Link</a>
+                                </small>
                             </v-row>
                         </v-container>
 
@@ -190,6 +201,9 @@ export default class AnonymousComponent extends Vue {
     drawer = false;
     dialog = false;
     valid = false;
+    loading = false;
+    isForgotPasswordDataValid = true;
+
     photoProfile: File = null;
     isAlreadyRegistered = true;
     isLoginDataValid = true;
@@ -240,6 +254,9 @@ export default class AnonymousComponent extends Vue {
 
     GoAway() {
         this.$router.push("/");
+    }
+    ResetPassword() {
+        this.$router.push("/Reset");
     }
 
     Go() {
@@ -343,12 +360,24 @@ export default class AnonymousComponent extends Vue {
     font-weight: 800;
     font-size: 17px;
 }
+.photoProfile {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    margin-left: 4.5rem;
+}
 .ball {
     border-radius: 20px;
     height: 30px;
     width: 30px;
     background-color: green;
     transform: translateX(-10px) translateY(-12px);
+}
+.username {
+    margin-left: 80px;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 2rem;
 }
 .listina {
     margin-top: 15px;

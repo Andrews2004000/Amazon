@@ -1,16 +1,22 @@
 
-import { User, UserClass } from '../model/Auth';
+import { User, AccountProvider, UserClass } from '../model/Auth';
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 import sharp from 'sharp'
+import * as GoogleOAuth from './GoggleAuth'
+
 import { stripe } from '../middlewere/stripe';
 import AppError from '../Error/AppError'
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
+//import { getUserDataFromTokenGoogle,getUserDataFromTokenFaceBook } from '../middlewere/AppFeaures'
+import * as SocialFeauture from '../middlewere/AppFeaures'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
 import path from 'path';
+
+
 
 
 //const multerStorage = multer.diskStorage({
@@ -119,7 +125,111 @@ export const login: RequestHandler = async (req, res, next) => {
     }
 
 }
+// export const SocialLogin: RequestHandler = async (req, res, next) => {
+//  const { provider, token } = req.query;
+//   if (provider !== AccountProvider.GOOGLE && provider !== AccountProvider.FACEBOOK) {
+//      throw new AppError('You Must Specified a provider')
+//  }
+//   let userData: { googleAccountId?: string; facebookAccountId?: string; email: string; username: string; provider: AccountProvider } | null = null;
+//   let user: DocumentType<UserClass> | null = null;
+//  if (provider === AccountProvider.GOOGLE) {
+//       userData = await SocialFeauture.getUserDataFromTokenGoogle(token);
+//   }
+//
+//  if (provider === AccountProvider.FACEBOOK) {
+//       userData = await SocialFeauture.getUserDataFromTokenFaceBook(token);
+//   }
 
+//  if (!userData) throw new Error('Could not get user data');
+//
+//   if (provider === AccountProvider.GOOGLE) {
+//      user = await User.findOne({ googleAccountId: userData.googleAccountId });
+//  }
+
+//  if (provider === AccountProvider.FACEBOOK) {
+//      user = await User.findOne({ facebookAccountId: userData.facebookAccountId });
+//  }
+//  if (!user) {
+//      user = await User.create({
+//          ...userData,
+//         password: 'SOCIAL_ACCOUNT_PASSWORD'
+//     })
+//
+//  } else {
+//      let hasChanged = false;
+//      if (user.username !== userData.username) {
+//         user.username = userData.username;
+//          hasChanged = true;
+//     }
+//
+//       if (user.email !== userData.email) {
+//           user.email = userData.email;
+//          hasChanged = true;
+//      }
+//
+//      if (hasChanged) {
+//          await user.save();
+//      }
+//   }
+//   const jwt = await user.getJwt();
+//
+//   SendCookieToken(res, jwt);
+//
+//   res.json({
+//       status: 'success',
+//       data: user
+////   })
+
+
+//} -->
+
+export const SocialLogin: RequestHandler = async (req, res, next) => {
+    const token = req.query.token as string
+    const provider = req.query.provider as string
+    if (provider !== AccountProvider.GOOGLE) {
+        throw new AppError('You Must specify a provider in query(google)', 400)
+
+    }
+    let userData: { googleAccountId?: string; userEmail: string; userName: string; provider?: AccountProvider } | null = null;
+    let user: DocumentType<UserClass> | null = null
+    if (provider === AccountProvider.GOOGLE) {
+        userData = await GoogleOAuth.getGoogleUserId(token)
+
+    }
+    if (!userData) throw new AppError('Could Not Get UserData')
+    if (provider === AccountProvider.GOOGLE) {
+        user = await User.findOne({ googleAccountId: userData.googleAccountId })
+
+    }
+    if (!user) {
+        user = await User.create({
+            ...userData as any,
+            password: 'SOCIAL_ACCOUNT_PASSWORD'
+        })
+    } else {
+        let hasChanged = false;
+        if (user.username !== userData.userName) {
+            user.username = userData.userName;
+            hasChanged = true;
+        }
+        if (user.email !== userData.userEmail) {
+            user.email = userData.userEmail;
+            hasChanged = true;
+        }
+        if (hasChanged) {
+            await user.save();
+
+        }
+    }
+    const jwt = await user.getJwt()
+    SendCookieToken(res, jwt)
+    res.json({
+        status: 'success',
+        data: user
+    })
+
+
+}
 export const upadteUser: RequestHandler = async (req, res, next) => {
     const body = req.body as Partial<UserClass>
     const user = req.user as any;

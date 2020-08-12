@@ -20,4 +20,5 @@ export default new Vuetify({
     icons: {
         iconfont: 'md',
     },
+    rtl: navigator.languages[0].includes('ar') ? true : false
 });

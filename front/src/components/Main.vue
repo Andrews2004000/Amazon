@@ -52,10 +52,8 @@
                     <v-col v-for="product in products" :key="product.id" :product="product">
                         <v-card class="pa-5 mx-auto" max-width="400" tile>
                             <div class="padre">
-                                <!--<v-row>-->
-
                                 <v-card-text class="beta">
-                                    <v-card-title class="titolo">Product Of The Mounth</v-card-title>
+                                    <v-card-title class="titolo">{{$t('general.save')}}</v-card-title>
                                     <v-card-subtitle>{{product.title}}</v-card-subtitle>
 
                                     <v-rating readonly v-model="product.ratings"></v-rating>
@@ -121,11 +119,12 @@ import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
 @Component({
     components: {
-        NavBar
-    }
+        NavBar,
+    },
 })
 export default class AnonymousComponent extends Vue {
     ok = false;
+    langs = ["en", "fr", "it", "ar", "de"];
     searchField = "";
     open = false;
     amenities = [1, 4];
@@ -138,7 +137,7 @@ export default class AnonymousComponent extends Vue {
         "Country",
         "EarlyScadenza",
         "LowerRatings",
-        "JustScadenza"
+        "JustScadenza",
     ];
 
     icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
@@ -147,13 +146,13 @@ export default class AnonymousComponent extends Vue {
         {
             src:
                 "https://leganerd.com/wp-content/uploads/2018/10/d39w7f4ix9f5s9.cloudfront-999x485.png",
-            title: "Alexa Products"
+            title: "Alexa Products",
         },
         {
             src:
                 "https://www.lifestyleblog.it/wp-content/uploads/2020/01/xbox-series-x-.jpg",
-            title: "Xbox Series X"
-        }
+            title: "Xbox Series X",
+        },
     ];
 
     //  ...mapActions(["SearchProducts", "AddToCart"]),
@@ -164,7 +163,7 @@ export default class AnonymousComponent extends Vue {
         console.log(searchQuery);
         this.$global.SearchProducts({
             searchQuery,
-            categoryType: "AllProducts"
+            categoryType: "AllProducts",
         });
     }
 
@@ -175,6 +174,9 @@ export default class AnonymousComponent extends Vue {
     created() {
         this.$global.LoadAllProducts();
         // this.$store.dispatch("load")
+    }
+    get currentLocale() {
+        return this.$i18n.locale.substring(0, 2);
     }
 
     get products() {

@@ -2,8 +2,11 @@
 	"compilerOptions": {
 		"experimentalDecorators": true,
 		"target": "esnext",
+		"emitDecoratorMetadata": true,
 		"module": "esnext",
 		"strict": false,
+		"resolveJsonModule": true,
+		"noImplicitAny": false,
 		"jsx": "preserve",
 		"importHelpers": true,
 		"moduleResolution": "node",
@@ -12,7 +15,7 @@
 		"allowSyntheticDefaultImports": true,
 		"sourceMap": true,
 		"baseUrl": ".",
-		"types": ["webpack-env"],
+		"types": ["webpack-env", "webpack", "webpack-env"],
 		"paths": {
 			"@/*": ["src/*"]
 		},

@@ -86,6 +86,13 @@ const routes = [
     name: 'Tecno',
     component: () => import('../components/Tecno.vue'),
   },
+  {
+    path: '/NewsLetter',
+    name: 'NewsLetter',
+    component: () => import('../components/NewsLetter.vue'),
+  },
+
+
 
 
 

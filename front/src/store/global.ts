@@ -119,7 +119,22 @@ export default class App extends VuexModule {
   GET_ONE_PRODUCT(payload) {
     this.product = payload;
   }
-
+  @Action
+  async sendNewsLetter(html) {
+    const { ok } = await Api.fetchData('newsletter', true, 'PUT', {
+      html
+    })
+    if (ok) return true;
+    if (!ok) return false;
+  }
+  @Action
+  async subscribeToNewsLetters(email) {
+    const { ok } = await Api.fetchData('newsletter', true, 'POST', {
+      email
+    })
+    if (ok) return true;
+    if (!ok) return false;
+  }
   @Action
   async Signup({ body, photoProfile }: { body: any, photoProfile: File }) {
     const formData = new FormData()

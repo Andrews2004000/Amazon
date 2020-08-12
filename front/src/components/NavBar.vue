@@ -22,16 +22,12 @@
             <v-btn class="ma-2" color="darken-2" dark v-if="homePage" router-view to="/">
                 <v-icon dark left v-if="homePage">mdi-arrow-left</v-icon>Back To HomePage
             </v-btn>
-            <!-- <span else>ok</span>-->
 
             <div class="conta">
-                <v-img
-                    :src="userData.user.photoProfile"
-                    v-if="userData.user.photoProfile"
-                    class="photoProfile"
-                ></v-img>
+                <v-img v-if="userData.user" :src="userData.user.photoProfile" class="photoProfile"></v-img>
+
                 <span class="fa fa-user mode" v-else></span>
-                <span class="username">{{userData.user.username}}</span>
+                <span class="username" v-if="userData.user">{{userData.user.username}}</span>
 
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
 
@@ -194,8 +190,8 @@ interface GenericObject {
             if (this.$refs.loginForm) {
                 this.$refs.loginForm.resetValidation();
             }
-        }
-    }
+        },
+    },
 })
 export default class AnonymousComponent extends Vue {
     drawer = false;
@@ -211,21 +207,21 @@ export default class AnonymousComponent extends Vue {
     userDatas: GenericObject = {};
     lazy = false;
 
-    inputUser = [v => v.length >= 5 || "Minimun Length is 5 Characthers"];
+    inputUser = [(v) => v.length >= 5 || "Minimun Length is 5 Characthers"];
 
     EmailUser = [
-        v =>
+        (v) =>
             !v ||
             /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-            "E-mail must be valid"
+            "E-mail must be valid",
     ];
 
-    inputPassword = [v => v.length >= 4 || "Minimun Length is 4 Characthers"];
+    inputPassword = [(v) => v.length >= 4 || "Minimun Length is 4 Characthers"];
 
     lista = [
         { title: "Tecnology", route: "/Tecnology" },
         { title: "Books", route: "/Book" },
-        { title: "House", route: "/House" }
+        { title: "House", route: "/House" },
     ];
 
     //...mapActions(["Signup", "Login", "Logout"]),
@@ -233,7 +229,7 @@ export default class AnonymousComponent extends Vue {
         if (this.isSignUpDataValid) {
             await this.$global.Signup({
                 body: this.userDatas,
-                photoProfile: this.photoProfile
+                photoProfile: this.photoProfile,
             });
             this.dialog = false;
         }

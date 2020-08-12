@@ -44,7 +44,7 @@ export const sendNewsletter: RequestHandler = async (req, res) => {
 
     await sendEmail({
         ...bcc as any,
-        subject: 'Halalpage - Newsletter',
+        subject: 'Amazon - Newsletter',
         html
     })
     res.json({

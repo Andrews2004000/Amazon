@@ -3,33 +3,38 @@ import { Product, ProductClass } from '../model/Products'
 import { RequestHandler } from 'express'
 import AppError from '../Error/AppError'
 import { User, UserClass, UserRole } from '../model/Auth'
-
+interface GenericObject {
+    [key: string]: any
+}
 export const getAllProducts: RequestHandler = async (req, res, next) => {
-    const reqQuery = { ...req.query }
-
-    delete reqQuery.owned;
-    delete reqQuery.search;
-    delete reqQuery.limit;
-    delete reqQuery.page;
+    const reqQuery = { ...req.query } as any
+    const excludeFields = ['page', 'limit', 'skip', 'sort', 'owned', 'search']
+    excludeFields.forEach((el => delete reqQuery[el]))
 
     const querySearch = req.query.search as string;
-    let productQuery = Product.find(reqQuery)
+    Object.keys(reqQuery).forEach(key => {
+        reqQuery[key] = decodeURIComponent(reqQuery[key])
+    })
 
+    let productQuery = Product.find(reqQuery)
     if (req.token && req.query.owned == 'true') {
         const currentUserId = await User.getIdFromJwt(req.token)
         const currentUser = await User.findById(currentUserId)
-
         if (currentUser?.role === (UserRole.VENDOR)) {
             productQuery = productQuery.where('vendor').equals(currentUserId)
         }
     }
-    if (querySearch) {
 
+    //Search
+    if (querySearch) {
         const searchKeyWord = querySearch.split('+').join(' ') as string;
         productQuery.where('title').regex(new RegExp(searchKeyWord, 'i'))
-
     }
+    //Sort
 
+    if (req.query.sort) {
+        productQuery = productQuery.sort(req.query.sort)
+    }
 
     const products = await productQuery;
     res.json({

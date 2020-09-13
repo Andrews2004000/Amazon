@@ -46,40 +46,144 @@
                 </v-row>
             </div>
         </div>
+
         <div>
-            <v-container class="pinoto">
+            <div class="sidebar">
+                <h6 class="sidebar__title">Mostra Risultati Per</h6>
+                <div class="sidebar__card__brand">
+                    <h6 class="sidebar__card__brand__title">Selezione Brand</h6>
+                    <label class="sidebar__card__brand__label">
+                        <input type="checkbox" name id />
+                        Brand popolari
+                    </label>
+                    <label class="sidebar__card__brand__label">
+                        <input type="checkbox" />
+                        I nostri brand
+                    </label>
+                </div>
+                <div class="sidebar__card__clothing">
+                    <h6 class="sidebar__card__clothing__title">Abbigliamento</h6>
+                    <ul class="sidebar__card__clothing__list">
+                        <li class="sidebar__card__clothing__list__items">Uomo</li>
+                        <li class="sidebar__card__clothing__list__items">Donna</li>
+                        <li class="sidebar__card__clothing__list__items">Bambine e ragazze</li>
+                        <li class="sidebar__card__clothing__list__items">Bambini e ragazii</li>
+                        <li class="sidebar__card__clothing__list__items">Prima infanzia</li>
+                        <li class="sidebar__card__clothing__list__items">Abbigliamneto Specifico</li>
+                    </ul>
+                </div>
+                <h6 class="filterBy">Filtra Per</h6>
+                <div class="sidebar__card__shipping">
+                    <h6 class="sidebar__card__shipping__title">Modalità Di Spedizione</h6>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" name id />
+                        Prime
+                    </label>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Spedione gratuita
+                    </label>
+                </div>
+                <div class="sidebar__card__make">
+                    <h6 class="sidebar__card__make__title">Marca</h6>
+                    <!--  <label
+                        class="sidebar__card__shipping__label"
+                        v-for="brand in brands"
+                        :key="brand"
+                    >
+                        <input type="checkbox" v-model="products.brand" :value="brand" />
+                        {{brand}}
+                        <v-checkbox v-for="brand in brands" :key="brand" :label="brand" v-model="products.brand" :value="brand"></v-checkbox>
+
+                    </label>-->
+                    <v-item-group v-model="QueryObject.brand">
+                        <v-checkbox
+                            v-for="brand in brands"
+                            :key="brand"
+                            :label="brand"
+                            :value="brand"
+                            @change="loadFilteredProducts"
+                        ></v-checkbox>
+                    </v-item-group>
+                </div>
+                <div class="sidebar__card__color">
+                    <h6 class="sidebar__card__color__title">Colors</h6>
+                    <div class="sidebar__card__color__container">
+                        <div class="sidebar__card__color__box"></div>
+                        <div class="sidebar__card__color__box"></div>
+                        <div class="sidebar__card__color__box"></div>
+                        <div class="sidebar__card__color__box"></div>
+                    </div>
+                </div>
+                <div class="sidebar__card__arrivi">
+                    <h6 class="sidebar__card__arrivi__title">Giorni di Consegna</h6>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Ricevi Oggi
+                    </label>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Ricevi Domani
+                    </label>
+                </div>
+                <div class="sidebar__card__delivery">
+                    <h6 class="sidebar__card__delivery__title">Nuovi Arrivi</h6>
+                    <h6 class="sidebar__card__delivery__items">Ultima settimana</h6>
+                    <h6 class="sidebar__card__delivery__items">Ultimo mese</h6>
+                    <h6 class="sidebar__card__delivery__items">Ultimi tre mesi</h6>
+                </div>
+                <div class="sidebar__card__price"></div>
+                <div class="sidebar__card__vendors">
+                    <h6 class="sidebar__card__vendors__title">Venditori</h6>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        srrl.com
+                    </label>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Gianni Morandi
+                    </label>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Stuma
+                    </label>
+                    <label class="sidebar__card__shipping__label">
+                        <input type="checkbox" />
+                        Andrews
+                    </label>
+                </div>
+            </div>
+            <v-container class="container__cards">
                 <v-row>
                     <v-col v-for="product in products" :key="product.id" :product="product">
-                        <v-card class="pa-5 mx-auto" max-width="400" tile>
-                            <div class="padre">
-                                <v-card-text class="beta">
-                                    <v-card-title class="titolo">{{$t('general.save')}}</v-card-title>
+                        <v-card class="card" max-width="400" tile>
+                            <div class="container__cards__typography">
+                                <v-card-text>
+                                    <v-card-title
+                                        class="container__cards__typography__title"
+                                    >{{$t('general.save')}}</v-card-title>
                                     <v-card-subtitle>{{product.title}}</v-card-subtitle>
 
                                     <v-rating readonly v-model="product.ratings"></v-rating>
                                 </v-card-text>
 
-                                <v-img
-                                    :src="product.imageUrl"
-                                    class="pongo align-end"
-                                    height="280px"
-                                    max-width="200px"
-                                    alt="image"
-                                ></v-img>
+                                <v-img :src="product.imageUrl" class="product__image" alt="image"></v-img>
                                 <v-spacer></v-spacer>
 
                                 <!--_ <span class="pu">ONLY</span> -->
 
-                                <span class="sna">{{ product.price }}$</span>
+                                <span
+                                    class="container__cards__typography__price"
+                                >Price:{{ product.price }}$</span>
 
                                 <v-card-actions>
                                     <v-btn
-                                        class="success putin"
+                                        class="container__cards__typography__btn"
                                         v-if="isLoggedIn"
                                         @click="Go(product._id)"
                                     >Add To Cart</v-btn>
                                     <v-btn
-                                        class="success putin"
+                                        class="container__cards__typography__btn"
                                         disabled
                                         v-if="!isLoggedIn"
                                     >Add To Cart</v-btn>
@@ -91,7 +195,17 @@
                 </v-row>
             </v-container>
         </div>
-
+        <div class="pages indigo">
+            <div class="card-footer pb-0 pt-3">
+                <jw-pagination :items="exampleItems" @changePage="onChangePage" class="orange"></jw-pagination>
+            </div>
+            <!--<div class="page">
+                <span class="page__content">1</span>
+            </div>
+            <div class="page">
+                <span class="page__content">2</span>
+            </div>-->
+        </div>
         <v-footer dark padless>
             <v-card flat tile class="indigo lighten-1 white--text text-center">
                 <v-card-text>
@@ -115,6 +229,7 @@
     </div>
 </template>
 <script>
+import Api from "../store/api";
 import { Vue, Component } from "vue-property-decorator";
 import NavBar from "./NavBar";
 @Component({
@@ -129,7 +244,9 @@ export default class AnonymousComponent extends Vue {
     open = false;
     amenities = [1, 4];
     neighborhoods = [1];
-
+    pageOfItems = [];
+    brands = [];
+    QueryObject = { brand: "" };
     tags = [
         "MaxPrice",
         "Best Ratings",
@@ -154,10 +271,15 @@ export default class AnonymousComponent extends Vue {
             title: "Xbox Series X",
         },
     ];
+    exampleItems = [...Array(150).keys()].map((i) => ({
+        id: i + 1,
+        name: "Item " + (i + 1),
+    }));
 
     //  ...mapActions(["SearchProducts", "AddToCart"]),
+
     searchHanlder() {
-        console.log("Sto Ceracndo");
+        console.log("Sto Cearcando");
         const searchField = this.searchField;
         const searchQuery = searchField.split(" ").join("+");
         console.log(searchQuery);
@@ -167,18 +289,34 @@ export default class AnonymousComponent extends Vue {
         });
     }
 
+    onChangePage(pageOfItems) {
+        // update page of items
+        this.pageOfItems = pageOfItems;
+    }
     Go(id) {
         this.$router.push("Detail/" + id);
     }
 
-    created() {
+    async created() {
         this.$global.LoadAllProducts();
-        // this.$store.dispatch("load")
+
+        this.brands = (
+            await Api.fetchData(`dictionary/brands`, true, "GET")
+        ).data.brand;
+
+        console.log(this.brands);
     }
+
     get currentLocale() {
         return this.$i18n.locale.substring(0, 2);
     }
+    get FiltersModel() {
+        return this.$global.QueryObject;
+    }
 
+    loadFilteredProducts() {
+        this.$global.LoadFilteredProducts(this.QueryObject);
+    }
     get products() {
         return this.$global.Products;
     }
@@ -189,10 +327,112 @@ export default class AnonymousComponent extends Vue {
 
     get userData() {
         return this.$global.userData;
-    } //...mapState(["isLoggedIn", "product", "userData"])
+    }
+
+    //   get productsBrands() {
+    //       return this.$global.LoadFilteredProducts;
+    //  }
+    //...mapState(["isLoggedIn", "product", "userData"])
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.filterBy {
+    font-size: 1rem;
+}
+.sidebar {
+    margin-left: 2rem;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    &__title {
+        font-size: 1rem;
+    }
+    &__card {
+        &__vendors {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            &__title {
+                font-size: 1rem;
+            }
+        }
+        &__delivery {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            &__title {
+                font-size: 1rem;
+            }
+            &__items {
+                font-size: 1rem;
+                font-weight: 500;
+            }
+        }
+        &__arrivi {
+            &__title {
+                font-size: 1rem;
+            }
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        &__make {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            &__title {
+                font-size: 1rem;
+            }
+        }
+        &__shipping {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            &__title {
+                font-size: 1rem;
+            }
+        }
+        &__color {
+            &__container {
+                display: flex;
+                flex-direction: row;
+                width: 15rem;
+            }
+            &__title {
+                font-size: 1rem;
+            }
+            &__box {
+                margin: 0.5rem;
+                width: 1.4rem;
+                height: 1.4rem;
+                background-color: #f13c20;
+            }
+        }
+        &__clothing {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            &__title {
+                font-size: 1rem;
+            }
+            &__list {
+                list-style: none;
+                display: flex;
+                flex-direction: column;
+                margin-left: -1rem;
+            }
+        }
+        &__brand {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            justify-content: center;
+            &__title {
+                font-size: 1rem;
+            }
+        }
+    }
+}
 .slide {
     position: absolute;
     width: 100%;
@@ -200,6 +440,7 @@ export default class AnonymousComponent extends Vue {
 .padre {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 .sup {
     position: absolute;
@@ -220,33 +461,101 @@ export default class AnonymousComponent extends Vue {
     margin-right: 10px;
     text-transform: uppercase;
     font-size: 38px;
-    margin-left: 50px;
+    // margin-left: 50px;
 }
 .sna {
     text-transform: uppercase;
     font-size: 38px;
 }
 .nope {
-    margin-right: 30px;
+    //  margin-right: 30px;
     font-size: 40px;
     cursor: pointer;
 }
-.pongo {
-    margin-left: 50px;
-}
-.sna {
-    margin-left: 5px;
-}
-.pu {
-    margin-left: 4px;
-}
+
 .pinoto {
-    margin-left: 13rem;
+    // margin-left: 13rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 .putin {
     width: 360px;
 }
 .titolo {
     margin-left: 10px;
+}
+.pages {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.page {
+    width: 3rem;
+    height: 3rem;
+    margin: 10px;
+    background-color: grey;
+    position: relative;
+    background-color: orange;
+}
+.page:hover {
+    transition: background-color 1s;
+    background-color: orangered;
+}
+.page__content {
+    position: absolute;
+    bottom: 10px;
+
+    left: 18.5px;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 600;
+}
+.card {
+    display: flex;
+    width: 20rem;
+    flex-direction: column;
+}
+.container__cards {
+    display: flex;
+    width: 100%;
+    margin-left: 14rem;
+    align-items: center;
+    justify-content: center;
+    &__typography {
+        display: flex;
+        justify-content: center;
+        //  align-items: center;
+        //margin-left: 1rem;
+        flex-direction: column;
+        &__title {
+            font-size: 1rem;
+            color: #000;
+        }
+        &__price {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        &__btn {
+            background-color: #f13c20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+    }
+}
+.product__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20rem;
+    width: 15rem;
+    margin-top: -5rem;
+    //   margin: 2.4rem;
 }
 </style>

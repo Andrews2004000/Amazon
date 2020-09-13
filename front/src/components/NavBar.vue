@@ -31,7 +31,7 @@
 
                 <v-btn class="user orange" router-view to="/Account" v-if="isLoggedIn">Account</v-btn>
 
-                <v-btn class="success user" @click="Go" v-if="userDataRole">sell</v-btn>
+                <v-btn class="success user" @click="Go">sell</v-btn>
 
                 <!-- <span else>ok</span>-->
                 <span class="name" v-if="userDataRole">{{userData.user.username}}</span>
@@ -110,6 +110,13 @@
                                         v-model="photoProfile"
                                     ></v-file-input>
                                 </v-col>
+                                <v-col cols="12" sm="12">
+                                    <vue-recaptcha
+                                        @verify="handler"
+                                        sitekey="6LcJ7r4ZAAAAAPrNKDZpcJzxBMuVfrCYmBXOHvk_"
+                                        :loadRecaptchaScript="true"
+                                    ></vue-recaptcha>
+                                </v-col>
                             </v-row>
                         </v-container>
 
@@ -172,6 +179,7 @@
     </div>
 </template>
 <script lang="ts">
+import VueRecaptcha from "vue-recaptcha";
 import { Vue, Component } from "vue-property-decorator";
 import authInput from "../mixins/authInput";
 
@@ -180,6 +188,9 @@ interface GenericObject {
 }
 
 @Component({
+    components: {
+        VueRecaptcha,
+    },
     mixins: [authInput],
 
     watch: {
@@ -215,6 +226,7 @@ export default class AnonymousComponent extends Vue {
             /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
             "E-mail must be valid",
     ];
+    token = "";
 
     inputPassword = [(v) => v.length >= 4 || "Minimun Length is 4 Characthers"];
 
@@ -223,6 +235,9 @@ export default class AnonymousComponent extends Vue {
         { title: "Books", route: "/Book" },
         { title: "House", route: "/House" },
     ];
+    handler(token) {
+        this.token = token;
+    }
 
     //...mapActions(["Signup", "Login", "Logout"]),
     async SignUpHandler() {

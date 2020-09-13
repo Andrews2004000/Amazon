@@ -13,6 +13,7 @@ import AuthRoutes from './routes/Auth'
 import CartRoutes from './routes/Cart'
 import OrderRoutes from './routes/Order'
 import xss from 'xss-clean'
+import DictionaryRoutes from './routes/Dictionary'
 
 import ProductsRoutes from './routes/Products';
 import csrf from 'csurf';
@@ -53,6 +54,7 @@ app.use('/api/v1/cart', CartRoutes)
 app.use('/api/v1/user', AuthRoutes);
 app.use('/api/v1/products', ProductsRoutes);
 app.use('/api/v1/order', OrderRoutes);
+app.use('/api/v1/dictionary', DictionaryRoutes)
 //Error Handling
 app.use('/api/', (req: Request, res: Response) => {
     res.status(404).json({ message: 'Route Not Found' });

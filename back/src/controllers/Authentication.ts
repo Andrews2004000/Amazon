@@ -5,9 +5,9 @@ import crypto from 'crypto'
 import mongoose, { Document } from 'mongoose'
 import sharp from 'sharp'
 import * as GoogleOAuth from './GoggleAuth'
-
+import axios from 'axios';
 import { stripe } from '../middlewere/stripe';
-import AppError from '../Error/AppError'
+
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 //import { getUserDataFromTokenGoogle,getUserDataFromTokenFaceBook } from '../middlewere/AppFeaures'
@@ -15,6 +15,7 @@ import * as SocialFeauture from '../middlewere/AppFeaures'
 import { RequestHandler, Request, Response, NextFunction } from 'express'
 import { DocumentType } from '@typegoose/typegoose'
 import path from 'path';
+import AppError from '../Error/AppError';
 
 
 
@@ -85,6 +86,7 @@ export const signUp: RequestHandler = async (req, res, next) => {
     userData._id = req.documentId;
     if (req.file) userData.photoProfile = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     const newUser = await User.create(userData)
+    await GoogleRecaptcha(req)
 
     const token = await newUser.getJwt()
     SendCookieToken(res, token)
@@ -371,5 +373,21 @@ function saveAccountId({ stripeAccountId, user }: { stripeAccountId: string; use
     user.stripeAccountId = stripeAccountId;
     user.save();
 }
+async function GoogleRecaptcha(req: Request) {
 
+
+    const RECAPTCHA_SERVER_KEY = '6LcJ7r4ZAAAAAG_Mra8AqZyfkAqCXYpLp7ZY37I6'
+
+    const humanKey = req.body.token;
+
+    // Validate Human
+    const { data } = await axios.post(`https://www.google.com/recaptcha/api/siteverify/?secret=${RECAPTCHA_SERVER_KEY}&response=${humanKey}`)
+
+    if (humanKey === null || !data.success) {
+        throw new AppError(`YOU ARE NOT A HUMAN.`, 404)
+    }
+
+
+    console.log("SUCCESS!")
+}
 export default SendCookieToken;

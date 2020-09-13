@@ -1,5 +1,5 @@
 class Api {
-    static url = process.env === 'production' ? '/api/' : `http://${document.domain}:5000/api/v1/`;
+    static url = `http://${document.domain}:5000/api/v1/`;
 
     static async fetchCsrfToken() {
         const result = await this.fetchData('csrftoken');
@@ -12,22 +12,22 @@ class Api {
 
     static csrfToken = '';
 
-    static async fetchData(path:any, alertErrors = false, method = 'GET', inputBody = null, isJsonBody = true) {
+    static async fetchData(path: any, alertErrors = false, method = 'GET', inputBody = null, isJsonBody = true) {
         try {
             let body;
-            const headers:any = {
+            const headers: any = {
                 Accept: 'application/json',
                 'CSRF-Token': this.csrfToken,
             };
-          if(isJsonBody){
-              body = inputBody ? JSON.stringify(inputBody) :null;
-              headers['Content-Type'] = 'application/json';
-          }else{
-            body = inputBody ? inputBody :null;
-          }
-          console.log(headers)
-               
-        console.log(inputBody)
+            if (isJsonBody) {
+                body = inputBody ? JSON.stringify(inputBody) : null;
+                headers['Content-Type'] = 'application/json';
+            } else {
+                body = inputBody ? inputBody : null;
+            }
+            console.log(headers)
+
+            console.log(inputBody)
             console.log("BODY")
             console.log(body)
             // Fetch Call

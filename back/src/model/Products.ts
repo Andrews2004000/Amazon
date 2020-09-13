@@ -1,5 +1,6 @@
 import mongoose, { Schema, Types } from 'mongoose'
 import { UserClass } from './Auth';
+import brands from '../JsonFiles/brands.json';
 /*export interface IUProducts extends mongoose.Document {
     _id: any,
     title: string,
@@ -44,11 +45,27 @@ type Reference<T> = Ref<T & { _id: Types.ObjectId }, Types.ObjectId & { _id: Typ
 //     PINK = "pink"
 
 // }
+enum NewRelease {
+    NEW__ARRIVES = 'New Arrivals',
+    LAST__WEEK = 'Last Week ',
+    LAST__MONTH = 'Last Month',
+    LAST__THREE__MONTH = 'Last Three Month'
+}
 enum AllCategory {
     TECNOLOGY = 'Tecnology',
     HOUSE = 'House',
     BOOK = 'Book',
     NOT_SPECIFIED = 'Not Specified'
+
+}
+enum Clothing {
+    MAN = 'Man',
+    WOMEN = 'Women',
+    GIRLS = 'Girls',
+    BOYS = 'Boys',
+    CHILDREN = 'Children'
+
+
 
 }
 
@@ -80,7 +97,37 @@ export class ProductClass {
     @prop({ ref: getName(UserClass), immutable: true })
     stripeAccountId?: Reference<UserClass>
     @prop({ default: Date.now() })
-    scadenza?: Date
+    scadenza?: Date;
+    @prop({ default: false })
+    topBrand?: boolean;
+    @prop({ default: false })
+    ourBrand?: boolean;
+    @prop({ type: String, enum: Clothing })
+    clothingOptions?: string
+    @prop({ default: false })
+    deliveryPrime?: boolean;
+    // @prop({ type: String })
+    // brand?: string[];
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) true;
+                return brands.brand.includes(v);
+
+            },
+            message: "This Brand Doesen't exist"
+
+        }
+    })
+    public brand?: string;
+    @prop({ enum: NewRelease })
+    NewRelease?: NewRelease
+    @prop({ type: String })
+    AllVendorsOptions?: string
+
+
+
+
 
 }
 

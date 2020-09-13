@@ -3,6 +3,7 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import store from './index'
 import Api from './api'
 import router from '../router/index'
+import queryString from 'query-string';
 export interface IGenericObject {
   [key: string]: any
 }
@@ -30,6 +31,9 @@ export default class App extends VuexModule {
     House: ['livingRoom', 'bedroom', 'garden'],
     Book: ['fantasy', 'history', 'action']
   };
+  AllClothingType = ['Man', 'Women', 'Children', 'Girls', 'Boys']
+
+
   userData: IGenericObject = {};
 
 
@@ -41,7 +45,7 @@ export default class App extends VuexModule {
 
 
   @Mutation
-  SETUP_RODUCTS_DATA(payload: { type: string; data: any }) {
+  SETUP_RODUCTS_DATA(payload: { type?: string; data: any }) {
     const type = payload.type;
     const data = payload.data;
     this[type] = data;
@@ -106,6 +110,11 @@ export default class App extends VuexModule {
   @Mutation
   TECNOLOGY_PRODUCTS(payload: any) {
     this.TecnologyProducts = payload;
+  }
+  @Mutation
+  FILTERED__PRODUCTS(payload: any) {
+    this.Products = payload;
+
   }
   @Mutation
   BOOKS_PRODUCTS(payload: any) {
@@ -197,6 +206,9 @@ export default class App extends VuexModule {
     console.log(result)
     this.LOGOUT
   }
+
+
+
   @Action
   async getAllUsers() {
     const result = await Api.fetchData(`user`)
@@ -274,14 +286,17 @@ export default class App extends VuexModule {
     const result = await Api.fetchData(
       `products?search=${searchQuery}`
     )
-    console.log(result)
+    console.log('Ok')
     if (!result.ok) {
       return;
     }
     const data = result.data;
     this.SETUP_RODUCTS_DATA({ data, type: categoryType })
 
+
   }
+
+
   @Action
   async LoadAllProducts() {
     const result = await Api.fetchData(`products`, true, 'GET')
@@ -327,6 +342,7 @@ export default class App extends VuexModule {
 
 
   }
+
   @Action
   async LoadHouseProducts() {
     const result = await Api.fetchData(`products?category=House`, true, 'GET')
@@ -399,6 +415,27 @@ export default class App extends VuexModule {
     return data;
 
   }
+  @Action
+  async LoadFilteredProducts(QueryObject) {
+    console.log('1')
+    const QueryObjectString = queryString.stringify(QueryObject);
+
+    console.log(`products?${QueryObjectString}`)
+    const result = await Api.fetchData(`products?${QueryObjectString}`, true, 'GET')
+    if (!result.ok) {
+      return;
+    }
+    console.log(result)
+    const data = result.data
+
+
+    this.FILTERED__PRODUCTS(data)
+
+  }
+
+
 
 
 }
+
+

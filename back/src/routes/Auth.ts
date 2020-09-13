@@ -30,4 +30,5 @@ router.route('/userUpdatings')
 //stripe
 router.get('/stripe-oauth/oauth-link', protect, UserController.getAuthLink);
 router.get('/stripe-oauth/authorize', protect, UserController.authorizeAuth);
+
 export default router;

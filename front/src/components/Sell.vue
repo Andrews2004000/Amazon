@@ -102,6 +102,14 @@
                                 v-model="userInputs.MaxQuantity"
                             ></v-text-field>
                         </v-col>
+                        <v-col cols="12" sm="12">
+                            <v-text-field
+                                outlined
+                                label="Brand"
+                                placeholder="Brand"
+                                v-model="userInputs.brand"
+                            ></v-text-field>
+                        </v-col>
                         <v-col cols="12">
                             <v-menu
                                 ref="menu"
@@ -159,11 +167,11 @@ export default class AnonymousComponent extends Vue {
         tags: "",
         MaxQuantity: 0,
         scadenza: "",
-        ratings: 0
+        ratings: 0,
     };
 
     isDateMenuOpen = false;
-    notEmptyRule = [v => !!v || "This field is required"];
+    notEmptyRule = [(v) => !!v || "This field is required"];
 
     size = [
         10,
@@ -206,7 +214,7 @@ export default class AnonymousComponent extends Vue {
         47,
         48,
         49,
-        50
+        50,
     ];
 
     items = ["Tecnology", "House", "Book"];
@@ -220,7 +228,7 @@ export default class AnonymousComponent extends Vue {
         "history",
         "livingroom",
         "garden",
-        "bedroom"
+        "bedroom",
     ];
 
     item = [
@@ -233,16 +241,16 @@ export default class AnonymousComponent extends Vue {
         "Purple",
         "Violet",
         "AzulMarine",
-        "pink"
+        "pink",
     ];
 
-    inputUser = [v => v.length >= 3 || "Minimun Length is 3 Characthers"];
+    inputUser = [(v) => v.length >= 3 || "Minimun Length is 3 Characthers"];
 
     EmailUser = [
-        v =>
+        (v) =>
             !v ||
             /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-            "E-mail must be valid"
+            "E-mail must be valid",
     ];
 
     // imageUrl: [
@@ -251,16 +259,16 @@ export default class AnonymousComponent extends Vue {
     //         /\.(gif|jpe?g|tiff|png|webp|bmp)$/i.test(v) ||
     //         "Image Not valid"
     // ],
-    inputPassword = [v => v.length >= 4 || "Minimun Length is 4 Characthers"];
+    inputPassword = [(v) => v.length >= 4 || "Minimun Length is 4 Characthers"];
 
     inputDescription = [
-        v => v.length >= 15 || "Minimun Length is 15 Characthers"
+        (v) => v.length >= 15 || "Minimun Length is 15 Characthers",
     ]; // MaxQuantity: v => {//    if (!v.trim()) return true;//    if (!isNaN(parseFloat(v)) && v >= 1 && v <= 20) return true;//    return "Number has to be between 1 and 20";// }
 
     // ...mapActions(["CreteNewProducts"]),
     async submit() {
         await this.$global.CreteNewProducts({
-            userInputs: this.userInputs
+            userInputs: this.userInputs,
         });
 
         this.$router.push("/");

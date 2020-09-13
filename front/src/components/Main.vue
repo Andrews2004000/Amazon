@@ -96,15 +96,18 @@
                         <v-checkbox v-for="brand in brands" :key="brand" :label="brand" v-model="products.brand" :value="brand"></v-checkbox>
 
                     </label>-->
-                    <v-item-group v-model="QueryObject.brand">
-                        <v-checkbox
+                    <!-- <v-radio-group v-model="QueryObject.brand">
+                        <v-radio
                             v-for="brand in brands"
                             :key="brand"
                             :label="brand"
                             :value="brand"
-                            @change="loadFilteredProducts"
-                        ></v-checkbox>
-                    </v-item-group>
+                            @click="loadFilteredProducts"
+                        ></v-radio>
+                    </v-radio-group>-->
+                    <v-radio-group v-model="QueryObject.brand">
+                        <v-radio v-for="brand in brands" :key="brand" :label="brand" :value="brand"></v-radio>
+                    </v-radio-group>
                 </div>
                 <div class="sidebar__card__color">
                     <h6 class="sidebar__card__color__title">Colors</h6>
@@ -230,7 +233,7 @@
 </template>
 <script>
 import Api from "../store/api";
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import NavBar from "./NavBar";
 @Component({
     components: {
@@ -246,6 +249,7 @@ export default class AnonymousComponent extends Vue {
     neighborhoods = [1];
     pageOfItems = [];
     brands = [];
+    Snoopy = "Helo";
     QueryObject = { brand: "" };
     tags = [
         "MaxPrice",
@@ -256,7 +260,7 @@ export default class AnonymousComponent extends Vue {
         "LowerRatings",
         "JustScadenza",
     ];
-
+    radioGroup = 1;
     icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
 
     items = [

@@ -63,32 +63,13 @@ export const deleteOrder: RequestHandler = async (req, res, next) => {
 
 }
 
-// export const getAllOrders: RequestHandler = async (req, res, next) => {
-//     const user = req.user?._id
-//     const order = await Order.find().populate('product')
-//     if (!user) {
-//         throw new AppError('No Authenticate', 404)
 
-//     }
-//     if (!isDocument(order.user)) {
-//         throw new Error("Cannot get user data");
-//     }
-
-//     if (user.role !== 'client') {
-//         throw new AppError('No Authneticate', 404)
-//     }
-//     if (!order) {
-//         throw new AppError('No Order', 404)
-
-//     }
-
-// }
 export const createCheckout: RequestHandler = async (req, res, next) => {
     const user = req.user;
     if (!user) throw new Error('Cannot get user data');
 
     // Get products from cart
-    const productsInCart = await ShoppingCart.find({ client: user._id.toHexString() }).populate('product');
+    const productsInCart = await ShoppingCart.find({ client: user._id.toHexString() }).populate('product').populate('product.price');
 
     // Create orderData
     const orderedProducts = productsInCart.map(cartProduct => {
@@ -165,7 +146,7 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
             //    },
 
             mode: 'payment',
-            success_url: `http://localhost:8080/order-product/success?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `http://localhost:8080/success-order/order-product/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `http://localhost:8080/order-product/cancel`,
             // metadata: convertObjectToMetadataList(orderData),
         }
@@ -177,8 +158,29 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
         message: 'success',
         data: {
             sessionId: session.id,
+
             stripeClientId: 'pk_test_aHRgrAbca3xoC2uAeJ23MHP300xReY1EAc'
         }
     })
 }
+export const getAllOrders: RequestHandler = async (req, res, next) => {
+    //let ordersQuery;
 
+    // if (!req.user) {
+    //     throw new AppError('You are not authenticated');
+    //  }
+    //  if (req.user.role === 'vendor' || req.user.role === 'admin') {
+    //      ordersQuery = Order.find({
+    //          vendor: { _id: req.user.id }
+    //      }).populate('product')
+    //  } else {
+    //       ordersQuery = Order.find({
+    //           client: { _id: req.user.id }
+    //      }).populate('product')
+    //  }
+    const allOrders = await Order.find();
+    res.json({
+        status: 'success',
+        data: allOrders,
+    })
+}

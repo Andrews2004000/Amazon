@@ -7,7 +7,7 @@
             <v-carousel>
                 <v-carousel-item
                     class="slide"
-                    v-for="(item,i) in items"
+                    v-for="(item, i) in items"
                     :key="i"
                     :src="item.src"
                     reverse-transition="fade-transition"
@@ -17,6 +17,7 @@
         </div>
         <div>
             <span class="sup">Products To Buy</span>
+
             <span class="sold orange--text">All Our Products</span>
             <div class="cerca">
                 <v-form>
@@ -40,7 +41,9 @@
                 <v-row justify="space-around">
                     <v-col cols="12" sm="6">
                         <v-chip-group multiple active-class="primary--text">
-                            <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
+                            <v-chip v-for="tag in tags" :key="tag">{{
+                                tag
+                            }}</v-chip>
                         </v-chip-group>
                     </v-col>
                 </v-row>
@@ -50,146 +53,155 @@
         <div>
             <div class="sidebar">
                 <h6 class="sidebar__title">Mostra Risultati Per</h6>
-                <div class="sidebar__card__brand">
-                    <h6 class="sidebar__card__brand__title">Selezione Brand</h6>
-                    <label class="sidebar__card__brand__label">
-                        <input type="checkbox" name id />
-                        Brand popolari
-                    </label>
-                    <label class="sidebar__card__brand__label">
-                        <input type="checkbox" />
-                        I nostri brand
-                    </label>
-                </div>
+
                 <div class="sidebar__card__clothing">
-                    <h6 class="sidebar__card__clothing__title">Abbigliamento</h6>
-                    <ul class="sidebar__card__clothing__list">
-                        <li class="sidebar__card__clothing__list__items">Uomo</li>
-                        <li class="sidebar__card__clothing__list__items">Donna</li>
-                        <li class="sidebar__card__clothing__list__items">Bambine e ragazze</li>
-                        <li class="sidebar__card__clothing__list__items">Bambini e ragazii</li>
-                        <li class="sidebar__card__clothing__list__items">Prima infanzia</li>
-                        <li class="sidebar__card__clothing__list__items">Abbigliamneto Specifico</li>
-                    </ul>
+                    <h6 class="sidebar__card__clothing__title">
+                        Abbigliamento
+                    </h6>
+                    <v-radio-group
+                        class="sidebar__card__clothing__list"
+                        v-model="QueryObject.clothes"
+                    >
+                        <v-radio
+                            class="sidebar__card__clothing__list__items"
+                            v-for="clothe in clothes"
+                            :key="clothe"
+                            :label="clothe"
+                            :value="clothe"
+                            @change="loadFilteredProducts"
+                        ></v-radio>
+                    </v-radio-group>
                 </div>
                 <h6 class="filterBy">Filtra Per</h6>
                 <div class="sidebar__card__shipping">
-                    <h6 class="sidebar__card__shipping__title">Modalità Di Spedizione</h6>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" name id />
-                        Prime
-                    </label>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Spedione gratuita
-                    </label>
+                    <h6 class="sidebar__card__shipping__title">
+                        Modalità Di Spedizione
+                    </h6>
+                    <v-radio-group
+                        class="sidebar__card__shipping__label"
+                        v-model="QueryObject.delivery"
+                    >
+                        <v-radio
+                            v-for="deliver in delivery"
+                            :key="deliver"
+                            :label="deliver"
+                            :value="deliver"
+                            @change="loadFilteredProducts"
+                        ></v-radio>
+                    </v-radio-group>
                 </div>
                 <div class="sidebar__card__make">
                     <h6 class="sidebar__card__make__title">Marca</h6>
-                    <!--  <label
-                        class="sidebar__card__shipping__label"
-                        v-for="brand in brands"
-                        :key="brand"
-                    >
-                        <input type="checkbox" v-model="products.brand" :value="brand" />
-                        {{brand}}
-                        <v-checkbox v-for="brand in brands" :key="brand" :label="brand" v-model="products.brand" :value="brand"></v-checkbox>
 
-                    </label>-->
-                    <!-- <v-radio-group v-model="QueryObject.brand">
+                    <v-radio-group
+                        v-model="QueryObject.brand"
+                        :mandatory="false"
+                    >
                         <v-radio
                             v-for="brand in brands"
                             :key="brand"
                             :label="brand"
                             :value="brand"
-                            @click="loadFilteredProducts"
+                            @change="loadFilteredProducts"
                         ></v-radio>
-                    </v-radio-group>-->
-                    <v-radio-group v-model="QueryObject.brand">
-                        <v-radio v-for="brand in brands" :key="brand" :label="brand" :value="brand"></v-radio>
                     </v-radio-group>
                 </div>
                 <div class="sidebar__card__color">
                     <h6 class="sidebar__card__color__title">Colors</h6>
-                    <div class="sidebar__card__color__container">
-                        <div class="sidebar__card__color__box"></div>
-                        <div class="sidebar__card__color__box"></div>
-                        <div class="sidebar__card__color__box"></div>
-                        <div class="sidebar__card__color__box"></div>
-                    </div>
+                    <v-radio-group
+                        class="sidebar__card__color__container"
+                        v-model="QueryObject.colorsOptions"
+                    >
+                        <v-radio
+                            class="sidebar__card__color__box"
+                            v-for="color in colors"
+                            :key="color"
+                            :value="color"
+                            :style="{ backgroundColor: color }"
+                            @change="loadFilteredProducts"
+                        ></v-radio>
+                    </v-radio-group>
                 </div>
-                <div class="sidebar__card__arrivi">
-                    <h6 class="sidebar__card__arrivi__title">Giorni di Consegna</h6>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Ricevi Oggi
-                    </label>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Ricevi Domani
-                    </label>
-                </div>
-                <div class="sidebar__card__delivery">
-                    <h6 class="sidebar__card__delivery__title">Nuovi Arrivi</h6>
-                    <h6 class="sidebar__card__delivery__items">Ultima settimana</h6>
-                    <h6 class="sidebar__card__delivery__items">Ultimo mese</h6>
-                    <h6 class="sidebar__card__delivery__items">Ultimi tre mesi</h6>
-                </div>
+                <h6 class="sidebar__card__color__title">Arrivi</h6>
+                <v-radio-group
+                    class="sidebar__card__delivery"
+                    v-model="QueryObject.release"
+                >
+                    <v-radio
+                        class="sidebar__card__delivery__title"
+                        v-for="releas in release"
+                        :key="releas"
+                        :value="releas"
+                        :label="releas"
+                        @change="loadFilteredProducts"
+                        >Nuovi Arrivi</v-radio
+                    >
+                </v-radio-group>
                 <div class="sidebar__card__price"></div>
                 <div class="sidebar__card__vendors">
                     <h6 class="sidebar__card__vendors__title">Venditori</h6>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        srrl.com
-                    </label>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Gianni Morandi
-                    </label>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Stuma
-                    </label>
-                    <label class="sidebar__card__shipping__label">
-                        <input type="checkbox" />
-                        Andrews
-                    </label>
+                    <v-radio-group class="sidebar__card__shipping__label">
+                        <v-radio
+                            v-for="vendor in vendors"
+                            :key="vendor"
+                            :label="vendor"
+                            :value="vendor"
+                        ></v-radio>
+                    </v-radio-group>
                 </div>
             </div>
+
             <v-container class="container__cards">
                 <v-row>
-                    <v-col v-for="product in products" :key="product.id" :product="product">
+                    <v-col
+                        v-for="product in products"
+                        :key="product.id"
+                        :product="product"
+                    >
                         <v-card class="card" max-width="400" tile>
                             <div class="container__cards__typography">
                                 <v-card-text>
                                     <v-card-title
                                         class="container__cards__typography__title"
-                                    >{{$t('general.save')}}</v-card-title>
-                                    <v-card-subtitle>{{product.title}}</v-card-subtitle>
+                                        >{{ $t("general.save") }}</v-card-title
+                                    >
+                                    <v-card-subtitle>{{
+                                        product.title
+                                    }}</v-card-subtitle>
 
-                                    <v-rating readonly v-model="product.ratings"></v-rating>
+                                    <v-rating
+                                        readonly
+                                        v-model="product.ratings"
+                                    ></v-rating>
                                 </v-card-text>
 
-                                <v-img :src="product.imageUrl" class="product__image" alt="image"></v-img>
+                                <v-img
+                                    :src="product.imageUrl"
+                                    class="product__image"
+                                    alt="image"
+                                ></v-img>
                                 <v-spacer></v-spacer>
 
                                 <!--_ <span class="pu">ONLY</span> -->
 
                                 <span
                                     class="container__cards__typography__price"
-                                >Price:{{ product.price }}$</span>
+                                    >Price:{{ product.price }}$</span
+                                >
 
                                 <v-card-actions>
                                     <v-btn
                                         class="container__cards__typography__btn"
                                         v-if="isLoggedIn"
                                         @click="Go(product._id)"
-                                    >Add To Cart</v-btn>
+                                        >Add To Cart</v-btn
+                                    >
                                     <v-btn
                                         class="container__cards__typography__btn"
                                         disabled
                                         v-if="!isLoggedIn"
-                                    >Add To Cart</v-btn>
+                                        >Add To Cart</v-btn
+                                    >
                                 </v-card-actions>
                                 <!--  </v-row>-->
                             </div>
@@ -198,9 +210,14 @@
                 </v-row>
             </v-container>
         </div>
+
         <div class="pages indigo">
             <div class="card-footer pb-0 pt-3">
-                <jw-pagination :items="exampleItems" @changePage="onChangePage" class="orange"></jw-pagination>
+                <jw-pagination
+                    :items="exampleItems"
+                    @changePage="onChangePage"
+                    class="orange"
+                ></jw-pagination>
             </div>
             <!--<div class="page">
                 <span class="page__content">1</span>
@@ -212,14 +229,27 @@
         <v-footer dark padless>
             <v-card flat tile class="indigo lighten-1 white--text text-center">
                 <v-card-text>
-                    <v-btn v-for="icon in icons" :key="icon" class="mx-4 white--text" icon>
+                    <v-btn
+                        v-for="icon in icons"
+                        :key="icon"
+                        class="mx-4 white--text"
+                        icon
+                    >
                         <v-icon size="24px">{{ icon }}</v-icon>
                     </v-btn>
                 </v-card-text>
 
-                <v-card-text
-                    class="white--text pt-0"
-                >Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</v-card-text>
+                <v-card-text class="white--text pt-0"
+                    >Phasellus feugiat arcu sapien, et iaculis ipsum elementum
+                    sit amet. Mauris cursus commodo interdum. Praesent ut risus
+                    eget metus luctus accumsan id ultrices nunc. Sed at orci sed
+                    massa consectetur dignissim a sit amet dui. Duis commodo
+                    vitae velit et faucibus. Morbi vehicula lacinia malesuada.
+                    Nulla placerat augue vel ipsum ultrices, cursus iaculis dui
+                    sollicitudin. Vestibulum eu ipsum vel diam elementum tempor
+                    vel ut orci. Orci varius natoque penatibus et magnis dis
+                    parturient montes, nascetur ridiculus mus.</v-card-text
+                >
 
                 <v-divider></v-divider>
 
@@ -246,11 +276,22 @@ export default class AnonymousComponent extends Vue {
     searchField = "";
     open = false;
     amenities = [1, 4];
+    bgc = { backgroundColor: "" };
     neighborhoods = [1];
     pageOfItems = [];
     brands = [];
-    Snoopy = "Helo";
-    QueryObject = { brand: "" };
+    clothes = [];
+    colors = [];
+    delivery = [];
+    release = [];
+
+    QueryObject = {
+        brand: "",
+        clothes: "",
+        colorsOptions: "",
+        delivery: "",
+        release: "",
+    };
     tags = [
         "MaxPrice",
         "Best Ratings",
@@ -260,6 +301,7 @@ export default class AnonymousComponent extends Vue {
         "LowerRatings",
         "JustScadenza",
     ];
+
     radioGroup = 1;
     icons = ["mdi-facebook", "mdi-twitter", "mdi-linkedin", "mdi-instagram"];
 
@@ -275,6 +317,7 @@ export default class AnonymousComponent extends Vue {
             title: "Xbox Series X",
         },
     ];
+
     exampleItems = [...Array(150).keys()].map((i) => ({
         id: i + 1,
         name: "Item " + (i + 1),
@@ -297,6 +340,7 @@ export default class AnonymousComponent extends Vue {
         // update page of items
         this.pageOfItems = pageOfItems;
     }
+
     Go(id) {
         this.$router.push("Detail/" + id);
     }
@@ -307,8 +351,24 @@ export default class AnonymousComponent extends Vue {
         this.brands = (
             await Api.fetchData(`dictionary/brands`, true, "GET")
         ).data.brand;
+        this.clothes = (
+            await Api.fetchData(`dictionary/clothes`, true, "GET")
+        ).data.clothes;
+        this.colors = (
+            await Api.fetchData("dictionary/colors", true, "GET")
+        ).data.colors;
+        this.delivery = (
+            await Api.fetchData("dictionary/delivery", true, "GET")
+        ).data.delivery;
+        this.release = (
+            await Api.fetchData("dictionary/release", true, "GET")
+        ).data.release;
 
+        console.log(this.clothes);
+
+        console.log(this.colors);
         console.log(this.brands);
+        console.log(this.release);
     }
 
     get currentLocale() {
@@ -317,6 +377,32 @@ export default class AnonymousComponent extends Vue {
     get FiltersModel() {
         return this.$global.QueryObject;
     }
+
+    get vendors() {
+        const allVendors = this.products.map((prod) => {
+            return prod.vendor.username;
+        });
+        console.log(allVendors);
+        const AllUniqueVendors = [...new Set(allVendors)];
+        console.log(AllUniqueVendors);
+        return AllUniqueVendors;
+    }
+
+    //  getDeliveryProducts() {
+    //     const products = this.products;
+    //
+    //     const primeProducts = products.filter((prod) => {
+    //      if (prod.deliveryPrime === true) {
+    //        return true;
+    //      } else {
+    //        console.log(prod.deliveryPrime);
+    //        return false;
+    //      }
+    //   });
+    //  console.log(primeProducts);
+    //   if (primeProducts.length === 0) return products;
+    //  return primeProducts;
+    // }
 
     loadFilteredProducts() {
         this.$global.LoadFilteredProducts(this.QueryObject);
@@ -400,7 +486,8 @@ export default class AnonymousComponent extends Vue {
             &__container {
                 display: flex;
                 flex-direction: row;
-                width: 15rem;
+
+                max-width: 15rem;
             }
             &__title {
                 font-size: 1rem;
@@ -409,7 +496,7 @@ export default class AnonymousComponent extends Vue {
                 margin: 0.5rem;
                 width: 1.4rem;
                 height: 1.4rem;
-                background-color: #f13c20;
+                cursor: pointer;
             }
         }
         &__clothing {
@@ -420,6 +507,7 @@ export default class AnonymousComponent extends Vue {
                 font-size: 1rem;
             }
             &__list {
+                cursor: pointer;
                 list-style: none;
                 display: flex;
                 flex-direction: column;

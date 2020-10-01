@@ -272,20 +272,11 @@ export const Logout: RequestHandler = async (req, res, next) => {
 
 }
 
-export const getAllUsers: RequestHandler = async (req, res, next) => {
+export const getUsers: RequestHandler = async (req, res, next) => {
     const users = await User.find()
-    if (!users) {
-        throw new AppError('No Passowrd', 404)
-    }
-    res.status(200).json({
+    res.json({
         status: 'success',
-        data:
-        {
-            users
-
-        }
-
-
+        data: users
     })
 
 }

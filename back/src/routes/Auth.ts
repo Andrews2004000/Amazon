@@ -5,16 +5,17 @@ import { protect, restrictRole, resetPassword, forgotPassword } from '../middlew
 import ExpressPromiseRouter from 'express-promise-router'
 import * as UserController from '../controllers/Authentication'
 import { getNewDocumentId } from '../middlewere/utilsMiddlewares';
+
 const router = ExpressPromiseRouter();
 //multer
 
 
-
+router.route('/').get(UserController.getUsers)
 //Routes For Normal Things
 router.route('/')
     .post(UserController.login)
     .put(getNewDocumentId, UserController.uploadUserPhoto, UserController.resizeAndSaveUserPhoto, UserController.signUp)
-    .get(protect, UserController.getAllUsers)
+
 //Resetting Password
 router.route('/forgotPassword').post(forgotPassword)
 router.route('/resetPassword').patch(resetPassword)

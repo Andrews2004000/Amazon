@@ -110,6 +110,28 @@
                                 v-model="userInputs.brand"
                             ></v-text-field>
                         </v-col>
+                        <v-col cols="12" sm="12">
+                            <v-text-field
+                                outlined
+                                label="Clothes"
+                                placeholder="Clothes"
+                                v-model="userInputs.clothes"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                            <v-text-field
+                                v-model="userInputs.delivery"
+                                class="ma-2"
+                                label="DeliveryPrime"
+                            ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                            <v-text-field
+                                v-model="userInputs.release"
+                                class="ma-2"
+                                label="New Release"
+                            ></v-text-field>
+                        </v-col>
                         <v-col cols="12">
                             <v-menu
                                 ref="menu"

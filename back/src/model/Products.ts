@@ -1,6 +1,10 @@
 import mongoose, { Schema, Types } from 'mongoose'
 import { UserClass } from './Auth';
 import brands from '../JsonFiles/brands.json';
+import clothes from '../JsonFiles/clothing.json';
+import colors from '../JsonFiles/colors.json'
+import delivery from '../JsonFiles/deliveryOptions.json'
+import release from '../JsonFiles/newRelease.json'
 /*export interface IUProducts extends mongoose.Document {
     _id: any,
     title: string,
@@ -102,10 +106,32 @@ export class ProductClass {
     topBrand?: boolean;
     @prop({ default: false })
     ourBrand?: boolean;
-    @prop({ type: String, enum: Clothing })
-    clothingOptions?: string
-    @prop({ default: false })
-    deliveryPrime?: boolean;
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) return true;
+                if (clothes.clothes.includes(v)) {
+                    return true;
+                } else {
+                    return false
+                }
+            }
+        }
+    })
+    public clothes?: string
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) return true;
+                if (delivery.delivery.includes(v)) {
+                    return true;
+                } else {
+                    return false
+                }
+            }
+        }
+    })
+    public delivery?: string
     // @prop({ type: String })
     // brand?: string[];
     @prop({
@@ -119,9 +145,45 @@ export class ProductClass {
 
         }
     })
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) return true;
+                if (colors.colors.includes(v)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    })
     public brand?: string;
-    @prop({ enum: NewRelease })
-    NewRelease?: NewRelease
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) return true;
+                if (colors.colors.includes(v)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    })
+    public colorsOptions?: string;
+    @prop({
+        validate: {
+            validator: (v) => {
+                if (!v) return true;
+                if (release.release.includes(v)) {
+                    return true;
+                } else {
+                    return false
+                }
+            }
+        }
+    })
+    public release?: string
     @prop({ type: String })
     AllVendorsOptions?: string
 

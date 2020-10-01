@@ -26,6 +26,9 @@ export default class App extends VuexModule {
   TecnologyProducts = []
   HouseProducts = []
   BookProducts = []
+  users = []
+  vendors = []
+
   AllTags = {
     Tecno: ['videogames', 'phones', 'computers'],
     House: ['livingRoom', 'bedroom', 'garden'],
@@ -68,6 +71,11 @@ export default class App extends VuexModule {
     this.isLoggedIn = true;
   }
   @Mutation
+  GET_ALL_USERS(payload: any) {
+    this.users = payload
+
+  }
+  @Mutation
   LOGOUT() {
     this.userData = {} as any;
     this.isLoggedIn = false;
@@ -106,6 +114,10 @@ export default class App extends VuexModule {
   @Mutation
   ALL_PRODUCTS(payload: any) {
     this.Products = payload;
+  }
+  @Mutation
+  ALL__VENDORS(payload: any) {
+    this.vendors = payload;
   }
   @Mutation
   TECNOLOGY_PRODUCTS(payload: any) {
@@ -209,14 +221,19 @@ export default class App extends VuexModule {
 
 
 
+
   @Action
-  async getAllUsers() {
-    const result = await Api.fetchData(`user`)
+  async getUsers() {
+    const result = await Api.fetchData(`user`, true, 'GET')
     if (!result.ok) {
       return;
     }
+    console.log(result)
     const data = result.data
-    return data;
+    console.log('GET ALL USERS')
+    console.log('1')
+    console.log(data)
+    this.GET_ALL_USERS(data);
 
   }
   @Action
@@ -276,9 +293,27 @@ export default class App extends VuexModule {
     this.CREATE_NEW_PRODUCTS(data)
 
   }
+  @Action
+  async DeleteProduct(payload) {
+    const id = payload;
+    const result = await Api.fetchData(`products/${id}`, true, 'DELETE')
+    if (!result.ok) {
+      return;
+    } else {
+      return true;
+    }
 
+  }
 
-
+  @Action
+  async getAllOwnedProducts() {
+    const result = await Api.fetchData(`products?owned=true`, true, 'GET')
+    if (!result.ok) {
+      return
+    }
+    const data = result.data;
+    return data;
+  }
 
   @Action
   async SearchProducts({ searchQuery, categoryType }) {
@@ -299,18 +334,20 @@ export default class App extends VuexModule {
 
   @Action
   async LoadAllProducts() {
-    const result = await Api.fetchData(`products`, true, 'GET')
+    const result = await Api.fetchData(`products?populate=vendor`, true, 'GET')
     console.log('Ok')
     if (!result.ok) {
       return;
     }
 
     const data = result.data;
-    console.log('1')
+
     this.ALL_PRODUCTS(data)
 
 
   }
+
+
   @Action
   async getOneProduct() {
     const currentRoute = router.currentRoute;
@@ -328,6 +365,7 @@ export default class App extends VuexModule {
 
 
   }
+
 
   @Action
   async LoadTecnologyProducts() {
@@ -418,7 +456,7 @@ export default class App extends VuexModule {
   @Action
   async LoadFilteredProducts(QueryObject) {
     console.log('1')
-    const QueryObjectString = queryString.stringify(QueryObject);
+    const QueryObjectString = queryString.stringify(QueryObject, { skipEmptyString: true });
 
     console.log(`products?${QueryObjectString}`)
     const result = await Api.fetchData(`products?${QueryObjectString}`, true, 'GET')

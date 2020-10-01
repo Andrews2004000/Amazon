@@ -14,6 +14,7 @@ import Detail from '../components/Details.vue'
 import SendEmail from '../components/Reset.vue'
 import Orders from '../components/AllOrders.vue'
 import ResetPassword from '../components/ResetPassword.vue'
+import PersonalPage from '../components/PersonalPage.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,6 +22,17 @@ const routes = [
     path: '/',
     name: 'Main',
     component: () => import('../components/Main.vue'),
+  },
+  {
+    path: '/success-order/order-product/success',
+    name: 'Order',
+    component: () => import('../components/OrderCompleted.vue'),
+  },
+
+  {
+    path: '/PersonalPage',
+    name: 'Main',
+    component: () => import('../components/PersonalPage.vue'),
   },
   {
     path: '/Reset',

@@ -31,5 +31,5 @@ export class OrderClass {
 //const Order = mongoose.model<IUOrder>('Order', orderSchema)
 //export default Order
 export const Order = getModelForClass(OrderClass, {
-    schemaOptions: { collection: 'order' }
+    schemaOptions: { collection: 'orders' }
 });

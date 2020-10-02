@@ -1,4 +1,6 @@
 import { ShoppingClass, ShoppingCart } from '../model/ShopCart'
+import stripeCompletedCheckout from '../utils/stripe/stripeCompletedCheckout';
+import stripeUpdateAccountDetails from '../utils/stripe/stripeUpdateAccountDetails';
 
 import { RequestHandler } from 'express';
 import AppError from '../Error/AppError'
@@ -162,6 +164,27 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
             stripeClientId: 'pk_test_aHRgrAbca3xoC2uAeJ23MHP300xReY1EAc'
         }
     })
+}
+export const webHooks: RequestHandler = async (req, res, next) => {
+    const sig = req.headers['stripe-signature']
+    let event;
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig as any, process.env.WEBHOOK_SECRET)
+    } catch (err) {
+        return res.status(400).send(`WebHook Error:${err.message}`)
+        console.log(err)
+
+    }
+    if (event.type === 'account.updated') {
+        const account = event.data.object
+
+    }
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+
+    }
+    console.log('[Webhook]Received')
+    res.json({ received: true })
 }
 export const getAllOrders: RequestHandler = async (req, res, next) => {
     //let ordersQuery;
